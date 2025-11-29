@@ -49,7 +49,7 @@ const FAQ = () => {
   return (
     <div
       id="faq"
-      className="min-h-screen flex items-center justify-center px-6 py-12 xs:py-20"
+      className="flex items-center justify-center px-6 py-8 xs:py-12"
     >
       <div className="max-w-screen-lg">
         <h2 className="text-3xl xs:text-4xl md:text-5xl !leading-[1.15] font-bold tracking-tight text-center">

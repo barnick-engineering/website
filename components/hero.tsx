@@ -15,21 +15,28 @@ const Hero = () => {
           <h1 className="mt-6 max-w-[20ch] text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold !leading-[1.2] tracking-tight">
             প্রিন্টিং / প্যাকেজিং এখন সহজ, দ্রুত ও বিশ্বস্ত
           </h1>
-          <p className="mt-6 max-w-[60ch] xs:text-lg">Idea -&gt; Design -&gt; Print</p>
+          <p className="mt-6 max-w-[60ch] xs:text-lg">
+            Idea -&gt; Design -&gt; Print
+          </p>
           <div className="mt-12 flex flex-col sm:flex-row items-center sm:justify-center gap-4">
             <Button
               size="lg"
               className="w-full sm:w-auto rounded-full text-base"
+              asChild={true}
             >
-              Get Started <ArrowUpRight className="!h-5 !w-5" />
+              <a href="#contact">
+                Get Started <ArrowUpRight className="!h-5 !w-5" />
+              </a>
             </Button>
             <Button
               variant="outline"
               size="lg"
               className="w-full sm:w-auto rounded-full text-base shadow-none"
-              // create a link to the demo video
+              asChild={true}
             >
-              <CirclePlay className="!h-5 !w-5" /> Watch Demo
+              <a href="https://www.youtube.com/@barnickpracharani">
+                <CirclePlay className="!h-5 !w-5" /> Watch Demo
+              </a>
             </Button>
           </div>
         </div>

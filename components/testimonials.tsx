@@ -34,7 +34,7 @@ const testimonials = [
 ];
 
 const Testimonials = () => (
-  <div id="products" className="flex justify-center items-center py-20">
+  <div id="products" className="flex justify-center items-center py-8 xs:py-12">
     <div className="h-full w-full">
       <h2 className="mb-12 text-4xl md:text-5xl font-bold text-center tracking-tight px-6">
         কাজের নমুনা / পোর্টফোলিও
