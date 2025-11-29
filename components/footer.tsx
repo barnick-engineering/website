@@ -58,7 +58,7 @@ const Footer = () => {
           <div className="max-w-xs w-full">
             <h6 className="font-semibold">ঠিকানা</h6>
             <p className="mt-6 text-muted-foreground">
-              2/ka pc culture housing dhaka
+              ৩৬ বাঁশিচরণ সেন পোদ্দার লেন, কোতোয়ালি, ঢাকা।
             </p>
           </div>
         </div>
