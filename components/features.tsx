@@ -11,39 +11,49 @@ import React from "react";
 const features = [
   {
     icon: Settings2,
-    title: "Customizable Layouts",
+    title: "কর্পোরেট এসেনশিয়াল",
     description:
-      "Design your space with drag-and-drop simplicity—create grids, lists, or galleries in seconds.",
+      "বিজসেন কার্ড, লেটারহেড, ইনভেলপ, প্রেজেন্টেশন ফোল্ডার, নোটপ্যাড ইত্যাদি",
   },
   {
     icon: Blocks,
-    title: "Interactive Widgets",
+    title: "মার্কেটিং এসেনশিয়াল",
     description:
-      "Embed polls, quizzes, or forms to keep your audience engaged.",
+      "ফ্লেয়ার, ব্রশিউর, পোস্টার, পোস্টকার্ড, ব্যানার, ডিজিটাল ব্যানার, ক্যাটালগ ইত্যাদি",
   },
   {
     icon: Bot,
-    title: "AI-Powered Tools",
-    description:
-      "Generate summaries, auto-format content, or translate into multiple languages seamlessly.",
+    title: "প্রমোশনাল আইটেম",
+    description: "টি-শার্ট, ব্যাগ, মগ, কি চেইন, কাস্টম কলম ইত্যাদি",
   },
   {
     icon: Film,
-    title: "Media Integrations",
+    title: "ল্যাভেল এবং স্টিকার",
     description:
-      "Connect with Spotify, Instagram, or your own media library for dynamic visuals and sound.",
+      "প্রোডাক্ট ল্যাভেল, এড্রেস ল্যাভেল, প্রেজেন্টেশন ল্যাভেল, কাস্টোম স্টিকার, উইন্ডো ক্লিং ইত্যাদি",
   },
   {
     icon: ChartPie,
-    title: "Advanced Analytics",
+    title: "লার্জ ফরমেট প্রিন্টিং",
     description:
-      "Track engagement, clicks, and user activity with intuitive charts and reports.",
+      "সাইনেজ, ভাইনেল ব্যানার, উইন্ডো ডিক্যাল, ভ্যাহিক্যাল র‍্যাপ ইত্যাদি",
   },
   {
     icon: MessageCircle,
-    title: "Seamless Collaboration",
+    title: "ষ্টেশনারী",
+    description: "গ্রিটিং কার্ড, ইনভাইটেশন, ক্যালেন্ডার, প্ল্যানারস ইত্যাদি",
+  },
+  {
+    icon: Bot,
+    title: "ইভেন্ট ম্যাটেরিয়ালস",
     description:
-      "Comment, tag, and assign tasks directly within your documents.",
+      "ইভেন্ট টিকেটস, ব্যাজ, রিস্টব্যান্ড, প্রোগ্রাম ম্যাটেরিয়ালস, টেবিল ট্যান্ট ইত্যাদি",
+  },
+  {
+    icon: Blocks,
+    title: "সিকিউরিটি প্রিন্টিং",
+    description:
+      "সার্টিফিকেট, চেক, পাসপোর্ট, ইভেন্ট টিকেট (with security features) ইত্যাদি",
   },
 ];
 
@@ -51,7 +61,7 @@ const Features = () => {
   return (
     <div id="features" className="w-full py-12 xs:py-20 px-6">
       <h2 className="text-3xl xs:text-4xl sm:text-5xl font-bold tracking-tight text-center">
-        Unleash Your Creativity
+        সেবা সমূহ
       </h2>
       <div className="w-full max-w-screen-lg mx-auto mt-10 sm:mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {features.map((feature) => (

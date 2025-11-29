@@ -9,49 +9,31 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "PureLanding - Beautiful Shadcn UI Landing Page",
+  title: "Barnick Pracharani - Printing Services",
   description:
-    "A beautiful landing page built with Shadcn UI, Next.js 15, Tailwind CSS, and Shadcn UI Blocks.",
+    "Barnick Pracharani is a printing services company that provides a wide range of printing services to its clients.",
   keywords: [
-    "PureLanding",
-    "PureLanding Landing Page",
-    "PureLanding Landing Page Template",
-    "PureLanding Page",
-    "Shadcn UI Landing Page",
-    "Shadcn UI Blocks",
-    "Shadcn UI",
-    "Landing Page",
-    "Tailwind CSS Landing Page",
-    "Beautiful Shadcn UI Landing Page",
-    "Next.js 15 Landing Page",
-    "Simple Landing Page",
-    "Landing Page Template",
-    "Landing Page Design",
+    "Barnick Pracharani",
+    "Barnick Pracharani Printing",
+    "Barnick Pracharani Printing Services",
+    "Barnick Pracharani Printing Products",
+    "visiting card printing",
+    "business card printing",
+    "letterhead printing",
+    "envelope printing",
+    "label printing",
+    "banner printing",
+    "poster printing",
+    "flyer printing",
+    " brochure printing",
   ],
-  openGraph: {
-    type: "website",
-    siteName: "PureLanding",
-    locale: "en_US",
-    url: "https://shadcn-landing-page.vercel.app",
-    title: "PureLanding - Beautiful Shadcn UI Landing Page",
-    description:
-      "A beautiful landing page built with Shadcn UI, Next.js 15, Tailwind CSS, and Shadcn UI Blocks.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "PureLanding Preview",
-      },
-    ],
-  },
   authors: [
     {
-      name: "Akash Moradiya",
-      url: "https://shadcnui-blocks.com",
+      name: "Avee Chakraborty",
+      url: "https://www.linkedin.com/in/avee-chakraborty-234096ab/",
     },
   ],
-  creator: "Akash Moradiya",
+  creator: "Avee Chakraborty",
   icons: [
     {
       rel: "icon",

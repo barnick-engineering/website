@@ -10,39 +10,38 @@ import {
 const faq = [
   {
     icon: Undo2,
-    question: "What is your return policy?",
+    question: "Barnick কী ধরনের প্রিন্টিং সার্ভিস দেয়?",
     answer:
-      "You can return unused items in their original packaging within 30 days for a refund or exchange. Contact support for assistance.",
+      "আমরা ভিজিটিং কার্ড, স্টিকার, লেবেল, ফ্লায়ার, ব্যানার, ব্রোশিওর, কাস্টম প্যাকেজিং বক্সসহ সব ধরনের প্রিন্টিং ও ব্র্যান্ডিং সার্ভিস দিই।",
   },
   {
     icon: Route,
-    question: "How do I track my order?",
+    question: "প্রিন্ট করতে কত সময় লাগে?",
     answer:
-      "Track your order using the link provided in your confirmation email, or log into your account to view tracking details.",
+      "সাধারণত ১–৩ কর্মদিবস লাগে। জরুরি অর্ডারের জন্য এক্সপ্রেস সার্ভিসও আছে।",
   },
   {
     icon: Truck,
-    question: "Do you ship internationally?",
+    question: "কীভাবে অর্ডার করতে হবে?",
     answer:
-      "Yes, we ship worldwide. Shipping fees and delivery times vary by location, and customs duties may apply for some countries.",
+      "ডিজাইন/ডিটেইল ফেসবুক মেসেঞ্জার, +8801712347097 নাম্বারে অর্ডার কনফার্ম করতে পারবেন। ৫০% অগ্রিমের পর কাজ শুরু হয়।",
   },
   {
     icon: BadgeDollarSign,
-    question: "What payment methods do you accept?",
+    question: "ডিজাইন কি আপনারা করে দেন?",
     answer:
-      "We accept Visa, MasterCard, American Express, PayPal, Apple Pay, and Google Pay, ensuring secure payment options for all customers.",
+      "হ্যাঁ, আমাদের ডিজাইনাররা আপনার ব্র্যান্ড অনুযায়ী কাস্টম ডিজাইন তৈরি করে দেয়। কিন্তু সেই ক্ষেত্রে চার্চ আলাদা।",
   },
   {
     icon: ShieldCheck,
-    question: "What if I receive a damaged item?",
+    question: "দাম কীভাবে নির্ধারিত হয়?",
     answer:
-      "Please contact our support team within 48 hours of delivery with photos of the damaged item. We’ll arrange a replacement or refund.",
+      "ডিজাইন, ম্যাটেরিয়াল, সাইজ, পরিমাণ এবং ফিনিশিং অনুযায়ী প্রাইস নির্ধারিত হয়।",
   },
   {
     icon: UserRoundCheck,
-    question: "How can I contact customer support?",
-    answer:
-      "Reach out via email at support@example.com or call us at 1-800-123-4567 for assistance with any inquiries.",
+    question: "ডেলিভারি কিভাবে পাবো?",
+    answer: "হ্যাঁ, ঢাকা ও সারা বাংলাদেশে কুরিয়ার ডেলিভারি সুবিধা রয়েছে।",
   },
 ];
 
@@ -54,11 +53,8 @@ const FAQ = () => {
     >
       <div className="max-w-screen-lg">
         <h2 className="text-3xl xs:text-4xl md:text-5xl !leading-[1.15] font-bold tracking-tight text-center">
-          Frequently Asked Questions
+          সাধারণ জিজ্ঞাসা (FAQ)
         </h2>
-        <p className="mt-3 xs:text-lg text-center text-muted-foreground">
-          Quick answers to common questions about our products and services.
-        </p>
 
         <div className="mt-12 grid md:grid-cols-2 bg-background rounded-xl overflow-hidden outline outline-[1px] outline-border outline-offset-[-1px]">
           {faq.map(({ question, answer, icon: Icon }) => (
