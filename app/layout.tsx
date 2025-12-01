@@ -79,7 +79,7 @@ export default function RootLayout({
             gtag('config', 'G-M37QBL6ZZN');
           `}
         </Script>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>{children}</TooltipProvider>
         </ThemeProvider>
       </body>
