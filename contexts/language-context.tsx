@@ -140,13 +140,19 @@ const translations: Record<Language, Record<string, string>> = {
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  // Default to Bengali
   const [language, setLanguageState] = useState<Language>("bn");
 
   useEffect(() => {
-    // Load language from localStorage
+    // Load language from localStorage only if it exists and is valid
+    // Default remains Bengali if no saved preference
     const savedLanguage = localStorage.getItem("language") as Language;
     if (savedLanguage && (savedLanguage === "bn" || savedLanguage === "en")) {
       setLanguageState(savedLanguage);
+    } else {
+      // Ensure Bengali is set as default if no saved preference
+      setLanguageState("bn");
+      localStorage.setItem("language", "bn");
     }
   }, []);
 
