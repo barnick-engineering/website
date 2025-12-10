@@ -57,6 +57,28 @@ export const metadata: Metadata = {
     follow: true,
   },
   manifest: "/site.webmanifest",
+  openGraph: {
+    title: "Barnick Pracharani – Printing & Packaging",
+    description: "প্রিন্টিং / প্যাকেজিং এখন আরও সহজ, দ্রুত ও বিশ্বাসযোগ্য!",
+    url: "https://barnickpracharani.com",
+    siteName: "Barnick Pracharani",
+    type: "website",
+    images: [
+      {
+        url: "https://barnickpracharani.com/images/preview.jpg",
+        width: 1200,
+        height: 630,
+        type: "image/jpeg",
+        alt: "Barnick Pracharani - Printing & Packaging",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Barnick Pracharani – Printing & Packaging",
+    description: "প্রিন্টিং / প্যাকেজিং এখন আরও সহজ, দ্রুত ও বিশ্বাসযোগ্য!",
+    images: ["https://barnickpracharani.com/images/preview.jpg"],
+  },
 };
 
 export default function RootLayout({
