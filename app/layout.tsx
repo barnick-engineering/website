@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import Script from "next/script";
 import { Geist } from "next/font/google";
+import { LanguageProvider } from "@/contexts/language-context";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -80,7 +81,9 @@ export default function RootLayout({
           `}
         </Script>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TooltipProvider>{children}</TooltipProvider>
+          <LanguageProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>
