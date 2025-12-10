@@ -39,17 +39,17 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: "icon",
-      url: "/barnick.png",
-    },
-    {
-      rel: "apple-touch-icon",
-      url: "/barnick.png",
+      url: "/favicon.ico",
     },
     {
       rel: "icon",
       type: "image/png",
       url: "/barnick.png",
       sizes: "any",
+    },
+    {
+      rel: "apple-touch-icon",
+      url: "/barnick.png",
     },
   ],
   robots: {
