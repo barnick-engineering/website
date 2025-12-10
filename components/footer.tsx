@@ -1,31 +1,36 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
-
-const footerLinks = [
-  {
-    title: "আমাদের সম্পর্কে",
-    href: "#about",
-  },
-  {
-    title: "সেবা সমূহ",
-    href: "#features",
-  },
-  {
-    title: "কাজের নমুনা",
-    href: "#products",
-  },
-  {
-    title: "সাধারণ জিজ্ঞাসা (FAQ)",
-    href: "#faq",
-  },
-  {
-    title: "যোগাযোগ",
-    href: "#contact",
-  },
-];
+import { useLanguage } from "@/contexts/language-context";
 
 const Footer = () => {
+  const { t } = useLanguage();
+  
+  const footerLinks = [
+    {
+      title: t("nav.about"),
+      href: "#about",
+    },
+    {
+      title: t("nav.services"),
+      href: "#features",
+    },
+    {
+      title: t("nav.portfolio"),
+      href: "#products",
+    },
+    {
+      title: t("nav.faq"),
+      href: "#faq",
+    },
+    {
+      title: t("nav.contact"),
+      href: "#contact",
+    },
+  ];
+
   return (
     <footer className="dark:border-t mt-12 dark bg-background text-foreground">
       <div className="max-w-screen-xl mx-auto">
@@ -56,9 +61,9 @@ const Footer = () => {
 
           {/* Address */}
           <div className="max-w-xs w-full">
-            <h6 className="font-semibold">ঠিকানা</h6>
+            <h6 className="font-semibold">{t("footer.address")}</h6>
             <p className="mt-6 text-muted-foreground">
-              ৩৬ বাঁশিচরণ সেন পোদ্দার লেন, কোতোয়ালি, ঢাকা।
+              {t("footer.addressValue")}
             </p>
           </div>
         </div>
@@ -67,7 +72,7 @@ const Footer = () => {
           {/* Copyright */}
           <span className="text-muted-foreground text-center sm:text-start">
             &copy; {new Date().getFullYear()}{" "}
-            <Link href="/">বার্ণিক প্রচারাণী</Link>. সর্বস্বত্ব সংরক্ষিত।
+            <Link href="/">{t("footer.copyright")}</Link>. {t("footer.rights")}
           </span>
         </div>
       </div>

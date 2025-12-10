@@ -4,6 +4,7 @@ import Marquee from "@/components/ui/marquee";
 import React, { useState } from "react";
 import Image from "next/image";
 import { ImageModal } from "./image-modal";
+import { useLanguage } from "@/contexts/language-context";
 
 const testimonials = [
   {
@@ -38,6 +39,7 @@ const testimonials = [
 
 const Testimonials = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   return (
     <div
@@ -46,7 +48,7 @@ const Testimonials = () => {
     >
       <div className="h-full w-full">
         <h2 className="mb-12 text-4xl md:text-5xl font-bold text-center tracking-tight px-6">
-          কাজের নমুনা / পোর্টফোলিও
+          {t("portfolio.title")}
         </h2>
         <div className="relative">
           <div className="z-10 absolute left-0 inset-y-0 w-[15%] bg-gradient-to-r from-background to-transparent" />
