@@ -20,10 +20,11 @@ export const ClientLogo = ({
     className="flex items-center justify-center p-1 sm:p-1.5 md:p-2"
   >
     <Image
-      src={src.toString()}
-      alt={alt.toString()}
+      src={src}
+      alt={alt}
       width={width}
       height={height}
+      className="object-contain"
     />
   </Link>
 );
