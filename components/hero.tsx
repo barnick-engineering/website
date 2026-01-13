@@ -26,7 +26,7 @@ const Hero = () => {
           <div className="mt-12 flex flex-col sm:flex-row items-center sm:justify-center gap-4">
             <Button
               size="lg"
-              className="w-full sm:w-auto rounded-full text-base "
+              className="w-full sm:w-auto rounded-full text-base"
               asChild={true}
             >
               <a href="#contact">
