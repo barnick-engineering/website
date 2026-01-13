@@ -14,7 +14,7 @@ const Hero = () => {
     <div className="min-h-[calc(100vh-6rem)] flex flex-col items-center py-20 px-6">
       <div className="md:mt-6 flex items-center justify-center">
         <div className="text-center max-w-2xl">
-          <Badge className="bg-primary rounded-full py-1 border-none">
+          <Badge className="bg-primary rounded-full py-1 border-none ">
             {t("hero.badge")}
           </Badge>
           <h1 className="mt-6 max-w-[20ch] text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold !leading-[1.2] tracking-tight">
