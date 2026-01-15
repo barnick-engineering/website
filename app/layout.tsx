@@ -39,17 +39,23 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: "icon",
-      url: "/barnick.png",
-    },
-    {
-      rel: "apple-touch-icon",
-      url: "/barnick.png",
+      url: "/favicon.ico", // Google prioritizes this
     },
     {
       rel: "icon",
       type: "image/png",
+      url: "/favicon-32x32.png",
+      sizes: "32x32",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      url: "/favicon-16x16.png",
+      sizes: "16x16",
+    },
+    {
+      rel: "apple-touch-icon",
       url: "/barnick.png",
-      sizes: "any",
     },
   ],
   robots: {
@@ -65,10 +71,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://barnickpracharani.com/images/preview.jpg",
-        width: 1200,
-        height: 630,
-        type: "image/jpeg",
+        url: "https://barnickpracharani.com/barnick.png",
+        width: 389,
+        height: 389,
+        type: "image/png",
         alt: "Barnick Pracharani - Printing & Packaging",
       },
     ],
@@ -77,7 +83,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Barnick Pracharani – Printing & Packaging",
     description: "প্রিন্টিং / প্যাকেজিং এখন আরও সহজ, দ্রুত ও বিশ্বাসযোগ্য!",
-    images: ["https://barnickpracharani.com/images/preview.jpg"],
+    images: ["https://barnickpracharani.com/barnick.png"],
   },
 };
 
@@ -101,6 +107,37 @@ export default function RootLayout({
             gtag('js', new Date());
             gtag('config', 'G-M37QBL6ZZN');
           `}
+        </Script>
+        {/* JSON-LD Structured Data */}
+        <Script
+          id="organization-schema"
+          type="application/ld+json"
+          strategy="afterInteractive"
+        >
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Barnick Pracharani",
+            "url": "https://barnickpracharani.com",
+            "logo": "https://barnickpracharani.com/barnick.png",
+            "description": "Printing & Packaging Services - High-quality customized printing from business cards to marketing materials",
+            "sameAs": [
+              "https://www.facebook.com/heybarnick",
+              "https://www.linkedin.com/company/barnick-pracharani",
+              "https://www.instagram.com/barnick_pracharani/"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+8801712347097",
+              "contactType": "customer service"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "36 Banshicharan Sen Poddar Lane, Kotowali",
+              "addressLocality": "Dhaka",
+              "addressCountry": "BD"
+            }
+          })}
         </Script>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>
