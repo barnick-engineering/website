@@ -3,6 +3,7 @@ import { NavMenu } from "./nav-menu";
 import { NavigationSheet } from "./navigation-sheet";
 import ThemeToggle from "../theme-toggle";
 import LanguageToggle from "../language-toggle";
+import { CartIcon } from "../ecommerce/cart-icon";
 
 const Navbar = () => {
   return (
@@ -14,6 +15,7 @@ const Navbar = () => {
         <NavMenu className="hidden md:block" />
 
         <div className="flex items-center gap-3">
+          <CartIcon />
           <LanguageToggle />
           <ThemeToggle />
 

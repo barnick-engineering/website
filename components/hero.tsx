@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, CirclePlay } from "lucide-react";
 import React from "react";
+import Link from "next/link";
 import LogoCloud from "./logo-cloud";
 import { useLanguage } from "@/contexts/language-context";
 
@@ -29,9 +30,9 @@ const Hero = () => {
               className="w-full sm:w-auto rounded-full text-base"
               asChild={true}
             >
-              <a href="#contact">
+              <Link href="/shop">
                 {t("hero.getStarted")} <ArrowUpRight className="!h-5 !w-5" />
-              </a>
+              </Link>
             </Button>
             <Button
               variant="outline"
