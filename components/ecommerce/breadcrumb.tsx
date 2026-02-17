@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { useLanguage } from "@/contexts/language-context";
 
 interface BreadcrumbItem {
   label: string;
@@ -14,8 +13,6 @@ interface BreadcrumbProps {
 }
 
 export const Breadcrumb = ({ items }: BreadcrumbProps) => {
-  const { t } = useLanguage();
-
   return (
     <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-6">
       {items.map((item, index) => (

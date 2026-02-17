@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/navbar";
 import Footer from "@/components/footer";
 import { CategoryPageContent } from "@/components/ecommerce/category-page-content";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getCategoryBySlug } from "@/data/categories";
 
 interface CategoryPageProps {
@@ -15,6 +15,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   if (!category) {
     notFound();
   }
+
+  if (category.href) {
+    redirect(category.href);
+  }
+
+
 
   return (
     <>

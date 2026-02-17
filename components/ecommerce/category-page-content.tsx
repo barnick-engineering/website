@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Breadcrumb } from "./breadcrumb";
 import { ProductCard } from "./product-card";
 import { getProductsByCategory } from "@/data/products";
-import { categories, getCategoryBySlug } from "@/data/categories";
+import { categories } from "@/data/categories";
 import { useLanguage } from "@/contexts/language-context";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";

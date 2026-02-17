@@ -4,49 +4,47 @@ import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
+import { Star } from "lucide-react";
 
 const Footer = () => {
   const { t } = useLanguage();
-  
-  const footerLinks = [
-    {
-      title: t("nav.about"),
-      href: "#about",
-    },
-    {
-      title: t("nav.services"),
-      href: "#features",
-    },
-    {
-      title: t("nav.portfolio"),
-      href: "#products",
-    },
-    {
-      title: t("nav.faq"),
-      href: "#faq",
-    },
-    {
-      title: t("nav.contact"),
-      href: "#contact",
-    },
+
+  const letUsHelp = [
+    { title: t("footer.shipping"), href: "/#contact" },
+    { title: t("nav.contact"), href: "/#contact" },
+    { title: t("footer.designHelp"), href: "/design-services" },
+    { title: t("nav.faq"), href: "/#faq" },
+  ];
+
+  const ourCompany = [
+    { title: t("nav.about"), href: "/#about" },
+    { title: t("nav.portfolio"), href: "/#products" },
   ];
 
   return (
     <footer className="dark:border-t mt-12 dark bg-background text-foreground">
       <div className="max-w-screen-xl mx-auto">
-        <div className="py-12 flex flex-col sm:flex-row items-start justify-between gap-x-8 gap-y-10 px-6 xl:px-0">
-          <div>
-            {/* Logo */}
+        <div className="py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 px-6 xl:px-0">
+          <div className="space-y-4">
+            <p className="text-lg font-semibold">{t("footer.tagline")}</p>
+            <p className="text-sm text-muted-foreground">
+              <Link href="/#contact" className="underline hover:text-foreground">
+                {t("footer.hereToHelp")}
+              </Link>
+            </p>
             <Image
               src="/barnick.png"
               alt="Barnick Pracharani"
-              width={80}
-              height={80}
-              className="object-contain"
+              width={64}
+              height={64}
+              className="object-contain mt-4"
             />
+          </div>
 
-            <ul className="mt-6 flex items-center gap-4 flex-wrap">
-              {footerLinks.map(({ title, href }) => (
+          <div>
+            <h6 className="font-semibold mb-4">{t("footer.letUsHelp")}</h6>
+            <ul className="space-y-2">
+              {letUsHelp.map(({ title, href }) => (
                 <li key={title}>
                   <Link
                     href={href}
@@ -59,21 +57,56 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Address */}
-          <div className="max-w-xs w-full">
-            <h6 className="font-semibold">{t("footer.address")}</h6>
-            <p className="mt-6 text-muted-foreground">
-              {t("footer.addressValue")}
+          <div>
+            <h6 className="font-semibold mb-4">{t("footer.ourCompany")}</h6>
+            <ul className="space-y-2">
+              {ourCompany.map(({ title, href }) => (
+                <li key={title}>
+                  <Link
+                    href={href}
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    {title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-1 mb-2">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Star
+                  key={i}
+                  className="h-5 w-5 fill-amber-400 text-amber-400"
+                  aria-hidden
+                />
+              ))}
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {t("footer.trustpilotText")}
             </p>
           </div>
         </div>
         <Separator />
-        <div className="py-8 flex flex-col-reverse sm:flex-row items-center justify-between gap-x-2 gap-y-5 px-6 xl:px-0">
-          {/* Copyright */}
-          <span className="text-muted-foreground text-center sm:text-start">
-            &copy; {new Date().getFullYear()}{" "}
-            <Link href="/">{t("footer.copyright")}</Link>. {t("footer.rights")}
-          </span>
+        <div className="py-8 flex flex-col-reverse sm:flex-row items-center justify-between gap-6 px-6 xl:px-0">
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6 text-center sm:text-start">
+            <a
+              href="tel:+8801712347097"
+              className="text-sm font-medium hover:underline"
+            >
+              +8801712347097
+            </a>
+            <span className="text-muted-foreground text-sm">
+              &copy; {new Date().getFullYear()}{" "}
+              <Link href="/">{t("footer.copyright")}</Link>. {t("footer.rights")}
+            </span>
+          </div>
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <span>bKash</span>
+            <span>Nagad</span>
+            <span>Bank transfer</span>
+          </div>
         </div>
       </div>
     </footer>

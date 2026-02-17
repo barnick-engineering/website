@@ -63,6 +63,7 @@ export default {
       animation: {
         marquee: "marquee var(--duration) linear infinite",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
+        "marquee-infinite": "marquee-infinite var(--duration, 40s) linear infinite",
       },
       keyframes: {
         marquee: {
@@ -80,6 +81,10 @@ export default {
           to: {
             transform: "translateY(calc(-100% - var(--gap)))",
           },
+        },
+        "marquee-infinite": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
         },
       },
     },

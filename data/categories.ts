@@ -10,6 +10,8 @@ export interface Category {
     en: string;
   };
   image: string; // Placeholder URL
+  /** If set, this is a link-only entry (e.g. Deals, Services) – no product grid. */
+  href?: string;
 }
 
 export const categories: Category[] = [
@@ -17,8 +19,8 @@ export const categories: Category[] = [
     id: "business-essentials",
     slug: "business-essentials",
     name: {
-      bn: "কর্পোরেট এসেনশিয়াল",
-      en: "Business Essentials",
+      bn: "বিজনেস কার্ড ও এসেনশিয়াল",
+      en: "Business Cards",
     },
     description: {
       bn: "বিজনেস কার্ড, লেটারহেড, ইনভেলপ, প্রেজেন্টেশন ফোল্ডার, নোটপ্যাড ইত্যাদি",
@@ -30,14 +32,27 @@ export const categories: Category[] = [
     id: "marketing-materials",
     slug: "marketing-materials",
     name: {
-      bn: "মার্কেটিং ম্যাটেরিয়াল",
-      en: "Marketing Materials",
+      bn: "পোস্টকার্ড ও প্রিন্ট অ্যাডভার্টাইজিং",
+      en: "Postcards & Print Advertising",
     },
     description: {
       bn: "ফ্লেয়ার, ব্রোশিওর, পোস্টার, পোস্টকার্ড, ব্যানার, ডিজিটাল ব্যানার, ক্যাটালগ ইত্যাদি",
       en: "Flyers, brochures, posters, postcards, banners, digital banners, catalogs, etc.",
     },
     image: "/testimonials/4.webp",
+  },
+  {
+    id: "signs-banners-posters",
+    slug: "signs-banners-posters",
+    name: {
+      bn: "সাইন, ব্যানার ও পোস্টার",
+      en: "Signs, Banners & Posters",
+    },
+    description: {
+      bn: "সাইনেজ, ভাইনেল ব্যানার, উইন্ডো ডিক্যাল, লার্জ ফরমেট প্রিন্টিং ইত্যাদি",
+      en: "Signage, vinyl banners, window decals, large-format printing, etc.",
+    },
+    image: "/testimonials/5.webp",
   },
   {
     id: "stickers-labels",
@@ -82,14 +97,55 @@ export const categories: Category[] = [
     id: "event-personal",
     slug: "event-personal",
     name: {
-      bn: "ইভেন্ট এবং পার্সোনাল",
-      en: "Event & Personal",
+      bn: "ইনভাইটেশন, গিফট ও স্টেশনারী",
+      en: "Invitations, Gifts & Stationery",
     },
     description: {
       bn: "ইভেন্ট টিকেট, ব্যাজ, রিস্টব্যান্ড, গ্রিটিং কার্ড, ইনভাইটেশন, ক্যালেন্ডার ইত্যাদি",
       en: "Event tickets, badges, wristbands, greeting cards, invitations, calendars, etc.",
     },
     image: "/testimonials/2.webp",
+  },
+  {
+    id: "booklets",
+    slug: "booklets",
+    name: {
+      bn: "বুকলেট",
+      en: "Booklets",
+    },
+    description: {
+      bn: "স্যাডেল-স্টিচ, ওয়্যার-বাউন্ড, পারফেক্ট বাউন্ড বুকলেট ইত্যাদি",
+      en: "Saddle-stitch, wire-bound, perfect bound booklets, etc.",
+    },
+    image: "/testimonials/4.webp",
+  },
+  {
+    id: "services",
+    slug: "services",
+    name: {
+      bn: "ডিজাইন সেবা",
+      en: "Design Services",
+    },
+    description: {
+      bn: "কাস্টম ডিজাইন, আপলোড আর্টওয়ার্ক, কোট রিকোয়েস্ট",
+      en: "Custom design, upload artwork, quote request",
+    },
+    image: "/testimonials/1.webp",
+    href: "/design-services",
+  },
+  {
+    id: "deals",
+    slug: "deals",
+    name: {
+      bn: "অফার ও ডিল",
+      en: "Deals",
+    },
+    description: {
+      bn: "বিশেষ অফার এবং ডিসকাউন্ট দেখুন",
+      en: "Special offers and discounts",
+    },
+    image: "/testimonials/6.webp",
+    href: "/deals",
   },
 ];
 

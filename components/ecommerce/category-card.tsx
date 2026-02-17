@@ -30,7 +30,7 @@ export const CategoryCard = ({ category }: CategoryCardProps) => {
           {category.description[language]}
         </p>
         <Button asChild variant="outline" className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-          <Link href={`/category/${category.slug}`}>
+          <Link href={category.href ?? `/category/${category.slug}`}>
             {t("shop.explore")} <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
