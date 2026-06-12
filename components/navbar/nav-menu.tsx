@@ -28,6 +28,11 @@ export const NavMenu = (props: NavigationMenuProps) => {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
+            <Link href="#reels">{t("nav.reels")}</Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild>
             <Link href="#products">{t("nav.portfolio")}</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>

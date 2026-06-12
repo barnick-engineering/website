@@ -19,6 +19,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Navigation
     "nav.about": "আমাদের সম্পর্কে",
     "nav.services": "সেবা সমূহ",
+    "nav.reels": "রিলস",
     "nav.portfolio": "কাজের নমুনা",
     "nav.faq": "সাধারণ জিজ্ঞাসা (FAQ)",
     "nav.contact": "যোগাযোগ",
@@ -51,6 +52,14 @@ const translations: Record<Language, Record<string, string>> = {
     "features.8.desc": "সার্টিফিকেট, চেক, পাসপোর্ট, ইভেন্ট টিকেট (with security features) ইত্যাদি",
     // Portfolio
     "portfolio.title": "কাজের নমুনা / পোর্টফোলিও",
+    // Reels
+    "reels.title": "আমাদের রিলস",
+    "reels.subtitle": "ইউটিউবে আমাদের প্রিন্টিং ও প্যাকেজিং কাজের ছোট ভিডিও দেখুন।",
+    "reels.tapToWatch": "রিলস দেখুন",
+    "reels.swipeHint": "সোয়াইপ করে পরের ভিডিও দেখুন",
+    "reels.countLabel": "টি ভিডিও",
+    "reels.close": "বন্ধ করুন",
+    "reels.viewAll": "ইউটিউবে সব রিলস দেখুন",
     // FAQ
     "faq.title": "সাধারণ জিজ্ঞাসা (FAQ)",
     "faq.1.q": "Barnick কী ধরনের প্রিন্টিং সার্ভিস দেয়?",
@@ -80,6 +89,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Navigation
     "nav.about": "About Us",
     "nav.services": "Services",
+    "nav.reels": "Reels",
     "nav.portfolio": "Portfolio",
     "nav.faq": "FAQ",
     "nav.contact": "Contact",
@@ -112,6 +122,14 @@ const translations: Record<Language, Record<string, string>> = {
     "features.8.desc": "Certificates, checks, passports, event tickets (with security features), etc.",
     // Portfolio
     "portfolio.title": "Portfolio / Work Samples",
+    // Reels
+    "reels.title": "Our Reels",
+    "reels.subtitle": "Watch short printing and packaging demos from our YouTube channel.",
+    "reels.tapToWatch": "Watch Reels",
+    "reels.swipeHint": "Swipe for next video",
+    "reels.countLabel": "videos",
+    "reels.close": "Close",
+    "reels.viewAll": "View all on YouTube",
     // FAQ
     "faq.title": "Frequently Asked Questions (FAQ)",
     "faq.1.q": "What types of printing services does Barnick provide?",

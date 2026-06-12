@@ -39,7 +39,7 @@ const Hero = () => {
               className="w-full sm:w-auto rounded-full text-base shadow-none"
               asChild={true}
             >
-              <a href="https://www.youtube.com/@barnickpracharani">
+              <a href="#reels">
                 <CirclePlay className="!h-5 !w-5" /> {t("hero.watchDemo")}
               </a>
             </Button>

@@ -6,6 +6,7 @@ import Footer from "@/components/footer";
 import Hero from "@/components/hero";
 import { Navbar } from "@/components/navbar";
 import Testimonials from "@/components/testimonials";
+import { YouTubeShortsSection } from "@/components/youtube-shorts-section";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
         <Hero />
         <About />
         <Features />
+        <YouTubeShortsSection />
         <Testimonials />
         <FAQ />
         <CTABanner />
