@@ -23,7 +23,7 @@ const LanguageToggle = () => {
       size="sm"
       onClick={() => setLanguage(language === "bn" ? "en" : "bn")}
       title={language === "bn" ? "Switch to English" : "বাংলায় পরিবর্তন করুন"}
-      className="gap-2"
+      className="gap-2 border-foreground/25 text-foreground"
     >
       <Languages className="h-4 w-4" />
       <span className="text-xs font-medium">

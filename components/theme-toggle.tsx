@@ -21,6 +21,7 @@ const ThemeToggle = () => {
     <Button
       variant="outline"
       size="icon"
+      className="border-foreground/25 text-foreground"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
       {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}

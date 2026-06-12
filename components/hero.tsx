@@ -1,52 +1,53 @@
 "use client";
 
+import { MessageCircle, Phone } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowUpRight, CirclePlay } from "lucide-react";
-import React from "react";
-import LogoCloud from "./logo-cloud";
+import LogoCloud from "@/components/logo-cloud";
 import { useLanguage } from "@/contexts/language-context";
+import { facebookInsights } from "@/data/insights";
+import { getPhoneUrl } from "@/lib/order";
 
 const Hero = () => {
   const { t } = useLanguage();
-  
+
   return (
-    <div className="min-h-[calc(100vh-6rem)] flex flex-col items-center py-20 px-6">
-      <div className="md:mt-6 flex items-center justify-center">
-        <div className="text-center max-w-2xl">
-          <Badge className="bg-primary rounded-full py-1 border-none ">
+    <div className="min-h-[calc(100vh-6rem)] flex flex-col items-center py-16 sm:py-20 px-6 bg-background">
+      <div className="flex items-center justify-center w-full">
+        <div className="text-center max-w-3xl">
+          <Badge className="bg-foreground text-background rounded-full py-1 border-none">
             {t("hero.badge")}
           </Badge>
-          <h1 className="mt-6 max-w-[20ch] text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold !leading-[1.2] tracking-tight">
+          <h1 className="mt-6 text-3xl xs:text-4xl sm:text-5xl md:text-6xl font-bold !leading-[1.15] tracking-tight">
             {t("hero.title")}
           </h1>
-          <p className="mt-6 max-w-[60ch] xs:text-lg">
+          <p className="mt-5 max-w-[50ch] mx-auto text-muted-foreground xs:text-lg">
             {t("hero.subtitle")}
           </p>
-          <div className="mt-12 flex flex-col sm:flex-row items-center sm:justify-center gap-4">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto rounded-full text-base"
-              asChild={true}
-            >
-              <a href="#contact">
-                {t("hero.getStarted")} <ArrowUpRight className="!h-5 !w-5" />
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Button size="lg" className="w-full sm:w-auto" asChild>
+              <a
+                href={facebookInsights.messengerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MessageCircle className="!h-5 !w-5" />
+                {t("hero.orderMessenger")}
               </a>
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="w-full sm:w-auto rounded-full text-base shadow-none"
-              asChild={true}
-            >
-              <a href="https://www.youtube.com/@barnickpracharani">
-                <CirclePlay className="!h-5 !w-5" /> {t("hero.watchDemo")}
+            <Button size="lg" variant="outline" className="w-full sm:w-auto border-foreground/30 text-foreground" asChild>
+              <a href={getPhoneUrl()}>
+                <Phone className="!h-5 !w-5" />
+                {t("cta.call")}
               </a>
             </Button>
           </div>
+          <p className="mt-4 text-xs text-muted-foreground">
+            {t("hero.trustLine")}
+          </p>
         </div>
       </div>
-      <LogoCloud className="mt-24 max-w-3xl mx-auto" />
+      <LogoCloud className="mt-16 max-w-3xl mx-auto" showTitle />
     </div>
   );
 };

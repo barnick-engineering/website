@@ -12,33 +12,29 @@ import { useLanguage } from "@/contexts/language-context";
 
 export const NavMenu = (props: NavigationMenuProps) => {
   const { t } = useLanguage();
-  
+
   return (
     <NavigationMenu {...props}>
       <NavigationMenuList className="gap-6 space-x-0 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start">
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="#about">{t("nav.about")}</Link>
+            <Link href="/#products" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
+              {t("nav.portfolio")}
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="#features">{t("nav.services")}</Link>
+            <Link href="/#faq" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
+              {t("nav.faq")}
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <Link href="#products">{t("nav.portfolio")}</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="#faq">{t("nav.faq")}</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="#contact">{t("nav.contact")}</Link>
+            <Link href="/#contact" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
+              {t("nav.contact")}
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
