@@ -4,6 +4,7 @@ import { HTMLAttributes, useState, useEffect } from "react";
 import { ClientLogo } from "./client-logo";
 import Marquee from "./ui/marquee";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
 
 const clients: Array<{ src: string; alt: string }> = [
   { src: "/clients/navy.png", alt: "Bangladesh Navy" },
@@ -23,7 +24,12 @@ const clients: Array<{ src: string; alt: string }> = [
   { src: "/clients/Chefs.png", alt: "Chefs" },
 ];
 
-function LogoCloud({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
+interface LogoCloudProps extends HTMLAttributes<HTMLDivElement> {
+  showTitle?: boolean;
+}
+
+function LogoCloud({ className, showTitle = false, ...props }: LogoCloudProps) {
+  const { t } = useLanguage();
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -55,20 +61,20 @@ function LogoCloud({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
       )}
     >
       <div className="w-full max-w-full mx-auto">
-        {/* Responsive text sizing and spacing */}
-        <p
-          className={cn(
-            "text-center font-medium text-muted-foreground",
-            // Mobile text sizing
-            "text-[10px] mb-2", // Very small mobile
-            "xs:text-xs xs:mb-3", // Small mobile (375px+)
-            "sm:text-sm sm:mb-4", // Small screens (640px+)
-            "md:text-base md:mb-5", // Medium screens (768px+)
-            "lg:text-lg lg:mb-6" // Large screens (1024px+)
-          )}
-        >
-          Trusted by clients
-        </p>
+        {showTitle && (
+          <p
+            className={cn(
+              "text-center font-medium text-muted-foreground",
+              "text-[10px] mb-2",
+              "xs:text-xs xs:mb-3",
+              "sm:text-sm sm:mb-4",
+              "md:text-base md:mb-5",
+              "lg:text-lg lg:mb-6"
+            )}
+          >
+            {t("logo.trustedBy")}
+          </p>
+        )}
 
         <div className="relative w-full">
           {/* Responsive gradient overlays - completely hidden on mobile */}
