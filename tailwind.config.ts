@@ -60,6 +60,15 @@ export default {
       screens: {
         xs: "375px",
       },
+      fontFamily: {
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        bengali: [
+          "var(--font-bengali)",
+          "var(--font-sans)",
+          "system-ui",
+          "sans-serif",
+        ],
+      },
       animation: {
         marquee: "marquee var(--duration) linear infinite",
         "marquee-vertical": "marquee-vertical var(--duration) linear infinite",

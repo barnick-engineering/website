@@ -2,12 +2,19 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import Script from "next/script";
-import { Geist } from "next/font/google";
+import { Geist, Noto_Sans_Bengali } from "next/font/google";
 import { LanguageProvider } from "@/contexts/language-context";
 import "./globals.css";
 
 const geistSans = Geist({
   subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const notoSansBengali = Noto_Sans_Bengali({
+  subsets: ["bengali"],
+  variable: "--font-bengali",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -93,8 +100,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.className} antialiased`}>
+    <html
+      lang="bn"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${notoSansBengali.variable}`}
+    >
+      <body className="font-sans antialiased">
         {/* Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-M37QBL6ZZN"
