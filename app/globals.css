@@ -116,9 +116,54 @@
     @apply border-border outline-ring/50;
   }
   html {
-    @apply scroll-smooth scroll-pt-12;
+    @apply scroll-smooth scroll-pt-12 overflow-x-hidden;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden font-sans;
+  }
+
+  html[lang="bn"] body {
+    @apply font-bengali;
+    line-height: 1.65;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    word-break: normal;
+    overflow-wrap: break-word;
+    hyphens: none;
+  }
+
+  html[lang="bn"] h1,
+  html[lang="bn"] h2,
+  html[lang="bn"] h3 {
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+
+  /* Uppercase & letter-spacing break Bengali conjunct letters (যুক্তাক্ষর) */
+  html[lang="bn"] .uppercase {
+    text-transform: none;
+  }
+
+  html[lang="bn"] [class*="tracking-"]:not([class*="tracking-normal"]) {
+    letter-spacing: 0;
+  }
+
+  html[lang="bn"] .leading-none {
+    line-height: 1.35;
+  }
+
+  html[lang="bn"] .leading-tight {
+    line-height: 1.4;
+  }
+
+  html[lang="bn"] .break-words {
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  /* Minimum readable size for Bengali labels on mobile */
+  html[lang="bn"] .text-\[11px\] {
+    font-size: 0.8125rem;
+    line-height: 1.45;
   }
 }

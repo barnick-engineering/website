@@ -59,8 +59,7 @@ function LogoCloud({ className, showTitle = false, ...props }: LogoCloudProps) {
       {...props}
       className={cn(
         "w-full border-y bg-muted/25",
-        "min-h-[62vh] sm:min-h-[66vh]",
-        "flex flex-col justify-center py-10 sm:py-12",
+        "py-10 sm:py-12 md:min-h-[50vh] md:flex md:flex-col md:justify-center",
         className
       )}
     >

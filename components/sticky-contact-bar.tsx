@@ -1,15 +1,42 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { MessageCircle, Phone } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
 import { getPhoneUrl } from "@/lib/order";
+import { cn } from "@/lib/utils";
 
 export function StickyContactBar() {
   const { t } = useLanguage();
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const hero = document.getElementById("hero");
+    if (!hero) return;
+
+    const update = () => {
+      const { bottom } = hero.getBoundingClientRect();
+      setVisible(bottom <= 0);
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden border-t bg-background/95 backdrop-blur-sm px-4 py-3 safe-area-pb">
+    <div
+      className={cn(
+        "fixed bottom-0 left-0 right-0 z-40 md:hidden border-t bg-background/95 backdrop-blur-sm px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-300 ease-out",
+        visible ? "translate-y-0" : "translate-y-full pointer-events-none"
+      )}
+      aria-hidden={!visible}
+    >
       <div className="flex gap-3 max-w-screen-xl mx-auto">
         <a
           href={facebookInsights.messengerUrl}
