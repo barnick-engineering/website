@@ -1,6 +1,5 @@
 import Hero from "@/components/hero";
 import { StatsInfographic } from "@/components/stats-infographic";
-import { HowToOrder } from "@/components/how-to-order";
 import Testimonials from "@/components/testimonials";
 import FAQ from "@/components/faq";
 import CTABanner from "@/components/cta-banner";
@@ -15,7 +14,6 @@ export default function Home() {
       <main className="pt-16 xs:pt-20 sm:pt-24 pb-20 md:pb-0">
         <Hero />
         <StatsInfographic />
-        <HowToOrder />
         <Testimonials />
         <FAQ />
         <CTABanner />
