@@ -31,7 +31,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.contact": "যোগাযোগ",
     // Hero
     "hero.badge": "১৯৮৯ সাল থেকে AI যুগে",
-    "hero.title": "প্রিন্টিং, প্যাকেজিং, ব্রান্ডিং — সহজ, দ্রুত, নির্ভরযোগ্য",
+    "hero.title": "প্রিন্টিং, প্যাকেজিং ও ব্রান্ডিং — সহজ, দ্রুত, নির্ভরযোগ্য",
     "hero.subtitle":
       "বিজনেস কার্ড থেকে কাস্টম প্যাকেজিং — আপনার ব্র্যান্ডের প্রিন্টিং ও প্যাকেজিং এক জায়গায়।",
     "hero.browseProducts": "পণ্য দেখুন",
