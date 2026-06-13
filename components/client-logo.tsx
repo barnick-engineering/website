@@ -1,30 +1,20 @@
 import Image from "next/image";
-import Link from "next/link";
+import { cn } from "@/lib/utils";
 
-// get parameter from props
 type ClientLogoProps = {
   src: string;
   alt: string;
-  width?: number;
-  height?: number;
+  className?: string;
 };
 
-export const ClientLogo = ({
-  src,
-  alt,
-  width = 64,
-  height = 64,
-}: ClientLogoProps) => (
-  <Link
-    href="/"
-    className="flex items-center justify-center p-1 sm:p-1.5 md:p-2"
-  >
+export function ClientLogo({ src, alt, className }: ClientLogoProps) {
+  return (
     <Image
       src={src}
       alt={alt}
-      width={width}
-      height={height}
-      className="object-contain"
+      width={160}
+      height={64}
+      className={cn("max-h-10 sm:max-h-12 w-auto object-contain", className)}
     />
-  </Link>
-);
+  );
+}
