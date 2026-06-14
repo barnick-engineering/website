@@ -6,6 +6,7 @@ import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
 import { getMessengerUrlWithText } from "@/lib/order";
 import { Input } from "@/components/ui/input";
+import { DotPattern } from "@/components/ui/dot-pattern";
 import {
   calculateOffsetMemo,
   calculateVisitingCard,
@@ -424,8 +425,9 @@ export function PriceEstimator() {
   }, [t, product, result, visitingQty, visiting, memoQty, memo]);
 
   return (
-    <section id="estimate" className="px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20">
-      <div className="max-w-screen-xl mx-auto w-full">
+    <section id="estimate" className="relative px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20">
+      <DotPattern />
+      <div className="relative z-10 max-w-screen-xl mx-auto w-full">
         {/* Header — compact */}
         <div className="text-center max-w-2xl mx-auto">
           <h2 className="text-2xl sm:text-3xl font-bold">{t("estimate.title")}</h2>

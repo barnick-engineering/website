@@ -2,6 +2,7 @@
 
 import { Route, Truck, Undo2, UserRoundCheck } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
+import { DotPattern } from "@/components/ui/dot-pattern";
 
 const FAQ = () => {
   const { t } = useLanguage();
@@ -14,8 +15,9 @@ const FAQ = () => {
   ];
 
   return (
-    <div id="faq" className="flex items-center justify-center px-6 py-12">
-      <div className="max-w-screen-lg w-full">
+    <div id="faq" className="relative flex items-center justify-center px-6 py-12 bg-background">
+      <DotPattern />
+      <div className="relative z-10 max-w-screen-lg w-full">
         <h2 className="text-3xl xs:text-4xl font-bold tracking-tight text-center">
           {t("faq.title")}
         </h2>
