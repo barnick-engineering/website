@@ -55,7 +55,7 @@
 
     --chart-5: 27 87% 67%;
 
-    --radius: 0.5rem
+    --radius: 0
   }
   .dark {
 
@@ -165,5 +165,12 @@
   html[lang="bn"] .text-\[11px\] {
     font-size: 0.8125rem;
     line-height: 1.45;
+  }
+}
+
+/* Sharp corners — brand identity (no rounded buttons/cards) */
+@layer utilities {
+  [class*="rounded"] {
+    border-radius: 0 !important;
   }
 }
