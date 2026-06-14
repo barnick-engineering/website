@@ -5,6 +5,10 @@ export function getMessengerOrderUrl(productName: string): string {
   return `${facebookInsights.messengerUrl}?text=${text}`;
 }
 
+export function getMessengerUrlWithText(message: string): string {
+  return `${facebookInsights.messengerUrl}?text=${encodeURIComponent(message)}`;
+}
+
 export function getPhoneUrl(): string {
   return `tel:${facebookInsights.phone}`;
 }

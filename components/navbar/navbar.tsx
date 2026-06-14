@@ -6,7 +6,7 @@ import LanguageToggle from "../language-toggle";
 
 const Navbar = () => {
   return (
-    <nav className="fixed z-10 top-6 inset-x-4 h-14 xs:h-16 bg-background/80 backdrop-blur-sm border border-border max-w-screen-xl mx-auto rounded-full shadow-sm">
+    <nav className="fixed z-10 top-6 inset-x-4 h-14 xs:h-16 bg-background/80 backdrop-blur-sm border border-border max-w-screen-xl mx-auto rounded-none shadow-sm">
       <div className="h-full flex items-center justify-between mx-auto px-4">
         <Logo />
 

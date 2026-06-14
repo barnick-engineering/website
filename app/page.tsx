@@ -1,4 +1,5 @@
 import Hero from "@/components/hero";
+import { PriceEstimator } from "@/components/price-estimator";
 import { StatsInfographic } from "@/components/stats-infographic";
 import Testimonials from "@/components/testimonials";
 import FAQ from "@/components/faq";
@@ -13,6 +14,7 @@ export default function Home() {
       <Navbar />
       <main className="pt-16 xs:pt-20 sm:pt-24 pb-20 md:pb-0">
         <Hero />
+        <PriceEstimator />
         <StatsInfographic />
         <Testimonials />
         <FAQ />

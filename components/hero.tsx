@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, Phone } from "lucide-react";
+import { MessageCircle, Phone, Calculator } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import LogoCloud from "@/components/logo-cloud";
@@ -36,7 +36,7 @@ const Hero = () => {
             <p className="mt-4 sm:mt-5 max-w-[50ch] text-muted-foreground xs:text-lg">
               {t("hero.subtitle")}
             </p>
-            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 min-w-0 max-w-full">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3 min-w-0 max-w-full">
               <Button
                 size="default"
                 className="w-full sm:flex-1 sm:min-w-0 h-10 px-4 text-xs sm:text-sm sm:h-11 sm:px-5 md:h-12 md:text-base md:px-6"
@@ -60,6 +60,17 @@ const Hero = () => {
                 <a href={getPhoneUrl()}>
                   <Phone className="!h-4 !w-4 sm:!h-[1.125rem] sm:!w-[1.125rem] shrink-0" />
                   {t("cta.call")}
+                </a>
+              </Button>
+              <Button
+                size="default"
+                variant="outline"
+                className="w-full sm:flex-1 sm:min-w-0 h-10 px-4 text-xs sm:text-sm sm:h-11 sm:px-5 md:h-12 md:text-base md:px-6 border-foreground/30 text-foreground"
+                asChild
+              >
+                <a href="#estimate">
+                  <Calculator className="!h-4 !w-4 sm:!h-[1.125rem] sm:!w-[1.125rem] shrink-0" />
+                  {t("nav.estimate")}
                 </a>
               </Button>
             </div>
