@@ -34,6 +34,18 @@ export const VISITING_FIXED_TIER_PRICES: Record<number, number> = {
 
 export const VISITING_PRESET_QUANTITIES = [500, 1000, 2000, 3000, 4000, 5000] as const;
 
+/** Fixed tier totals for 2" × 2" stickers */
+export const STICKER_2X2_FIXED_TIER_PRICES: Record<number, number> = {
+  1000: 1350,
+  2000: 2500,
+  3000: 3200,
+  5000: 4000,
+};
+
+export const STICKER_2X2_PRESET_QUANTITIES = [1000, 2000, 3000, 5000] as const;
+
+export type RoundStickerSize = "2";
+
 const VISITING_CARD = {
   cardsPerSheet: 80,
   sheetUnitPrice: 12,
@@ -155,4 +167,21 @@ export function calculateOffsetMemo(input: OffsetMemoInput): EstimateResult | nu
   const total = sheetCost + plateCost + printingCost + bindingCost + packagingCost;
 
   return toRange(total, qty);
+}
+
+export function calculateSticker2x2(qty: number | null): EstimateResult | null {
+  if (qty === null || qty <= 0) return null;
+
+  const price = STICKER_2X2_FIXED_TIER_PRICES[qty];
+  if (price === undefined) return null;
+
+  return toFixedPrice(price, qty);
+}
+
+export function calculateRoundSticker(
+  size: RoundStickerSize,
+  qty: number | null
+): EstimateResult | null {
+  if (size !== "2") return null;
+  return calculateSticker2x2(qty);
 }
