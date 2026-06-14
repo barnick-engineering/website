@@ -23,6 +23,17 @@ export type OffsetMemoInput = {
   binding: "pad" | "memo";
 };
 
+/** Fixed tier totals for standard visiting card quantities */
+export const VISITING_FIXED_TIER_PRICES: Record<number, number> = {
+  500: 1000,
+  1000: 1200,
+  2000: 2200,
+  3000: 3000,
+  4000: 3800,
+};
+
+export const VISITING_PRESET_QUANTITIES = [500, 1000, 2000, 3000, 4000, 5000] as const;
+
 const VISITING_CARD = {
   cardsPerSheet: 80,
   sheetUnitPrice: 12,
@@ -62,10 +73,19 @@ function toRange(total: number, qty: number): EstimateResult {
   };
 }
 
-export function calculateVisitingCard(input: VisitingCardInput): EstimateResult | null {
-  if (input.qty === null) return null;
+function toFixedPrice(total: number, qty: number): EstimateResult {
+  return {
+    minPrice: total,
+    maxPrice: total,
+    minUnitPrice: Math.round(total / qty),
+    maxUnitPrice: Math.round(total / qty),
+  };
+}
 
+function calculateVisitingCardFull(input: VisitingCardInput): EstimateResult | null {
   const { qty, bothSides, colors, mattLamination, spotUV, dyeCutting } = input;
+  if (qty === null || qty <= 0) return null;
+
   const c = VISITING_CARD;
 
   const sheetsRequired = Math.ceil(qty / c.cardsPerSheet);
@@ -105,8 +125,21 @@ export function calculateVisitingCard(input: VisitingCardInput): EstimateResult 
   return toRange(total, qty);
 }
 
+export function calculateVisitingCard(input: VisitingCardInput): EstimateResult | null {
+  if (input.qty === null || input.qty <= 0) return null;
+
+  const { qty } = input;
+
+  // 5000 and custom quantities use full calculation; smaller tiers use fixed prices
+  if (qty !== 5000 && VISITING_FIXED_TIER_PRICES[qty] !== undefined) {
+    return toFixedPrice(VISITING_FIXED_TIER_PRICES[qty], qty);
+  }
+
+  return calculateVisitingCardFull(input);
+}
+
 export function calculateOffsetMemo(input: OffsetMemoInput): EstimateResult | null {
-  if (input.qty === null) return null;
+  if (input.qty === null || input.qty <= 0) return null;
 
   const { qty, size, colors, binding } = input;
   const c = OFFSET_MEMO;

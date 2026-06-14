@@ -4,40 +4,71 @@ import { useMemo, useState } from "react";
 import { AlertTriangle, Calculator, ChevronDown, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
+import { getMessengerUrlWithText } from "@/lib/order";
+import { Input } from "@/components/ui/input";
 import {
   calculateOffsetMemo,
   calculateVisitingCard,
+  VISITING_PRESET_QUANTITIES,
   type ColorCount,
   type EstimateResult,
 } from "@/lib/calculateEstimate";
 import { cn } from "@/lib/utils";
 
-type ProductId = "visiting-card" | "offset-memo";
+type ProductId = "visiting-card" | "cash-memo";
 
-const ACTIVE_PRODUCTS: { id: ProductId; labelKey: string }[] = [
+type ProductPill =
+  | { id: ProductId; labelKey: string; disabled?: false }
+  | { id: "coming-soon"; labelKey: string; disabled: true };
+
+const PRODUCT_PILLS: ProductPill[] = [
   { id: "visiting-card", labelKey: "estimate.product.visitingCard" },
-  { id: "offset-memo", labelKey: "estimate.product.offsetMemo" },
+  { id: "cash-memo", labelKey: "estimate.product.cashMemo" },
+  { id: "coming-soon", labelKey: "estimate.comingSoon", disabled: true },
 ];
 
-const VISITING_QTY_OPTIONS = [100, 250, 500, 1000, 2000, 5000] as const;
 const MEMO_QTY_OPTIONS = [500, 1000, 2000, 5000] as const;
 const COLOR_OPTIONS: ColorCount[] = [1, 2, 4];
 
+type VisitingQtyMode = "preset" | "custom";
+
 const DEFAULT_VISITING = {
-  qty: null as number | null,
+  qtyMode: "preset" as VisitingQtyMode,
+  presetQty: null as number | null,
+  customQty: "",
   bothSides: false,
   colors: 1 as ColorCount,
-  mattLamination: false,
-  spotUV: false,
-  dyeCutting: false,
+  mattLamination: true,
+  spotUV: true,
+  dyeCutting: true,
 };
 
+function resolveVisitingQty(state: typeof DEFAULT_VISITING): number | null {
+  if (state.qtyMode === "custom") {
+    const n = parseInt(state.customQty.trim(), 10);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  return state.presetQty;
+}
+
+type MemoQtyMode = "preset" | "custom";
+
 const DEFAULT_MEMO = {
-  qty: null as number | null,
+  qtyMode: "preset" as MemoQtyMode,
+  presetQty: null as number | null,
+  customQty: "",
   size: "large" as "large" | "small",
   colors: 1 as ColorCount,
   binding: "pad" as "pad" | "memo",
 };
+
+function resolveMemoQty(state: typeof DEFAULT_MEMO): number | null {
+  if (state.qtyMode === "custom") {
+    const n = parseInt(state.customQty.trim(), 10);
+    return Number.isFinite(n) && n > 0 ? n : null;
+  }
+  return state.presetQty;
+}
 
 function formatPrice(n: number): string {
   return n.toLocaleString("en-BD");
@@ -78,48 +109,207 @@ function CompactToggle<T extends string | boolean>({
   );
 }
 
-function QtyPicker<T extends number>({
-  label,
-  options,
-  value,
-  onChange,
+function VisitingQtySelector({
+  qtyMode,
+  presetQty,
+  customQty,
+  onPresetSelect,
+  onCustomSelect,
+  onCustomQtyChange,
 }: {
-  label: string;
-  options: readonly T[];
-  value: T | null;
-  onChange: (v: T) => void;
+  qtyMode: VisitingQtyMode;
+  presetQty: number | null;
+  customQty: string;
+  onPresetSelect: (qty: number) => void;
+  onCustomSelect: () => void;
+  onCustomQtyChange: (value: string) => void;
 }) {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
+  const locale = language === "bn" ? "bn-BD" : "en-BD";
 
   return (
     <div>
-      <p className="text-sm font-semibold text-foreground mb-2">{label}</p>
-      <div className="grid grid-cols-3 xs:grid-cols-6 gap-1.5 sm:gap-2">
-        {options.map((opt) => (
+      <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.visiting.qty")}</p>
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5 sm:gap-2">
+        {VISITING_PRESET_QUANTITIES.map((opt) => (
           <button
             key={opt}
             type="button"
-            onClick={() => onChange(opt)}
+            onClick={() => onPresetSelect(opt)}
             className={cn(
-              "min-h-10 rounded-lg text-sm font-semibold transition-colors",
-              value === opt
+              "min-h-10 text-sm font-semibold transition-colors",
+              qtyMode === "preset" && presetQty === opt
                 ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
                 : "border border-foreground/20 bg-background hover:bg-muted"
             )}
           >
-            {opt.toLocaleString(language === "bn" ? "bn-BD" : "en-BD")}
+            {opt.toLocaleString(locale)}
           </button>
         ))}
+        <button
+          type="button"
+          onClick={onCustomSelect}
+          className={cn(
+            "min-h-10 text-sm font-semibold transition-colors",
+            qtyMode === "custom"
+              ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
+              : "border border-foreground/20 bg-background hover:bg-muted"
+          )}
+        >
+          {t("estimate.visiting.custom")}
+        </button>
       </div>
+
+      {qtyMode === "custom" && (
+        <div className="mt-3">
+          <label className="text-sm font-medium text-foreground" htmlFor="visiting-custom-qty">
+            {t("estimate.visiting.customLabel")}
+          </label>
+          <Input
+            id="visiting-custom-qty"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            placeholder={t("estimate.visiting.customPlaceholder")}
+            value={customQty}
+            onChange={(e) => onCustomQtyChange(e.target.value)}
+            className="mt-1.5 min-h-11 text-base"
+          />
+        </div>
+      )}
     </div>
   );
 }
 
+function MemoQtySelector({
+  qtyMode,
+  presetQty,
+  customQty,
+  onPresetSelect,
+  onCustomSelect,
+  onCustomQtyChange,
+}: {
+  qtyMode: MemoQtyMode;
+  presetQty: number | null;
+  customQty: string;
+  onPresetSelect: (qty: number) => void;
+  onCustomSelect: () => void;
+  onCustomQtyChange: (value: string) => void;
+}) {
+  const { t, language } = useLanguage();
+  const locale = language === "bn" ? "bn-BD" : "en-BD";
+
+  return (
+    <div>
+      <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.memo.qty")}</p>
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 sm:gap-2">
+        {MEMO_QTY_OPTIONS.map((opt) => (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => onPresetSelect(opt)}
+            className={cn(
+              "min-h-10 text-sm font-semibold transition-colors",
+              qtyMode === "preset" && presetQty === opt
+                ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
+                : "border border-foreground/20 bg-background hover:bg-muted"
+            )}
+          >
+            {opt.toLocaleString(locale)}
+          </button>
+        ))}
+        <button
+          type="button"
+          onClick={onCustomSelect}
+          className={cn(
+            "min-h-10 text-sm font-semibold transition-colors",
+            qtyMode === "custom"
+              ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
+              : "border border-foreground/20 bg-background hover:bg-muted"
+          )}
+        >
+          {t("estimate.memo.custom")}
+        </button>
+      </div>
+
+      {qtyMode === "custom" && (
+        <div className="mt-3">
+          <label className="text-sm font-medium text-foreground" htmlFor="memo-custom-qty">
+            {t("estimate.memo.customLabel")}
+          </label>
+          <Input
+            id="memo-custom-qty"
+            type="number"
+            inputMode="numeric"
+            min={1}
+            placeholder={t("estimate.memo.customPlaceholder")}
+            value={customQty}
+            onChange={(e) => onCustomQtyChange(e.target.value)}
+            className="mt-1.5 min-h-11 text-base"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function formatEstimatePrice(result: EstimateResult): string {
+  if (result.minPrice === result.maxPrice) {
+    return `৳ ${formatPrice(result.minPrice)}`;
+  }
+  return `৳ ${formatPrice(result.minPrice)} – ৳ ${formatPrice(result.maxPrice)}`;
+}
+
+function buildEstimateMessengerMessage({
+  t,
+  product,
+  result,
+  visitingQty,
+  visiting,
+  memoQty,
+  memo,
+}: {
+  t: (key: string) => string;
+  product: ProductId;
+  result: EstimateResult;
+  visitingQty: number | null;
+  visiting: typeof DEFAULT_VISITING;
+  memoQty: number | null;
+  memo: typeof DEFAULT_MEMO;
+}): string {
+  const lines = [t("estimate.messenger.intro"), ""];
+
+  if (product === "visiting-card" && visitingQty) {
+    lines.push(`${t("estimate.messenger.item")}: ${t("estimate.product.visitingCard")}`);
+    lines.push(`${t("estimate.messenger.qty")}: ${visitingQty.toLocaleString("en-BD")}`);
+    lines.push(`${t("estimate.messenger.price")}: ${formatEstimatePrice(result)}`);
+    lines.push("");
+    lines.push(`${t("estimate.visiting.sides")}: ${t(visiting.bothSides ? "estimate.visiting.sides.both" : "estimate.visiting.sides.one")}`);
+    lines.push(`${t("estimate.visiting.colors")}: ${t(`estimate.visiting.colors.${visiting.colors}`)}`);
+    lines.push(`${t("estimate.visiting.matt")}: ${t(visiting.mattLamination ? "estimate.visiting.matt.on" : "estimate.visiting.matt.off")}`);
+    lines.push(`${t("estimate.visiting.spot")}: ${t(visiting.spotUV ? "estimate.visiting.spot.on" : "estimate.visiting.spot.off")}`);
+    lines.push(`${t("estimate.visiting.cutting")}: ${t(visiting.dyeCutting ? "estimate.visiting.cutting.dye" : "estimate.visiting.cutting.regular")}`);
+    lines.push(t("estimate.paperNote"));
+  } else if (memoQty) {
+    lines.push(`${t("estimate.messenger.item")}: ${t("estimate.product.cashMemo")}`);
+    lines.push(`${t("estimate.messenger.qty")}: ${memoQty.toLocaleString("en-BD")}`);
+    lines.push(`${t("estimate.messenger.price")}: ${formatEstimatePrice(result)}`);
+    lines.push("");
+    lines.push(`${t("estimate.memo.size")}: ${t(memo.size === "large" ? "estimate.memo.size.large" : "estimate.memo.size.small")}`);
+    lines.push(`${t("estimate.memo.colors")}: ${t(`estimate.memo.colors.${memo.colors}`)}`);
+    lines.push(`${t("estimate.memo.binding")}: ${t(memo.binding === "pad" ? "estimate.memo.binding.pad" : "estimate.memo.binding.memo")}`);
+  }
+
+  return lines.join("\n");
+}
+
 function PricePanel({
   result,
+  messengerUrl,
   className,
 }: {
   result: EstimateResult | null;
+  messengerUrl: string | null;
   className?: string;
 }) {
   const { t } = useLanguage();
@@ -137,25 +327,31 @@ function PricePanel({
 
       {result ? (
         <div className="mt-2 min-w-0">
-          <div className="flex flex-col gap-0.5">
+          {result.minPrice === result.maxPrice ? (
             <p className="text-xl sm:text-2xl font-bold tabular-nums leading-none">
               ৳ {formatPrice(result.minPrice)}
             </p>
-            <p className="text-xs text-background/60 py-0.5">{t("estimate.result.rangeTo")}</p>
-            <p className="text-xl sm:text-2xl font-bold tabular-nums leading-none">
-              ৳ {formatPrice(result.maxPrice)}
-            </p>
-          </div>
+          ) : (
+            <div className="flex flex-col gap-0.5">
+              <p className="text-xl sm:text-2xl font-bold tabular-nums leading-none">
+                ৳ {formatPrice(result.minPrice)}
+              </p>
+              <p className="text-xs text-background/60 py-0.5">{t("estimate.result.rangeTo")}</p>
+              <p className="text-xl sm:text-2xl font-bold tabular-nums leading-none">
+                ৳ {formatPrice(result.maxPrice)}
+              </p>
+            </div>
+          )}
           <p className="mt-2 text-xs sm:text-sm text-background/80 break-words">
             {t("estimate.result.perUnit")}: ৳ {formatPrice(result.minUnitPrice)} – ৳{" "}
             {formatPrice(result.maxUnitPrice)}
           </p>
-          <p className="mt-3 flex items-start gap-1.5 text-[11px] text-amber-200 leading-snug">
-            <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" aria-hidden />
+          <p className="mt-3 flex items-start gap-1.5 text-[11px] text-background/50 leading-snug">
+            <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" aria-hidden />
             <span className="min-w-0">{t("estimate.result.disclaimer")}</span>
           </p>
           <a
-            href={facebookInsights.messengerUrl}
+            href={messengerUrl ?? facebookInsights.messengerUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 flex w-full max-w-full min-w-0 items-center justify-center gap-2 rounded-full bg-background px-4 py-3 text-sm font-medium text-foreground hover:bg-background/90 transition-colors text-center leading-snug"
@@ -188,13 +384,44 @@ export function PriceEstimator() {
     setMemo(DEFAULT_MEMO);
   };
 
-  const result = useMemo(() => {
-    if (product === "visiting-card") return calculateVisitingCard(visiting);
-    return calculateOffsetMemo(memo);
-  }, [product, visiting, memo]);
+  const visitingQty = useMemo(() => resolveVisitingQty(visiting), [visiting]);
+  const memoQty = useMemo(() => resolveMemoQty(memo), [memo]);
 
-  const hasQty = product === "visiting-card" ? visiting.qty !== null : memo.qty !== null;
+  const result = useMemo(() => {
+    if (product === "visiting-card") {
+      return calculateVisitingCard({
+        qty: visitingQty,
+        bothSides: visiting.bothSides,
+        colors: visiting.colors,
+        mattLamination: visiting.mattLamination,
+        spotUV: visiting.spotUV,
+        dyeCutting: visiting.dyeCutting,
+      });
+    }
+    return calculateOffsetMemo({
+      qty: memoQty,
+      size: memo.size,
+      colors: memo.colors,
+      binding: memo.binding,
+    });
+  }, [product, visiting, visitingQty, memo, memoQty]);
+
+  const hasQty = product === "visiting-card" ? visitingQty !== null : memoQty !== null;
   const stepNums = language === "bn" ? ["১", "২", "৩"] : ["1", "2", "3"];
+
+  const messengerUrl = useMemo(() => {
+    if (!result) return null;
+    const message = buildEstimateMessengerMessage({
+      t,
+      product,
+      result,
+      visitingQty,
+      visiting,
+      memoQty,
+      memo,
+    });
+    return getMessengerUrlWithText(message);
+  }, [t, product, result, visitingQty, visiting, memoQty, memo]);
 
   return (
     <section id="estimate" className="px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20">
@@ -205,13 +432,13 @@ export function PriceEstimator() {
           <p className="mt-2 text-sm text-muted-foreground">{t("estimate.subtitle")}</p>
         </div>
 
-        <p
-          className="mt-4 mx-auto max-w-2xl flex items-center justify-center gap-1.5 text-center text-[11px] sm:text-xs text-amber-800 dark:text-amber-200"
+        <div
+          className="mt-4 mx-auto max-w-2xl flex items-start justify-center gap-2 text-left text-[11px] sm:text-xs border border-amber-600/20 bg-amber-500/10 px-3 py-2.5 text-amber-950/90 dark:border-amber-400/12 dark:bg-amber-400/6 dark:text-muted-foreground"
           role="note"
         >
-          <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden />
-          {t("estimate.disclaimer")}
-        </p>
+          <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5 text-amber-700/80 dark:text-amber-400/40" aria-hidden />
+          <span>{t("estimate.disclaimer")}</span>
+        </div>
 
         {/* Simple 3-step hint */}
         <div className="mt-5 flex items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
@@ -230,36 +457,50 @@ export function PriceEstimator() {
 
         {/* Product pills — scrollable, scales to many items */}
         <div className="mt-5 flex gap-2 overflow-x-auto pb-1 scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {ACTIVE_PRODUCTS.map((p) => (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => handleProductChange(p.id)}
-              className={cn(
-                "shrink-0 min-h-10 rounded-full px-4 sm:px-5 text-sm font-semibold transition-colors",
-                product === p.id
-                  ? "bg-foreground text-background"
-                  : "border border-foreground/20 bg-background hover:bg-muted"
-              )}
-            >
-              {t(p.labelKey)}
-            </button>
-          ))}
+          {PRODUCT_PILLS.map((p) =>
+            p.disabled ? (
+              <span
+                key={p.id}
+                className="shrink-0 min-h-10 rounded-full px-4 sm:px-5 text-sm font-semibold border border-dashed border-foreground/15 text-muted-foreground inline-flex items-center cursor-default"
+              >
+                {t(p.labelKey)}
+              </span>
+            ) : (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => handleProductChange(p.id)}
+                className={cn(
+                  "shrink-0 min-h-10 rounded-full px-4 sm:px-5 text-sm font-semibold transition-colors",
+                  product === p.id
+                    ? "bg-foreground text-background"
+                    : "border border-foreground/20 bg-background hover:bg-muted"
+                )}
+              >
+                {t(p.labelKey)}
+              </button>
+            )
+          )}
         </div>
-        <p className="mt-1.5 text-[11px] text-muted-foreground">{t("estimate.comingSoonList")}</p>
 
-        {/* Two-panel layout: options + always-visible price */}
+        {/* Options first on mobile; price panel after all inputs */}
         <div className="mt-5 grid lg:grid-cols-[1fr_minmax(240px,320px)] gap-4 lg:gap-5 items-start min-w-0">
-          <PricePanel result={result} className="order-1 lg:order-2" />
-
-          <div className="order-2 lg:order-1 rounded-xl border bg-background p-4 sm:p-5 space-y-4">
+          <div className="rounded-xl border bg-background p-4 sm:p-5 space-y-4">
             {product === "visiting-card" ? (
               <>
-                <QtyPicker
-                  label={t("estimate.visiting.qty")}
-                  options={VISITING_QTY_OPTIONS}
-                  value={visiting.qty}
-                  onChange={(qty) => setVisiting((s) => ({ ...s, qty }))}
+                <VisitingQtySelector
+                  qtyMode={visiting.qtyMode}
+                  presetQty={visiting.presetQty}
+                  customQty={visiting.customQty}
+                  onPresetSelect={(qty) =>
+                    setVisiting((s) => ({ ...s, qtyMode: "preset", presetQty: qty }))
+                  }
+                  onCustomSelect={() =>
+                    setVisiting((s) => ({ ...s, qtyMode: "custom", presetQty: null }))
+                  }
+                  onCustomQtyChange={(customQty) =>
+                    setVisiting((s) => ({ ...s, qtyMode: "custom", customQty }))
+                  }
                 />
 
                 <div className="grid sm:grid-cols-2 gap-3 pt-1 border-t border-border/60">
@@ -336,11 +577,19 @@ export function PriceEstimator() {
               </>
             ) : (
               <>
-                <QtyPicker
-                  label={t("estimate.memo.qty")}
-                  options={MEMO_QTY_OPTIONS}
-                  value={memo.qty}
-                  onChange={(qty) => setMemo((s) => ({ ...s, qty }))}
+                <MemoQtySelector
+                  qtyMode={memo.qtyMode}
+                  presetQty={memo.presetQty}
+                  customQty={memo.customQty}
+                  onPresetSelect={(qty) =>
+                    setMemo((s) => ({ ...s, qtyMode: "preset", presetQty: qty }))
+                  }
+                  onCustomSelect={() =>
+                    setMemo((s) => ({ ...s, qtyMode: "custom", presetQty: null }))
+                  }
+                  onCustomQtyChange={(customQty) =>
+                    setMemo((s) => ({ ...s, qtyMode: "custom", customQty }))
+                  }
                 />
                 <div className="grid sm:grid-cols-2 gap-3 pt-1 border-t border-border/60">
                   <CompactToggle
@@ -387,6 +636,8 @@ export function PriceEstimator() {
               </>
             )}
           </div>
+
+          <PricePanel result={result} messengerUrl={messengerUrl} />
         </div>
       </div>
     </section>
