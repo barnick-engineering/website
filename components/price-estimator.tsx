@@ -9,14 +9,16 @@ import { Input } from "@/components/ui/input";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import {
   calculateOffsetMemo,
+  calculateRoundSticker,
   calculateVisitingCard,
+  STICKER_2X2_PRESET_QUANTITIES,
   VISITING_PRESET_QUANTITIES,
   type ColorCount,
   type EstimateResult,
 } from "@/lib/calculateEstimate";
 import { cn } from "@/lib/utils";
 
-type ProductId = "visiting-card" | "cash-memo";
+type ProductId = "visiting-card" | "cash-memo" | "round-sticker";
 
 type ProductPill =
   | { id: ProductId; labelKey: string; disabled?: false }
@@ -25,6 +27,7 @@ type ProductPill =
 const PRODUCT_PILLS: ProductPill[] = [
   { id: "visiting-card", labelKey: "estimate.product.visitingCard" },
   { id: "cash-memo", labelKey: "estimate.product.cashMemo" },
+  { id: "round-sticker", labelKey: "estimate.product.roundSticker" },
   { id: "coming-soon", labelKey: "estimate.comingSoon", disabled: true },
 ];
 
@@ -70,6 +73,10 @@ function resolveMemoQty(state: typeof DEFAULT_MEMO): number | null {
   }
   return state.presetQty;
 }
+
+const DEFAULT_STICKER = {
+  qty: null as number | null,
+};
 
 function formatPrice(n: number): string {
   return n.toLocaleString("en-BD");
@@ -254,6 +261,51 @@ function MemoQtySelector({
   );
 }
 
+function RoundStickerOptions({
+  qty,
+  onQtyChange,
+}: {
+  qty: number | null;
+  onQtyChange: (qty: number) => void;
+}) {
+  const { t, language } = useLanguage();
+  const locale = language === "bn" ? "bn-BD" : "en-BD";
+
+  return (
+    <>
+      <div>
+        <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.sticker.size")}</p>
+        <div className="inline-flex">
+          <span className="min-h-10 px-4 text-sm font-semibold bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background inline-flex items-center">
+            {t("estimate.sticker.size.2")}
+          </span>
+        </div>
+      </div>
+
+      <div className="pt-1 border-t border-border/60">
+        <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.sticker.qty")}</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
+          {STICKER_2X2_PRESET_QUANTITIES.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => onQtyChange(opt)}
+              className={cn(
+                "min-h-10 text-sm font-semibold transition-colors",
+                qty === opt
+                  ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
+                  : "border border-foreground/20 bg-background hover:bg-muted"
+              )}
+            >
+              {opt.toLocaleString(locale)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
 function formatEstimatePrice(result: EstimateResult): string {
   if (result.minPrice === result.maxPrice) {
     return `৳ ${formatPrice(result.minPrice)}`;
@@ -269,6 +321,7 @@ function buildEstimateMessengerMessage({
   visiting,
   memoQty,
   memo,
+  sticker,
 }: {
   t: (key: string) => string;
   product: ProductId;
@@ -277,6 +330,7 @@ function buildEstimateMessengerMessage({
   visiting: typeof DEFAULT_VISITING;
   memoQty: number | null;
   memo: typeof DEFAULT_MEMO;
+  sticker: typeof DEFAULT_STICKER;
 }): string {
   const lines = [t("estimate.messenger.intro"), ""];
 
@@ -291,7 +345,7 @@ function buildEstimateMessengerMessage({
     lines.push(`${t("estimate.visiting.spot")}: ${t(visiting.spotUV ? "estimate.visiting.spot.on" : "estimate.visiting.spot.off")}`);
     lines.push(`${t("estimate.visiting.cutting")}: ${t(visiting.dyeCutting ? "estimate.visiting.cutting.dye" : "estimate.visiting.cutting.regular")}`);
     lines.push(t("estimate.paperNote"));
-  } else if (memoQty) {
+  } else if (product === "cash-memo" && memoQty) {
     lines.push(`${t("estimate.messenger.item")}: ${t("estimate.product.cashMemo")}`);
     lines.push(`${t("estimate.messenger.qty")}: ${memoQty.toLocaleString("en-BD")}`);
     lines.push(`${t("estimate.messenger.price")}: ${formatEstimatePrice(result)}`);
@@ -299,6 +353,11 @@ function buildEstimateMessengerMessage({
     lines.push(`${t("estimate.memo.size")}: ${t(memo.size === "large" ? "estimate.memo.size.large" : "estimate.memo.size.small")}`);
     lines.push(`${t("estimate.memo.colors")}: ${t(`estimate.memo.colors.${memo.colors}`)}`);
     lines.push(`${t("estimate.memo.binding")}: ${t(memo.binding === "pad" ? "estimate.memo.binding.pad" : "estimate.memo.binding.memo")}`);
+  } else if (product === "round-sticker" && sticker.qty) {
+    lines.push(`${t("estimate.messenger.item")}: ${t("estimate.product.roundSticker")}`);
+    lines.push(`${t("estimate.sticker.size")}: ${t("estimate.sticker.size.2")}`);
+    lines.push(`${t("estimate.messenger.qty")}: ${sticker.qty.toLocaleString("en-BD")}`);
+    lines.push(`${t("estimate.messenger.price")}: ${formatEstimatePrice(result)}`);
   }
 
   return lines.join("\n");
@@ -378,11 +437,13 @@ export function PriceEstimator() {
   const [product, setProduct] = useState<ProductId>("visiting-card");
   const [visiting, setVisiting] = useState(DEFAULT_VISITING);
   const [memo, setMemo] = useState(DEFAULT_MEMO);
+  const [sticker, setSticker] = useState(DEFAULT_STICKER);
 
   const handleProductChange = (id: ProductId) => {
     setProduct(id);
     setVisiting(DEFAULT_VISITING);
     setMemo(DEFAULT_MEMO);
+    setSticker(DEFAULT_STICKER);
   };
 
   const visitingQty = useMemo(() => resolveVisitingQty(visiting), [visiting]);
@@ -399,15 +460,23 @@ export function PriceEstimator() {
         dyeCutting: visiting.dyeCutting,
       });
     }
-    return calculateOffsetMemo({
-      qty: memoQty,
-      size: memo.size,
-      colors: memo.colors,
-      binding: memo.binding,
-    });
-  }, [product, visiting, visitingQty, memo, memoQty]);
+    if (product === "cash-memo") {
+      return calculateOffsetMemo({
+        qty: memoQty,
+        size: memo.size,
+        colors: memo.colors,
+        binding: memo.binding,
+      });
+    }
+    return calculateRoundSticker("2", sticker.qty);
+  }, [product, visiting, visitingQty, memo, memoQty, sticker]);
 
-  const hasQty = product === "visiting-card" ? visitingQty !== null : memoQty !== null;
+  const hasQty =
+    product === "visiting-card"
+      ? visitingQty !== null
+      : product === "cash-memo"
+        ? memoQty !== null
+        : sticker.qty !== null;
   const stepNums = language === "bn" ? ["১", "২", "৩"] : ["1", "2", "3"];
 
   const messengerUrl = useMemo(() => {
@@ -420,9 +489,10 @@ export function PriceEstimator() {
       visiting,
       memoQty,
       memo,
+      sticker,
     });
     return getMessengerUrlWithText(message);
-  }, [t, product, result, visitingQty, visiting, memoQty, memo]);
+  }, [t, product, result, visitingQty, visiting, memoQty, memo, sticker]);
 
   return (
     <section id="estimate" className="relative px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20">
@@ -577,7 +647,7 @@ export function PriceEstimator() {
 
                 <p className="text-[11px] text-muted-foreground pt-1">{t("estimate.paperNote")}</p>
               </>
-            ) : (
+            ) : product === "cash-memo" ? (
               <>
                 <MemoQtySelector
                   qtyMode={memo.qtyMode}
@@ -636,7 +706,12 @@ export function PriceEstimator() {
                   </div>
                 </div>
               </>
-            )}
+            ) : product === "round-sticker" ? (
+              <RoundStickerOptions
+                qty={sticker.qty}
+                onQtyChange={(qty) => setSticker({ qty })}
+              />
+            ) : null}
           </div>
 
           <PricePanel result={result} messengerUrl={messengerUrl} />
