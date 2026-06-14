@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import LogoCloud from "@/components/logo-cloud";
 import { HeroProductionFlow } from "@/components/hero-production-flow";
+import { DotPattern } from "@/components/ui/dot-pattern";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
 import { getPhoneUrl } from "@/lib/order";
@@ -17,8 +18,9 @@ const Hero = () => {
   return (
     <>
       <section id="hero" className="overflow-x-hidden">
-        <div className="py-8 sm:py-14 lg:py-16 px-4 xs:px-6 bg-background">
-          <div className="max-w-screen-xl mx-auto w-full grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-start lg:items-center min-w-0">
+        <div className="relative py-8 sm:py-14 lg:py-16 px-4 xs:px-6 bg-background">
+          <DotPattern />
+          <div className="relative z-10 max-w-screen-xl mx-auto w-full grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-start lg:items-center min-w-0">
           <div className="text-left order-1 min-w-0">
             <Badge className="inline-flex items-center gap-1.5 bg-foreground text-background rounded-full py-1 px-3 border-none">
               {t("hero.badge")}
