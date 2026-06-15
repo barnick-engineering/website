@@ -1,7 +1,7 @@
 import Hero from "@/components/hero";
 import { PriceEstimator } from "@/components/price-estimator";
 import { StatsInfographic } from "@/components/stats-infographic";
-import Testimonials from "@/components/testimonials";
+import PortfolioSection from "@/components/portfolio/PortfolioSection";
 import FAQ from "@/components/faq";
 import CTABanner from "@/components/cta-banner";
 import Footer from "@/components/footer";
@@ -16,7 +16,7 @@ export default function Home() {
         <Hero />
         <PriceEstimator />
         <StatsInfographic />
-        <Testimonials />
+        <PortfolioSection />
         <FAQ />
         <CTABanner />
         <Footer />
