@@ -1,6 +1,5 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
 import Script from "next/script";
 import { Geist, Noto_Sans_Bengali } from "next/font/google";
 import { LanguageProvider } from "@/contexts/language-context";
@@ -150,11 +149,9 @@ export default function RootLayout({
             }
           })}
         </Script>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <LanguageProvider>
-            <TooltipProvider>{children}</TooltipProvider>
-          </LanguageProvider>
-        </ThemeProvider>
+        <LanguageProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
