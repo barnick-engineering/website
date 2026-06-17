@@ -14,8 +14,8 @@ export default function Home() {
       <Navbar />
       <main className="pt-16 xs:pt-20 sm:pt-24 pb-20 md:pb-0">
         <Hero />
-        <PriceEstimator />
         <StatsInfographic />
+        <PriceEstimator />
         <PortfolioSection />
         <FAQ />
         <CTABanner />
