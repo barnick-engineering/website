@@ -30,18 +30,19 @@ export function StickyContactBar() {
   }, []);
 
   return (
-    <div
+    <nav
+      aria-label="দ্রুত যোগাযোগ"
       className={cn(
         "fixed bottom-0 left-0 right-0 z-40 md:hidden border-t bg-background/95 backdrop-blur-sm px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-300 ease-out",
         visible ? "translate-y-0" : "translate-y-full pointer-events-none"
       )}
-      aria-hidden={!visible}
     >
       <div className="flex gap-3 max-w-screen-xl mx-auto">
         <a
           href={facebookInsights.messengerUrl}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label={`${t("cta.messenger")} — Messenger`}
           className="flex-1 inline-flex items-center justify-center gap-2 h-11 rounded-full bg-foreground text-background text-sm font-medium"
         >
           <MessageCircle className="h-4 w-4" />
@@ -49,12 +50,13 @@ export function StickyContactBar() {
         </a>
         <a
           href={getPhoneUrl()}
+          aria-label={`${t("cta.call")} — ফোন`}
           className="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full border border-foreground/25 text-foreground text-sm font-medium hover:bg-muted"
         >
           <Phone className="h-4 w-4" />
           {t("cta.call")}
         </a>
       </div>
-    </div>
+    </nav>
   );
 }

@@ -14,6 +14,7 @@ export function ClientLogo({ src, alt, className }: ClientLogoProps) {
       alt={alt}
       width={160}
       height={64}
+      sizes="192px"
       className={cn("max-h-10 sm:max-h-12 w-auto object-contain", className)}
     />
   );

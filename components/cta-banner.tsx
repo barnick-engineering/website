@@ -10,7 +10,7 @@ export default function CTABanner() {
   const { t } = useLanguage();
 
   return (
-    <div className="px-6" id="contact">
+    <div className="scroll-mt-[7.5rem] px-6" id="contact">
       <div className="my-16 w-full bg-foreground text-background max-w-screen-lg mx-auto rounded-2xl py-10 md:py-14 px-6 md:px-12">
         <h3 className="text-3xl md:text-4xl font-bold">{t("contact.title")}</h3>
         <p className="mt-3 text-base md:text-lg text-background/80">

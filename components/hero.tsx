@@ -1,10 +1,12 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { MessageCircle, Phone, Calculator } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import LogoCloud from "@/components/logo-cloud";
 import { HeroProductionFlow } from "@/components/hero-production-flow";
+
+const LogoCloud = dynamic(() => import("@/components/logo-cloud"));
 import { DotPattern } from "@/components/ui/dot-pattern";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
@@ -24,7 +26,10 @@ const Hero = () => {
           <div className="text-left order-1 min-w-0">
             <Badge className="inline-flex items-center gap-1.5 bg-foreground text-background rounded-full py-1 px-3 border-none">
               {t("hero.badge")}
-              <span className="text-sm leading-none" aria-hidden>🚀</span>
+              <span className="text-sm leading-none" aria-hidden>
+                {" "}
+                🚀
+              </span>
             </Badge>
             <h1
               className={cn(

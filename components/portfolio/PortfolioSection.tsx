@@ -9,6 +9,7 @@ import {
   type PortfolioCategory,
   type PortfolioItem,
 } from "@/lib/portfolioData";
+import { toBengaliDigits } from "@/lib/formatBn";
 import CategoryFilter from "./CategoryFilter";
 import PortfolioCard from "./PortfolioCard";
 import PortfolioLightbox from "./PortfolioLightbox";
@@ -27,7 +28,8 @@ export default function PortfolioSection() {
   }, [activeCategory]);
 
   const visible = filtered.slice(0, visibleCount);
-  const hasMore = visibleCount < filtered.length;
+  const remaining = Math.max(filtered.length - visibleCount, 0);
+  const hasMore = remaining > 0;
 
   const handleCategoryChange = (cat: PortfolioCategory) => {
     setActiveCategory(cat);
@@ -48,7 +50,7 @@ export default function PortfolioSection() {
   };
 
   return (
-    <section id="products" className="py-14 px-4 xs:px-6 max-w-5xl mx-auto w-full">
+    <section id="products" className="scroll-mt-[7.5rem] py-14 px-4 xs:px-6 max-w-5xl mx-auto w-full">
       <div className="mb-8">
         <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">
           কাজের নমুনা / পোর্টফোলিও
@@ -67,11 +69,10 @@ export default function PortfolioSection() {
         layout
       >
         <AnimatePresence mode="popLayout">
-          {visible.map((item, index) => (
+          {visible.map((item) => (
             <PortfolioCard
               key={item.id}
               item={item}
-              priority={index < 3}
               onClick={() => setLightboxItem(item)}
             />
           ))}
@@ -85,7 +86,7 @@ export default function PortfolioSection() {
             onClick={() => setVisibleCount((c) => c + LOAD_MORE_COUNT)}
             className="px-6 py-2.5 border border-border text-sm text-foreground hover:bg-muted transition-colors"
           >
-            আরও দেখুন ({filtered.length - visibleCount} টি বাকি)
+            আরও দেখুন ({toBengaliDigits(remaining)}টি বাকি)
           </button>
         </div>
       )}

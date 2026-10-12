@@ -50,9 +50,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h6 className="font-semibold text-sm uppercase tracking-wider text-white/60">
+            <p className="font-semibold text-sm uppercase tracking-wider text-white/60">
               {t("footer.links")}
-            </h6>
+            </p>
             <ul className="mt-4 space-y-2">
               {footerLinks.map(({ title, href }) => (
                 <li key={title}>
@@ -68,9 +68,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h6 className="font-semibold text-sm uppercase tracking-wider text-white/60">
+            <p className="font-semibold text-sm uppercase tracking-wider text-white/60">
               {t("footer.address")}
-            </h6>
+            </p>
             <p className="mt-4 text-sm text-white/80 leading-relaxed">
               {t("footer.addressValue")}
             </p>
@@ -84,9 +84,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h6 className="font-semibold text-sm uppercase tracking-wider text-white/60">
+            <p className="font-semibold text-sm uppercase tracking-wider text-white/60">
               {t("footer.social")}
-            </h6>
+            </p>
             <div className="mt-4 flex gap-3">
               {socialLinks.map(({ href, icon: Icon, label }) => (
                 <a

@@ -8,23 +8,32 @@ import "./globals.css";
 const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
+  preload: false,
 });
 
 const notoSansBengali = Noto_Sans_Bengali({
   subsets: ["bengali"],
   variable: "--font-bengali",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+  adjustFontFallback: true,
 });
 
+const siteUrl = "https://barnickpracharani.com";
+const siteTitle = "বর্ণিক প্রচারাণী — প্রিন্টিং ও প্যাকেজিং";
+const siteDescription =
+  "বিজনেস কার্ড থেকে কাস্টম প্যাকেজিং — সহজ, দ্রুত, নির্ভরযোগ্য। ১৯৮৯ সাল থেকে ঢাকায় মানসম্মত প্রিন্টিং সেবা।";
+
 export const metadata: Metadata = {
-  title: "Barnick Pracharani - Printing Services",
-  description:
-    "Barnick Pracharani is a printing services company that provides a wide range of printing services to its clients.",
+  metadataBase: new URL(siteUrl),
+  title: siteTitle,
+  description: siteDescription,
   keywords: [
+    "বর্ণিক প্রচারাণী",
     "Barnick Pracharani",
-    "Barnick Pracharani Printing",
-    "Barnick Pracharani Printing Services",
-    "Barnick Pracharani Printing Products",
+    "প্রিন্টিং",
+    "প্যাকেজিং",
+    "ভিজিটিং কার্ড",
     "visiting card printing",
     "business card printing",
     "letterhead printing",
@@ -33,7 +42,7 @@ export const metadata: Metadata = {
     "banner printing",
     "poster printing",
     "flyer printing",
-    " brochure printing",
+    "brochure printing",
   ],
   authors: [
     {
@@ -45,7 +54,7 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: "icon",
-      url: "/favicon.ico", // Google prioritizes this
+      url: "/favicon.ico",
     },
     {
       rel: "icon",
@@ -70,26 +79,28 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Barnick Pracharani – Printing & Packaging",
-    description: "প্রিন্টিং / প্যাকেজিং এখন আরও সহজ, দ্রুত ও বিশ্বাসযোগ্য!",
-    url: "https://barnickpracharani.com",
-    siteName: "Barnick Pracharani",
+    title: siteTitle,
+    description: siteDescription,
+    url: siteUrl,
+    siteName: "বর্ণিক প্রচারাণী",
+    locale: "bn_BD",
+    alternateLocale: ["en_US"],
     type: "website",
     images: [
       {
-        url: "https://barnickpracharani.com/barnick.png",
-        width: 389,
-        height: 389,
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
         type: "image/png",
-        alt: "Barnick Pracharani - Printing & Packaging",
+        alt: siteTitle,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Barnick Pracharani – Printing & Packaging",
-    description: "প্রিন্টিং / প্যাকেজিং এখন আরও সহজ, দ্রুত ও বিশ্বাসযোগ্য!",
-    images: ["https://barnickpracharani.com/barnick.png"],
+    title: siteTitle,
+    description: siteDescription,
+    images: ["/twitter-image"],
   },
 };
 
@@ -105,12 +116,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${notoSansBengali.variable}`}
     >
       <body className="font-sans antialiased">
-        {/* Google Analytics */}
+        {/* Google Analytics — lazyOnload so it never competes with first paint */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-M37QBL6ZZN"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -120,33 +131,46 @@ export default function RootLayout({
         </Script>
         {/* JSON-LD Structured Data */}
         <Script
-          id="organization-schema"
+          id="localbusiness-schema"
           type="application/ld+json"
           strategy="afterInteractive"
         >
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Barnick Pracharani",
-            "url": "https://barnickpracharani.com",
-            "logo": "https://barnickpracharani.com/barnick.png",
-            "description": "Printing & Packaging Services - High-quality customized printing from business cards to marketing materials",
-            "sameAs": [
-              "https://www.facebook.com/heybarnick",
-              "https://www.linkedin.com/company/barnick-pracharani",
-              "https://www.instagram.com/barnick_pracharani/"
-            ],
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "+8801712347097",
-              "contactType": "customer service"
+            "@type": "LocalBusiness",
+            name: "Barnick Pracharani",
+            alternateName: "বর্ণিক প্রচারাণী",
+            url: "https://barnickpracharani.com",
+            image: "https://barnickpracharani.com/barnick.png",
+            logo: "https://barnickpracharani.com/barnick.png",
+            description: siteDescription,
+            telephone: "+8801712347097",
+            foundingDate: "1989",
+            openingHours: ["Sa-Th 09:00-18:00"],
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: 23.7098,
+              longitude: 90.4074,
             },
-            "address": {
+            sameAs: [
+              "https://www.facebook.com/heybarnick",
+              "https://www.instagram.com/barnick_pracharani/",
+              "https://www.linkedin.com/company/barnick-pracharani",
+            ],
+            address: {
               "@type": "PostalAddress",
-              "streetAddress": "36 Banshicharan Sen Poddar Lane, Kotowali",
-              "addressLocality": "Dhaka",
-              "addressCountry": "BD"
-            }
+              streetAddress: "36 Bashichoron Sen Poddar Lane, Kotwali, Dhaka",
+              addressLocality: "Dhaka",
+              addressRegion: "Dhaka",
+              addressCountry: "BD",
+            },
+            contactPoint: {
+              "@type": "ContactPoint",
+              telephone: "+8801712347097",
+              contactType: "customer service",
+              areaServed: "BD",
+              availableLanguage: ["bn", "en"],
+            },
           })}
         </Script>
         <LanguageProvider>

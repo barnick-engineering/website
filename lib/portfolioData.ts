@@ -35,7 +35,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: "1",
     src: "/testimonials/1.webp",
-    alt: "প্রিমিয়াম শপিং ব্যাগ",
+    alt: "প্রিমিয়াম শপিং ব্যাগের নমুনা",
     category: "প্যাকেজিং",
     productName: "প্রিমিয়াম শপিং ব্যাগ",
     specs: "প্রিমিয়াম শপিং ব্যাগ",
@@ -45,7 +45,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: "2",
     src: "/testimonials/2.webp",
-    alt: "ইনভাইটেশন কার্ড",
+    alt: "ইনভাইটেশন কার্ডের নমুনা",
     category: "কার্ড",
     productName: "ইনভাইটেশন কার্ড",
     specs: "ইনভাইটেশন কার্ড",
@@ -54,7 +54,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: "3",
     src: "/testimonials/3.webp",
-    alt: "ব্রশিউর / পোর্টফলিও",
+    alt: "ব্রোশিওর ও পোর্টফোলিওর নমুনা",
     category: "ব্রোশিওর / ক্যাটালগ",
     productName: "ব্রশিউর / পোর্টফলিও",
     specs: "ব্রশিউর / পোর্টফলিও",
@@ -63,7 +63,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: "4",
     src: "/testimonials/4.webp",
-    alt: "নোটপ্যাড",
+    alt: "নোটপ্যাডের নমুনা",
     category: "নোটপ্যাড",
     productName: "নোটপ্যাড",
     specs: "নোটপ্যাড",
@@ -72,7 +72,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: "5",
     src: "/testimonials/5.webp",
-    alt: "ফ্লায়ার",
+    alt: "ফ্লায়ারের নমুনা",
     category: "ব্যানার / ফ্লায়ার",
     productName: "ট্রাই-ফোল্ড ব্রোশিওর",
     specs: "170gsm গ্লসি · ফুল কালার · দুই পাশ",
@@ -81,7 +81,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: "6",
     src: "/testimonials/6.webp",
-    alt: "ভিজিটিং কার্ড",
+    alt: "ভিজিটিং কার্ডের নমুনা",
     category: "ভিজিটিং কার্ড",
     productName: "ভিজিটিং কার্ড",
     specs: "ভিজিটিং কার্ড",
@@ -90,7 +90,7 @@ export const portfolioItems: PortfolioItem[] = [
   {
     id: "7",
     src: "/testimonials/7.webp",
-    alt: "স্টিকার / লেবেল",
+    alt: "স্টিকার ও লেবেলের নমুনা",
     category: "স্টিকার / লেবেল",
     productName: "স্টিকার / লেবেল",
     specs: "স্টিকার / লেবেল",

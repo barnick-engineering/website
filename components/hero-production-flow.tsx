@@ -233,10 +233,6 @@ function ProductionStep({
     { icon: Lightbulb, label: t("hero.flow.pipeline.idea") },
     { icon: Palette, label: t("hero.flow.pipeline.design") },
     { icon: Printer, label: t("hero.flow.pipeline.print") },
-  ];
-
-  const services = [
-    { icon: Printer, label: t("hero.flow.step2.printLabel") },
     { icon: Package, label: t("hero.flow.step2.packagingLabel") },
   ];
 
@@ -256,7 +252,7 @@ function ProductionStep({
         isActive={isStepActive}
       />
 
-      <div className="mt-5 grid grid-cols-3 divide-x divide-border/80 border border-border bg-muted/35 shadow-sm">
+      <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 divide-x divide-border/80 border border-border bg-muted/35 shadow-sm">
         {pipeline.map(({ icon, label }, i) => (
           <SubItem
             key={label}
@@ -267,21 +263,6 @@ function ProductionStep({
             isLooping={isLooping && isStepActive}
             language={language}
             variant="pipeline"
-          />
-        ))}
-      </div>
-
-      <div className="mt-3 grid grid-cols-2 gap-2.5">
-        {services.map(({ icon, label }, i) => (
-          <SubItem
-            key={label}
-            icon={icon}
-            label={label}
-            revealed={subRevealed(i + 3)}
-            highlighted={subHighlighted((i + 3) as ProcessSubStep)}
-            isLooping={isLooping && isStepActive}
-            language={language}
-            variant="service"
           />
         ))}
       </div>
@@ -296,7 +277,6 @@ function ProcessSteps({
   activeSubStep,
   isLooping,
   prefersReducedMotion,
-  layout,
 }: {
   revealedColumns: [boolean, boolean, boolean];
   revealedSubSteps: number;
@@ -304,7 +284,6 @@ function ProcessSteps({
   activeSubStep: ProcessSubStep;
   isLooping: boolean;
   prefersReducedMotion: boolean;
-  layout: "mobile" | "desktop";
 }) {
   const { t } = useLanguage();
 
@@ -353,12 +332,8 @@ function ProcessSteps({
     </>
   );
 
-  if (layout === "mobile") {
-    return <div className="divide-y divide-border lg:hidden">{steps}</div>;
-  }
-
   return (
-    <div className="hidden lg:grid lg:grid-cols-[1fr_2.5fr_1fr] lg:divide-x divide-border relative">
+    <div className="divide-y divide-border lg:grid lg:grid-cols-[1fr_2.5fr_1fr] lg:divide-y-0 lg:divide-x relative">
       {steps}
     </div>
   );
@@ -390,16 +365,6 @@ export function HeroProductionFlow() {
           activeSubStep={activeSubStep}
           isLooping={isLooping}
           prefersReducedMotion={prefersReducedMotion}
-          layout="mobile"
-        />
-        <ProcessSteps
-          revealedColumns={revealedColumns}
-          revealedSubSteps={revealedSubSteps}
-          activeStep={activeStep}
-          activeSubStep={activeSubStep}
-          isLooping={isLooping}
-          prefersReducedMotion={prefersReducedMotion}
-          layout="desktop"
         />
       </div>
     </div>

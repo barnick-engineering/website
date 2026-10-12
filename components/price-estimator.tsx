@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, Calculator, ChevronDown, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
@@ -16,6 +16,7 @@ import {
   type ColorCount,
   type EstimateResult,
 } from "@/lib/calculateEstimate";
+import { parseEstimateQuery } from "@/lib/estimateQuery";
 import { cn } from "@/lib/utils";
 
 type ProductId = "visiting-card" | "cash-memo" | "round-sticker";
@@ -439,6 +440,30 @@ export function PriceEstimator() {
   const [memo, setMemo] = useState(DEFAULT_MEMO);
   const [sticker, setSticker] = useState(DEFAULT_STICKER);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const parsed = parseEstimateQuery(window.location.search);
+    if (parsed.product) setProduct(parsed.product);
+    if (parsed.visiting) {
+      setVisiting((s) => ({
+        ...s,
+        ...parsed.visiting,
+      }));
+    }
+    if (parsed.memo) {
+      setMemo((s) => ({
+        ...s,
+        ...parsed.memo,
+      }));
+    }
+    if (parsed.sticker) {
+      setSticker((s) => ({
+        ...s,
+        ...parsed.sticker,
+      }));
+    }
+  }, []);
+
   const handleProductChange = (id: ProductId) => {
     setProduct(id);
     setVisiting(DEFAULT_VISITING);
@@ -495,7 +520,7 @@ export function PriceEstimator() {
   }, [t, product, result, visitingQty, visiting, memoQty, memo, sticker]);
 
   return (
-    <section id="estimate" className="relative px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20">
+    <section id="estimate" className="relative scroll-mt-[7.5rem] px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20">
       <DotPattern />
       <div className="relative z-10 max-w-screen-xl mx-auto w-full">
         {/* Header — compact */}
@@ -533,9 +558,19 @@ export function PriceEstimator() {
             p.disabled ? (
               <span
                 key={p.id}
-                className="shrink-0 min-h-10 rounded-full px-4 sm:px-5 text-sm font-semibold border border-dashed border-foreground/15 text-muted-foreground inline-flex items-center cursor-default"
+                className="shrink-0 inline-flex flex-col items-center gap-1"
               >
-                {t(p.labelKey)}
+                <span className="min-h-10 rounded-full px-4 sm:px-5 text-sm font-semibold border border-dashed border-foreground/15 text-muted-foreground inline-flex items-center cursor-default">
+                  {t(p.labelKey)}
+                </span>
+                <a
+                  href={getMessengerUrlWithText(t("estimate.comingSoonMessenger"))}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                >
+                  {t("estimate.comingSoonNotify")}
+                </a>
               </span>
             ) : (
               <button

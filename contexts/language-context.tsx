@@ -20,7 +20,7 @@ const translations: Record<Language, Record<string, string>> = {
     "logo.name": "বর্ণিক প্রচারণী",
     "logo.trustedBy": "আমাদের বিশ্বস্ত ক্লায়েন্ট",
     "logo.subtitle":
-      "বাংলাদেশের শীর্ষ প্রতিষ্ঠানগুলো বার্ণিক প্রচারাণীর ওপর আস্থা রাখে",
+      "বাংলাদেশের শীর্ষ প্রতিষ্ঠানগুলো বর্ণিক প্রচারাণীর ওপর আস্থা রাখে",
     "logo.swipeHint": "← সোয়াইপ করে আরও দেখুন →",
     // Navigation
     "nav.shop": "পণ্য দেখুন",
@@ -105,7 +105,7 @@ const translations: Record<Language, Record<string, string>> = {
     // About
     "about.title": "আমাদের সম্পর্কে",
     "about.content":
-      "১৯৮৯ সাল থেকে বার্ণিক প্রচারাণী মানসম্মত প্রিন্টিং সেবায় আপনার নির্ভরযোগ্য সঙ্গী। এখন বাংলাদেশে আমাদের নতুন অনলাইন প্ল্যাটফর্মের মাধ্যমে উচ্চমানের কাস্টমাইজড প্রিন্টিং—বিজনেস কার্ড থেকে শুরু করে যেকোনো ধরনের মার্কেটিং ম্যাটেরিয়াল—অর্ডার করা আরও সহজ ও দ্রুত।\n\nঅভিজ্ঞতার ঐতিহ্য, আধুনিক প্রযুক্তি এবং উদ্ভাবনের সমন্বয়ে আমরা আপনাকে দিচ্ছি নিখুঁত প্রিন্টিং সল্যুশন। বার্ণিক প্রচারাণীর সঙ্গে অসাধারণ প্রিন্ট এখন মাত্র এক ক্লিকের দূরত্বে।",
+      "১৯৮৯ সাল থেকে বর্ণিক প্রচারাণী মানসম্মত প্রিন্টিং সেবায় আপনার নির্ভরযোগ্য সঙ্গী। এখন বাংলাদেশে আমাদের নতুন অনলাইন প্ল্যাটফর্মের মাধ্যমে উচ্চমানের কাস্টমাইজড প্রিন্টিং—বিজনেস কার্ড থেকে শুরু করে যেকোনো ধরনের মার্কেটিং ম্যাটেরিয়াল—অর্ডার করা আরও সহজ ও দ্রুত।\n\nঅভিজ্ঞতার ঐতিহ্য, আধুনিক প্রযুক্তি এবং উদ্ভাবনের সমন্বয়ে আমরা আপনাকে দিচ্ছি নিখুঁত প্রিন্টিং সল্যুশন। বর্ণিক প্রচারাণীর সঙ্গে অসাধারণ প্রিন্ট এখন মাত্র এক ক্লিকের দূরত্বে।",
     // Features
     "features.title": "সেবা সমূহ",
     "features.subtitle": "আপনার প্রয়োজন অনুযায়ী ক্যাটাগরি বেছে নিন",
@@ -147,7 +147,7 @@ const translations: Record<Language, Record<string, string>> = {
       "ডিজাইন/ডিটেইল ফেসবুক মেসেঞ্জার, +8801712347097 নাম্বারে অর্ডার কনফার্ম করতে পারবেন। ৫০% অগ্রিমের পর কাজ শুরু হয়।",
     "faq.4.q": "ডিজাইন কি আপনারা করে দেন?",
     "faq.4.a":
-      "হ্যাঁ, আমাদের ডিজাইনাররা আপনার ব্র্যান্ড অনুযায়ী কাস্টম ডিজাইন তৈরি করে দেয়। কিন্তু সেই ক্ষেত্রে চার্চ আলাদা।",
+      "আমাদের ইন-হাউস ডিজাইনার কাস্টম ডিজাইন করে দেন। এর জন্য অতিরিক্ত চার্জ প্রযোজ্য।",
     "faq.5.q": "দাম কীভাবে নির্ধারিত হয়?",
     "faq.5.a":
       "ডিজাইন, ম্যাটেরিয়াল, সাইজ, পরিমাণ এবং ফিনিশিং অনুযায়ী প্রাইস নির্ধারিত হয়।",
@@ -160,17 +160,21 @@ const translations: Record<Language, Record<string, string>> = {
     // Footer
     "footer.address": "ঠিকানা",
     "footer.addressValue": "৩৬ বাঁশিচরণ সেন পোদ্দার লেন, কোতোয়ালি, ঢাকা।",
-    "footer.copyright": "বার্ণিক প্রচারাণী",
+    "footer.copyright": "বর্ণিক প্রচারাণী",
     "footer.rights": "সর্বস্বত্ব সংরক্ষিত।",
     "footer.tagline": "১৯৮৯ সাল থেকে মানসম্মত প্রিন্টিং ও প্যাকেজিং সেবা।",
     "footer.links": "লিংক",
     "footer.social": "সোশ্যাল",
     // Price estimator
     "estimate.title": "মূল্য অনুমান করুন",
-    "estimate.subtitle": "এক জায়গায় আনুমানিক দাম জানুন — মেসেঞ্জারে অর্ডার করুন",
+    "estimate.subtitle":
+      "এক জায়গায় আনুমানিক দাম জানুন — মেসেঞ্জারে অর্ডার করুন",
     "estimate.disclaimer":
       "মূল্য পরিবর্তনশীল — কাগজের বাজারমূল্যের উপর নির্ভর করে চূড়ান্ত মূল্য ভিন্ন হতে পারে।",
     "estimate.comingSoon": "শীঘ্রই আসছে",
+    "estimate.comingSoonNotify": "আগাম জানতে মেসেজ দিন",
+    "estimate.comingSoonMessenger":
+      "আমি রাউন্ড স্টিকার সম্পর্কে আগাম জানতে চাই",
     "estimate.product.visitingCard": "ভিজিটিং কার্ড",
     "estimate.product.cashMemo": "ক্যাশ মেমো",
     "estimate.product.roundSticker": "রাউন্ড স্টিকার",
@@ -198,8 +202,8 @@ const translations: Record<Language, Record<string, string>> = {
     "estimate.visiting.customPlaceholder": "কার্ড সংখ্যা লিখুন (যেমন: 1500)",
     "estimate.memo.qty": "কতটি মেমো লাগবে?",
     "estimate.memo.size": "মেমোর আকার",
-    "estimate.memo.size.large": "বড় (9×11.5\")",
-    "estimate.memo.size.small": "ছোট (5.75×9\")",
+    "estimate.memo.size.large": 'বড় (9×11.5")',
+    "estimate.memo.size.small": 'ছোট (5.75×9")',
     "estimate.memo.colors": "কালার",
     "estimate.memo.colors.1": "১ রঙ",
     "estimate.memo.colors.2": "২ রঙ",
@@ -212,7 +216,7 @@ const translations: Record<Language, Record<string, string>> = {
     "estimate.memo.customPlaceholder": "মেমো সংখ্যা লিখুন (যেমন: 1500)",
     "estimate.sticker.qty": "কতটি স্টিকার লাগবে?",
     "estimate.sticker.size": "আকার",
-    "estimate.sticker.size.2": "২\"",
+    "estimate.sticker.size.2": '২"',
     "estimate.result.total": "আনুমানিক মোট মূল্য",
     "estimate.result.perUnit": "প্রতি ইউনিট",
     "estimate.result.disclaimer":
@@ -383,10 +387,14 @@ const translations: Record<Language, Record<string, string>> = {
     "footer.social": "Social",
     // Price estimator
     "estimate.title": "Get a Price Estimate",
-    "estimate.subtitle": "Get an approximate price in one place — order on Messenger",
+    "estimate.subtitle":
+      "Get an approximate price in one place — order on Messenger",
     "estimate.disclaimer":
       "Prices are variable — final cost may differ depending on paper market rates.",
     "estimate.comingSoon": "Coming soon",
+    "estimate.comingSoonNotify": "Message us to get notified",
+    "estimate.comingSoonMessenger":
+      "I would like to know in advance about round stickers",
     "estimate.product.visitingCard": "Visiting Card",
     "estimate.product.cashMemo": "Cash Memo",
     "estimate.product.roundSticker": "Round Sticker",
@@ -414,8 +422,8 @@ const translations: Record<Language, Record<string, string>> = {
     "estimate.visiting.customPlaceholder": "Enter number of cards (e.g. 1500)",
     "estimate.memo.qty": "How many memos?",
     "estimate.memo.size": "Memo size",
-    "estimate.memo.size.large": "Large (9×11.5\")",
-    "estimate.memo.size.small": "Small (5.75×9\")",
+    "estimate.memo.size.large": 'Large (9×11.5")',
+    "estimate.memo.size.small": 'Small (5.75×9")',
     "estimate.memo.colors": "Colors",
     "estimate.memo.colors.1": "1 color",
     "estimate.memo.colors.2": "2 colors",
@@ -428,7 +436,7 @@ const translations: Record<Language, Record<string, string>> = {
     "estimate.memo.customPlaceholder": "Enter number of memos (e.g. 1500)",
     "estimate.sticker.qty": "How many stickers?",
     "estimate.sticker.size": "Size",
-    "estimate.sticker.size.2": "2\"",
+    "estimate.sticker.size.2": '2"',
     "estimate.result.total": "Estimated total price",
     "estimate.result.perUnit": "Per unit",
     "estimate.result.disclaimer":
