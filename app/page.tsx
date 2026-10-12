@@ -1,12 +1,23 @@
+import dynamic from "next/dynamic";
 import Hero from "@/components/hero";
-import { PriceEstimator } from "@/components/price-estimator";
-import { StatsInfographic } from "@/components/stats-infographic";
-import PortfolioSection from "@/components/portfolio/PortfolioSection";
-import FAQ from "@/components/faq";
-import CTABanner from "@/components/cta-banner";
-import Footer from "@/components/footer";
 import { Navbar } from "@/components/navbar";
-import { StickyContactBar } from "@/components/sticky-contact-bar";
+
+// Below-fold components: code-split to reduce initial JS bundle
+const StatsInfographic = dynamic(() =>
+  import("@/components/stats-infographic").then((m) => m.StatsInfographic)
+);
+const PriceEstimator = dynamic(() =>
+  import("@/components/price-estimator").then((m) => m.PriceEstimator)
+);
+const PortfolioSection = dynamic(() =>
+  import("@/components/portfolio/PortfolioSection")
+);
+const FAQ = dynamic(() => import("@/components/faq"));
+const CTABanner = dynamic(() => import("@/components/cta-banner"));
+const Footer = dynamic(() => import("@/components/footer"));
+const StickyContactBar = dynamic(() =>
+  import("@/components/sticky-contact-bar").then((m) => m.StickyContactBar)
+);
 
 export default function Home() {
   return (

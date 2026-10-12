@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 export type ProcessStep = 1 | 2 | 3;
 
-/** 0–2: pipeline; 3–4: services */
-export type ProcessSubStep = 0 | 1 | 2 | 3 | 4;
+/** 0–3: idea → design → print → packaging */
+export type ProcessSubStep = 0 | 1 | 2 | 3;
 
 const COLUMN_DELAYS_DESKTOP: Record<ProcessStep, number> = {
   1: 0,
@@ -19,7 +19,7 @@ const COLUMN_DELAYS_MOBILE: Record<ProcessStep, number> = {
 };
 const REVEAL_COMPLETE_DELAY_DESKTOP = 1800;
 const REVEAL_SUB_STEP_STAGGER = 100;
-const SUB_STEP_COUNT = 5;
+const SUB_STEP_COUNT = 4;
 
 const LOOP_STEP_DURATIONS: Record<ProcessStep, number> = {
   1: 2000,
@@ -210,7 +210,7 @@ export function useProcessAnimation() {
     }
 
     const timeout = window.setTimeout(() => {
-      setActiveSubStep((sub) => (sub >= 4 ? 0 : ((sub + 1) as ProcessSubStep)));
+      setActiveSubStep((sub) => (sub >= 3 ? 0 : ((sub + 1) as ProcessSubStep)));
     }, LOOP_SUB_STEP_DURATION);
 
     return () => window.clearTimeout(timeout);

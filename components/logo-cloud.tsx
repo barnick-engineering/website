@@ -7,18 +7,18 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/language-context";
 
 const clients: Array<{ src: string; alt: string }> = [
-  { src: "/clients/navy.png", alt: "Bangladesh Navy" },
-  { src: "/clients/world-vision.png", alt: "World Vision" },
-  { src: "/clients/bd-swimming-fed.png", alt: "Bangladesh Swimming Federation" },
-  { src: "/clients/club.png", alt: "Club" },
-  { src: "/clients/fvl.jpg", alt: "FVL" },
-  { src: "/clients/clilipos.png", alt: "Clilipos" },
-  { src: "/clients/meam.png", alt: "MEAM" },
-  { src: "/clients/medistack.png", alt: "Medistack" },
-  { src: "/clients/Nexus T logo.png", alt: "Nexus T" },
-  { src: "/clients/cord-e.png", alt: "Cord-E" },
-  { src: "/clients/orange.png", alt: "Orange" },
-  { src: "/clients/Chefs.png", alt: "Chefs" },
+  { src: "/clients/navy.png", alt: "বাংলাদেশ নৌবাহিনীর লোগো" },
+  { src: "/clients/world-vision.png", alt: "ওয়ার্ল্ড ভিশনের লোগো" },
+  { src: "/clients/bd-swimming-fed.png", alt: "বাংলাদেশ সুইমিং ফেডারেশনের লোগো" },
+  { src: "/clients/club.png", alt: "ক্লাবের লোগো" },
+  { src: "/clients/fvl.jpg", alt: "এফভিএল-এর লোগো" },
+  { src: "/clients/clilipos.png", alt: "চিলিপসের লোগো" },
+  { src: "/clients/meam.png", alt: "মিয়ামের লোগো" },
+  { src: "/clients/medistack.png", alt: "মেডিস্ট্যাকের লোগো" },
+  { src: "/clients/Nexus T logo.png", alt: "নেক্সাস টি-এর লোগো" },
+  { src: "/clients/cord-e.png", alt: "কর্ড-ই-এর লোগো" },
+  { src: "/clients/orange.png", alt: "অরেঞ্জের লোগো" },
+  { src: "/clients/Chefs.png", alt: "শেফসের লোগো" },
 ];
 
 interface LogoCloudProps extends HTMLAttributes<HTMLDivElement> {

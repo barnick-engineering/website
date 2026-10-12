@@ -15,7 +15,7 @@ const FAQ = () => {
   ];
 
   return (
-    <div id="faq" className="relative flex items-center justify-center px-6 py-12 bg-background">
+    <div id="faq" className="relative scroll-mt-[7.5rem] flex items-center justify-center px-6 py-12 bg-background">
       <DotPattern />
       <div className="relative z-10 max-w-screen-lg w-full">
         <h2 className="text-3xl xs:text-4xl font-bold tracking-tight text-center">
