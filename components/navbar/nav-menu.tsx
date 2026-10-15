@@ -44,6 +44,13 @@ export const NavMenu = (props: NavigationMenuProps) => {
             </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild>
+            <Link href="/design" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
+              {t("nav.design")}
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );

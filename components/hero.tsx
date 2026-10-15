@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { MessageCircle, Phone, Calculator } from "lucide-react";
+import Link from "next/link";
+import { MessageCircle, Phone, Calculator, Pencil } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HeroProductionFlow } from "@/components/hero-production-flow";
@@ -79,6 +80,17 @@ const Hero = () => {
                   <Calculator className="!h-4 !w-4 sm:!h-[1.125rem] sm:!w-[1.125rem] shrink-0" />
                   {t("nav.estimate")}
                 </a>
+              </Button>
+              <Button
+                size="default"
+                variant="outline"
+                className="w-full sm:flex-1 sm:min-w-0 h-10 px-4 text-xs sm:text-sm sm:h-11 sm:px-5 md:h-12 md:text-base md:px-6 border-foreground/30 text-foreground"
+                asChild
+              >
+                <Link href="/design">
+                  <Pencil className="!h-4 !w-4 sm:!h-[1.125rem] sm:!w-[1.125rem] shrink-0" />
+                  {t("nav.design")}
+                </Link>
               </Button>
             </div>
             <p className="mt-4 text-xs text-muted-foreground">{t("hero.trustLine")}</p>

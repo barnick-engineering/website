@@ -20,7 +20,7 @@ const translations: Record<Language, Record<string, string>> = {
     "logo.name": "বর্ণিক প্রচারণী",
     "logo.trustedBy": "আমাদের বিশ্বস্ত ক্লায়েন্ট",
     "logo.subtitle":
-      "বাংলাদেশের শীর্ষ প্রতিষ্ঠানগুলো বর্ণিক প্রচারাণীর ওপর আস্থা রাখে",
+      "বাংলাদেশের শীর্ষ প্রতিষ্ঠানগুলো বর্ণিক প্রচারণীর ওপর আস্থা রাখে",
     "logo.swipeHint": "← সোয়াইপ করে আরও দেখুন →",
     // Navigation
     "nav.shop": "পণ্য দেখুন",
@@ -30,6 +30,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.faq": "সাধারণ জিজ্ঞাসা",
     "nav.contact": "যোগাযোগ",
     "nav.estimate": "মূল্য অনুমান",
+    "nav.design": "নিজে ডিজাইন করুন",
     // Hero
     "hero.badge": "১৯৮৯ সাল থেকে AI যুগে",
     "hero.title": "প্রিন্টিং, প্যাকেজিং ও ব্রান্ডিং — সহজ, দ্রুত, নির্ভরযোগ্য",
@@ -105,7 +106,7 @@ const translations: Record<Language, Record<string, string>> = {
     // About
     "about.title": "আমাদের সম্পর্কে",
     "about.content":
-      "১৯৮৯ সাল থেকে বর্ণিক প্রচারাণী মানসম্মত প্রিন্টিং সেবায় আপনার নির্ভরযোগ্য সঙ্গী। এখন বাংলাদেশে আমাদের নতুন অনলাইন প্ল্যাটফর্মের মাধ্যমে উচ্চমানের কাস্টমাইজড প্রিন্টিং—বিজনেস কার্ড থেকে শুরু করে যেকোনো ধরনের মার্কেটিং ম্যাটেরিয়াল—অর্ডার করা আরও সহজ ও দ্রুত।\n\nঅভিজ্ঞতার ঐতিহ্য, আধুনিক প্রযুক্তি এবং উদ্ভাবনের সমন্বয়ে আমরা আপনাকে দিচ্ছি নিখুঁত প্রিন্টিং সল্যুশন। বর্ণিক প্রচারাণীর সঙ্গে অসাধারণ প্রিন্ট এখন মাত্র এক ক্লিকের দূরত্বে।",
+      "১৯৮৯ সাল থেকে বর্ণিক প্রচারণী মানসম্মত প্রিন্টিং সেবায় আপনার নির্ভরযোগ্য সঙ্গী। এখন বাংলাদেশে আমাদের নতুন অনলাইন প্ল্যাটফর্মের মাধ্যমে উচ্চমানের কাস্টমাইজড প্রিন্টিং—বিজনেস কার্ড থেকে শুরু করে যেকোনো ধরনের মার্কেটিং ম্যাটেরিয়াল—অর্ডার করা আরও সহজ ও দ্রুত।\n\nঅভিজ্ঞতার ঐতিহ্য, আধুনিক প্রযুক্তি এবং উদ্ভাবনের সমন্বয়ে আমরা আপনাকে দিচ্ছি নিখুঁত প্রিন্টিং সল্যুশন। বর্ণিক প্রচারণীর সঙ্গে অসাধারণ প্রিন্ট এখন মাত্র এক ক্লিকের দূরত্বে।",
     // Features
     "features.title": "সেবা সমূহ",
     "features.subtitle": "আপনার প্রয়োজন অনুযায়ী ক্যাটাগরি বেছে নিন",
@@ -160,7 +161,7 @@ const translations: Record<Language, Record<string, string>> = {
     // Footer
     "footer.address": "ঠিকানা",
     "footer.addressValue": "৩৬ বাঁশিচরণ সেন পোদ্দার লেন, কোতোয়ালি, ঢাকা।",
-    "footer.copyright": "বর্ণিক প্রচারাণী",
+    "footer.copyright": "বর্ণিক প্রচারণী",
     "footer.rights": "সর্বস্বত্ব সংরক্ষিত।",
     "footer.tagline": "১৯৮৯ সাল থেকে মানসম্মত প্রিন্টিং ও প্যাকেজিং সেবা।",
     "footer.links": "লিংক",
@@ -250,6 +251,7 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.faq": "FAQ",
     "nav.contact": "Contact",
     "nav.estimate": "Price Estimate",
+    "nav.design": "Design Yourself",
     // Hero
     "hero.badge": "Since 1989 · AI era",
     "hero.title": "Printing, Packaging & Branding — Easy, Fast, Trusted",

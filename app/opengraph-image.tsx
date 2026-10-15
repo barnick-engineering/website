@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "বর্ণিক প্রচারাণী — প্রিন্টিং ও প্যাকেজিং";
+export const alt = "বর্ণিক প্রচারণী — প্রিন্টিং ও প্যাকেজিং";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

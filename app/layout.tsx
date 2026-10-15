@@ -20,7 +20,7 @@ const notoSansBengali = Noto_Sans_Bengali({
 });
 
 const siteUrl = "https://barnickpracharani.com";
-const siteTitle = "বর্ণিক প্রচারাণী — প্রিন্টিং ও প্যাকেজিং";
+const siteTitle = "বর্ণিক প্রচারণী — প্রিন্টিং ও প্যাকেজিং";
 const siteDescription =
   "বিজনেস কার্ড থেকে কাস্টম প্যাকেজিং — সহজ, দ্রুত, নির্ভরযোগ্য। ১৯৮৯ সাল থেকে ঢাকায় মানসম্মত প্রিন্টিং সেবা।";
 
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   title: siteTitle,
   description: siteDescription,
   keywords: [
-    "বর্ণিক প্রচারাণী",
+    "বর্ণিক প্রচারণী",
     "Barnick Pracharani",
     "প্রিন্টিং",
     "প্যাকেজিং",
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     url: siteUrl,
-    siteName: "বর্ণিক প্রচারাণী",
+    siteName: "বর্ণিক প্রচারণী",
     locale: "bn_BD",
     alternateLocale: ["en_US"],
     type: "website",
@@ -139,7 +139,7 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             name: "Barnick Pracharani",
-            alternateName: "বর্ণিক প্রচারাণী",
+            alternateName: "বর্ণিক প্রচারণী",
             url: "https://barnickpracharani.com",
             image: "https://barnickpracharani.com/barnick.png",
             logo: "https://barnickpracharani.com/barnick.png",
