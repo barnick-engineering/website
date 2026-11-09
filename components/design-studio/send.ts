@@ -1,7 +1,6 @@
 import { facebookInsights } from "@/data/insights";
 import { getMessengerUrlWithText } from "@/lib/order";
-import type { Product } from "./products";
-import type { BusinessInfo } from "./types";
+import type { Product, BusinessInfo } from "./types";
 import { renderProductPng } from "./render-png";
 
 export function fireStudioEvent(name: string, params?: Record<string, string>) {
@@ -11,8 +10,14 @@ export function fireStudioEvent(name: string, params?: Record<string, string>) {
   }
 }
 
-function buildMessage(product: Product, qty: number, note: string): string {
-  const lines = ["আমি ডিজাইন স্টুডিও থেকে অর্ডার করতে চাই:", `পণ্য: ${product.labelBn}`, `পরিমাণ: ${qty}`];
+function buildMessage(product: Product, info: BusinessInfo, qty: number, note: string): string {
+  const lines = [
+    "আমি ডিজাইন স্টুডিও থেকে অর্ডার করতে চাই:",
+    `পণ্য: ${product.labelBn}`,
+    `প্রতিষ্ঠান: ${info.name}`,
+    `ফোন: ${info.phone}`,
+    `পরিমাণ: ${qty}`,
+  ];
   if (note.trim()) lines.push(`নির্দেশনা: ${note.trim()}`);
   return lines.join("\n");
 }
@@ -25,7 +30,7 @@ export async function sendToMessenger(
   note: string,
   uploadEndpoint: string | null
 ): Promise<void> {
-  const message = buildMessage(product, qty, note);
+  const message = buildMessage(product, info, qty, note);
   const messengerUrl = getMessengerUrlWithText(message);
 
   // Open popup synchronously BEFORE any await so browsers don't block it
@@ -42,6 +47,7 @@ export async function sendToMessenger(
         form.append("product", product.id);
         form.append("qty", String(qty));
         form.append("note", note);
+        form.append("name", info.name);
         const res = await fetch(uploadEndpoint, { method: "POST", body: form });
         if (res.ok) {
           const { url } = (await res.json()) as { url: string };
@@ -58,17 +64,19 @@ export async function sendToMessenger(
 
     // Try Web Share API
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: `বর্ণিক প্রচারণী ডিজাইন — ${product.labelBn}`, text: message });
+      await navigator.share({
+        files: [file],
+        title: `বর্ণিক প্রচারণী ডিজাইন — ${product.labelBn}`,
+        text: message,
+      });
       fireStudioEvent("design_send_messenger", { product: product.id });
       return;
     }
 
-    // Fallback: download + clipboard + ensure popup open
+    // Fallback: download PNG + copy message + ensure Messenger popup open
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url;
-    a.download = `barnick-design-${product.id}.png`;
-    a.click();
+    a.href = url; a.download = `barnick-design-${product.id}.png`; a.click();
     URL.revokeObjectURL(url);
     try { await navigator.clipboard.writeText(message); } catch { /* ignore */ }
     if (!popup || popup.closed) window.open(messengerUrl, "_blank");
@@ -82,9 +90,7 @@ export async function downloadDesign(svgEl: SVGSVGElement, product: Product): Pr
   const blob = await renderProductPng(svgEl, product, 4);
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url;
-  a.download = `barnick-design-${product.id}.png`;
-  a.click();
+  a.href = url; a.download = `barnick-design-${product.id}.png`; a.click();
   URL.revokeObjectURL(url);
   fireStudioEvent("design_download", { product: product.id });
 }
