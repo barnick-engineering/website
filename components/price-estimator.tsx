@@ -530,10 +530,10 @@ export function PriceEstimator() {
         </div>
 
         <div
-          className="mt-4 mx-auto max-w-2xl flex items-start justify-center gap-2 text-left text-[11px] sm:text-xs border border-amber-600/20 bg-amber-500/10 px-3 py-2.5 text-amber-950/90"
+          className="mt-4 mx-auto max-w-2xl flex items-start justify-center gap-2 text-left text-[11px] sm:text-xs border border-primary/25 bg-primary/10 px-3 py-2.5 text-foreground/90"
           role="note"
         >
-          <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5 text-amber-700/80" aria-hidden />
+          <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary" aria-hidden />
           <span>{t("estimate.disclaimer")}</span>
         </div>
 

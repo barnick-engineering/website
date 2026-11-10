@@ -14,6 +14,9 @@ const Footer = () => {
     { title: t("nav.portfolio"), href: "/#products" },
     { title: t("nav.faq"), href: "/#faq" },
     { title: t("nav.contact"), href: "/#contact" },
+    { title: t("nav.design"), href: "/#design" },
+    { title: t("nav.guide"), href: "/guide" },
+    { title: t("nav.policies"), href: "/policies" },
   ];
 
   const socialLinks = [
@@ -31,11 +34,11 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="mt-12 bg-black text-white">
+    <footer className="mt-12 bg-foreground text-background">
       <div className="max-w-screen-xl mx-auto px-6">
         <div className="py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="inline-flex rounded-lg bg-white p-2">
+            <Link href="/" className="inline-flex rounded-lg bg-background p-2">
               <Image
                 src="/barnick.png"
                 alt="Barnick Pracharani"
@@ -44,13 +47,13 @@ const Footer = () => {
                 className="h-12 w-auto object-contain"
               />
             </Link>
-            <p className="mt-4 text-sm text-white/70 max-w-xs">
+            <p className="mt-4 text-sm text-background/70 max-w-xs">
               {t("footer.tagline")}
             </p>
           </div>
 
           <div>
-            <p className="font-semibold text-sm uppercase tracking-wider text-white/60">
+            <p className="font-semibold text-sm uppercase tracking-wider text-background/60">
               {t("footer.links")}
             </p>
             <ul className="mt-4 space-y-2">
@@ -58,7 +61,7 @@ const Footer = () => {
                 <li key={title}>
                   <Link
                     href={href}
-                    className="text-sm text-white/80 hover:text-white transition-colors"
+                    className="text-sm text-background/80 hover:text-primary transition-colors"
                   >
                     {title}
                   </Link>
@@ -68,15 +71,15 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="font-semibold text-sm uppercase tracking-wider text-white/60">
+            <p className="font-semibold text-sm uppercase tracking-wider text-background/60">
               {t("footer.address")}
             </p>
-            <p className="mt-4 text-sm text-white/80 leading-relaxed">
+            <p className="mt-4 text-sm text-background/80 leading-relaxed">
               {t("footer.addressValue")}
             </p>
             <a
               href={getPhoneUrl()}
-              className="mt-4 inline-flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors"
+              className="mt-4 inline-flex items-center gap-2 text-sm text-background/80 hover:text-primary transition-colors"
             >
               <Phone className="h-4 w-4" />
               {facebookInsights.phone}
@@ -84,7 +87,7 @@ const Footer = () => {
           </div>
 
           <div>
-            <p className="font-semibold text-sm uppercase tracking-wider text-white/60">
+            <p className="font-semibold text-sm uppercase tracking-wider text-background/60">
               {t("footer.social")}
             </p>
             <div className="mt-4 flex gap-3">
@@ -95,7 +98,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="h-10 w-10 rounded-full border border-white/20 flex items-center justify-center text-white/80 hover:bg-white hover:text-black transition-colors"
+                  className="h-10 w-10 rounded-full border border-background/20 flex items-center justify-center text-background/80 hover:bg-primary hover:border-primary hover:text-primary-foreground transition-colors"
                 >
                   <Icon className="h-4 w-4" />
                 </a>
@@ -104,7 +107,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-white/15 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-white/60">
+        <div className="border-t border-background/15 py-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-background/60">
           <span>
             &copy; {new Date().getFullYear()} {t("footer.copyright")}.{" "}
             {t("footer.rights")}

@@ -24,7 +24,7 @@ const Hero = () => {
           <DotPattern />
           <div className="relative z-10 max-w-screen-xl mx-auto w-full grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-start lg:items-center min-w-0">
           <div className="text-left order-1 min-w-0">
-            <Badge className="inline-flex items-center gap-1.5 bg-foreground text-background rounded-full py-1 px-3 border-none">
+            <Badge className="inline-flex items-center gap-1.5 bg-foreground text-background hover:bg-foreground rounded-full py-1 px-3 border-none">
               {t("hero.badge")}
               <span className="text-sm leading-none" aria-hidden>
                 {" "}

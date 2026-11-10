@@ -12,6 +12,7 @@ const PriceEstimator = dynamic(() =>
 const PortfolioSection = dynamic(() =>
   import("@/components/portfolio/PortfolioSection")
 );
+const DesignService = dynamic(() => import("@/components/design-service"));
 const FAQ = dynamic(() => import("@/components/faq"));
 const CTABanner = dynamic(() => import("@/components/cta-banner"));
 const Footer = dynamic(() => import("@/components/footer"));
@@ -28,6 +29,7 @@ export default function Home() {
         <StatsInfographic />
         <PriceEstimator />
         <PortfolioSection />
+        <DesignService />
         <FAQ />
         <CTABanner />
         <Footer />

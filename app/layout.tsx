@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import { Geist, Noto_Sans_Bengali } from "next/font/google";
 import { LanguageProvider } from "@/contexts/language-context";
+import { ContactTracker } from "@/components/contact-tracker";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -77,6 +78,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  // Google Search Console: set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the
+  // "HTML tag" verification code (content="…") from Search Console.
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
+    verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION },
+  }),
   manifest: "/site.webmanifest",
   openGraph: {
     title: siteTitle,
@@ -174,6 +180,7 @@ export default function RootLayout({
           })}
         </Script>
         <LanguageProvider>
+          <ContactTracker />
           <TooltipProvider>{children}</TooltipProvider>
         </LanguageProvider>
       </body>
