@@ -1,8 +1,9 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Noto_Sans_Bengali } from "next/font/google";
+import { Fraunces, Geist, Noto_Sans_Bengali, Noto_Serif_Bengali } from "next/font/google";
 import { LanguageProvider } from "@/contexts/language-context";
+import { ContactTracker } from "@/components/contact-tracker";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,6 +18,23 @@ const notoSansBengali = Noto_Sans_Bengali({
   weight: ["400", "600", "700"],
   display: "swap",
   adjustFontFallback: true,
+});
+
+// Display serif for headings: Fraunces (Latin) + Noto Serif Bengali (Bangla).
+// Both sit in one font stack (--font-display), so Bangla glyphs fall through
+// to the Bengali serif automatically.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-display-latin",
+  weight: ["500", "600"],
+  display: "swap",
+});
+
+const notoSerifBengali = Noto_Serif_Bengali({
+  subsets: ["bengali"],
+  variable: "--font-display-bengali",
+  weight: ["500", "600"],
+  display: "swap",
 });
 
 const siteUrl = "https://barnickpracharani.com";
@@ -77,6 +95,11 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  // Google Search Console: set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the
+  // "HTML tag" verification code (content="…") from Search Console.
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
+    verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION },
+  }),
   manifest: "/site.webmanifest",
   openGraph: {
     title: siteTitle,
@@ -113,7 +136,7 @@ export default function RootLayout({
     <html
       lang="bn"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${notoSansBengali.variable}`}
+      className={`${geistSans.variable} ${notoSansBengali.variable} ${fraunces.variable} ${notoSerifBengali.variable}`}
     >
       <body className="font-sans antialiased">
         {/* Google Analytics — lazyOnload so it never competes with first paint */}
@@ -174,6 +197,7 @@ export default function RootLayout({
           })}
         </Script>
         <LanguageProvider>
+          <ContactTracker />
           <TooltipProvider>{children}</TooltipProvider>
         </LanguageProvider>
       </body>

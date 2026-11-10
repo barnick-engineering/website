@@ -30,7 +30,7 @@ export function StatsInfographic() {
             key={stat.label}
             className="flex flex-col items-center text-center p-6 rounded-2xl bg-background border"
           >
-            <span className="text-3xl sm:text-4xl font-bold text-foreground tabular-nums">
+            <span className="font-display text-4xl sm:text-5xl font-semibold text-foreground tabular-nums">
               {stat.value}
             </span>
             <span className="mt-2 text-sm text-muted-foreground">{stat.label}</span>

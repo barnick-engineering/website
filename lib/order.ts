@@ -16,3 +16,62 @@ export function getPhoneUrl(): string {
 export function getFacebookPageUrl(): string {
   return facebookInsights.pageUrl;
 }
+
+/* ------------------------------------------------------------------ */
+/* Order reference codes                                               */
+/* ------------------------------------------------------------------ */
+
+// No 0/O/1/I/L — easy to read aloud over the phone or type back in chat.
+const REF_ALPHABET = "23456789ABCDEFGHJKMNPQRSTUVWXYZ";
+const REF_STORAGE_KEY = "barnick_ref_code";
+
+function randomRefCode(): string {
+  let code = "";
+  for (let i = 0; i < 5; i++) {
+    code += REF_ALPHABET[Math.floor(Math.random() * REF_ALPHABET.length)];
+  }
+  return `BR-${code}`;
+}
+
+/**
+ * One reference code per browser session, so every chat/call a visitor starts
+ * carries the same code — staff see it in Messenger, GA sees it on the event.
+ */
+export function getSessionRefCode(): string {
+  try {
+    const existing = sessionStorage.getItem(REF_STORAGE_KEY);
+    if (existing) return existing;
+    const code = randomRefCode();
+    sessionStorage.setItem(REF_STORAGE_KEY, code);
+    return code;
+  } catch {
+    return randomRefCode();
+  }
+}
+
+const DEFAULT_GREETING = {
+  bn: "হ্যালো বর্ণিক! আমি অর্ডার করতে চাই।",
+  en: "Hi Barnick! I'd like to place an order.",
+} as const;
+
+/**
+ * Adds the reference code + source to a Messenger link:
+ * - appends "Ref: BR-XXXXX · source" to the prefilled text (staff can see it)
+ * - sets m.me `ref=` (delivered to the Page's messaging_referrals webhook)
+ */
+export function withMessengerRef(
+  href: string,
+  opts: { refCode: string; source: string; language: "bn" | "en" }
+): string {
+  try {
+    const url = new URL(href);
+    const base = url.searchParams.get("text") || DEFAULT_GREETING[opts.language];
+    const text = `${base}\n\nRef: ${opts.refCode} · ${opts.source}`;
+    const ref = `${opts.source}_${opts.refCode}`.slice(0, 250);
+    // Build the query by hand: URLSearchParams encodes spaces as "+", which
+    // Messenger may show literally. encodeURIComponent uses %20.
+    return `${url.origin}${url.pathname}?text=${encodeURIComponent(text)}&ref=${encodeURIComponent(ref)}`;
+  } catch {
+    return href;
+  }
+}

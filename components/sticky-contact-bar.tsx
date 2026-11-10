@@ -32,6 +32,7 @@ export function StickyContactBar() {
   return (
     <nav
       aria-label="দ্রুত যোগাযোগ"
+      data-track-source="sticky_bar"
       className={cn(
         "fixed bottom-0 left-0 right-0 z-40 md:hidden border-t bg-background/95 backdrop-blur-sm px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] transition-transform duration-300 ease-out",
         visible ? "translate-y-0" : "translate-y-full pointer-events-none"

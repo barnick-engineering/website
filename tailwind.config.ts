@@ -61,6 +61,12 @@ export default {
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: [
+          "var(--font-display-latin)",
+          "var(--font-display-bengali)",
+          "Georgia",
+          "serif",
+        ],
         bengali: [
           "var(--font-bengali)",
           "var(--font-sans)",

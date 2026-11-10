@@ -30,6 +30,9 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.faq": "সাধারণ জিজ্ঞাসা",
     "nav.contact": "যোগাযোগ",
     "nav.estimate": "মূল্য অনুমান",
+    "nav.design": "ডিজাইন সার্ভিস",
+    "nav.guide": "প্রিন্টিং গাইড",
+    "nav.policies": "নীতিমালা",
     // Hero
     "hero.badge": "১৯৮৯ সাল থেকে AI যুগে",
     "hero.title": "প্রিন্টিং, প্যাকেজিং ও ব্রান্ডিং — সহজ, দ্রুত, নির্ভরযোগ্য",
@@ -250,6 +253,9 @@ const translations: Record<Language, Record<string, string>> = {
     "nav.faq": "FAQ",
     "nav.contact": "Contact",
     "nav.estimate": "Price Estimate",
+    "nav.design": "Design Service",
+    "nav.guide": "Printing Guide",
+    "nav.policies": "Policies",
     // Hero
     "hero.badge": "Since 1989 · AI era",
     "hero.title": "Printing, Packaging & Branding — Easy, Fast, Trusted",

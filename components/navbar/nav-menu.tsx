@@ -32,6 +32,13 @@ export const NavMenu = (props: NavigationMenuProps) => {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
+            <Link href="/guide" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
+              {t("nav.guide")}
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild>
             <Link href="/#faq" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
               {t("nav.faq")}
             </Link>

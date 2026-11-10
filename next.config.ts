@@ -25,11 +25,13 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+              // Dev-only 'unsafe-eval': React Refresh / HMR evaluates code at runtime.
+              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://www.google-analytics.com`,
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: https:",
               "font-src 'self'",
-              "connect-src 'self' https://www.google-analytics.com https://analytics.google.com",
+              // GA4 sends hits to regional *.google-analytics.com hosts and to www.google.com/g/collect.
+              "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://www.google.com",
               "frame-ancestors 'none'",
             ].join("; "),
           },

@@ -15,7 +15,7 @@ export function DotPattern({ className, size = 24 }: DotPatternProps) {
       aria-hidden
       className={cn(
         "pointer-events-none absolute inset-0 z-0",
-        "bg-[radial-gradient(circle,hsl(var(--foreground)/0.14)_1px,transparent_1px)]",
+        "bg-[radial-gradient(circle,hsl(var(--foreground)/0.3)_1px,transparent_1px)]",
         className
       )}
       style={{
