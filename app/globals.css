@@ -70,6 +70,15 @@
     @apply bg-background text-foreground overflow-x-hidden font-sans;
   }
 
+  /* Display serif for page/section headings; small card titles (h3) stay sans */
+  h1,
+  h2 {
+    @apply font-display;
+  }
+  :is(h1, h2).font-bold {
+    font-weight: 600;
+  }
+
   html[lang="bn"] body {
     @apply font-bengali;
     line-height: 1.65;

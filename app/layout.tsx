@@ -1,7 +1,7 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Geist, Noto_Sans_Bengali } from "next/font/google";
+import { Fraunces, Geist, Noto_Sans_Bengali, Noto_Serif_Bengali } from "next/font/google";
 import { LanguageProvider } from "@/contexts/language-context";
 import { ContactTracker } from "@/components/contact-tracker";
 import "./globals.css";
@@ -18,6 +18,23 @@ const notoSansBengali = Noto_Sans_Bengali({
   weight: ["400", "600", "700"],
   display: "swap",
   adjustFontFallback: true,
+});
+
+// Display serif for headings: Fraunces (Latin) + Noto Serif Bengali (Bangla).
+// Both sit in one font stack (--font-display), so Bangla glyphs fall through
+// to the Bengali serif automatically.
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-display-latin",
+  weight: ["500", "600"],
+  display: "swap",
+});
+
+const notoSerifBengali = Noto_Serif_Bengali({
+  subsets: ["bengali"],
+  variable: "--font-display-bengali",
+  weight: ["500", "600"],
+  display: "swap",
 });
 
 const siteUrl = "https://barnickpracharani.com";
@@ -119,7 +136,7 @@ export default function RootLayout({
     <html
       lang="bn"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${notoSansBengali.variable}`}
+      className={`${geistSans.variable} ${notoSansBengali.variable} ${fraunces.variable} ${notoSerifBengali.variable}`}
     >
       <body className="font-sans antialiased">
         {/* Google Analytics — lazyOnload so it never competes with first paint */}
