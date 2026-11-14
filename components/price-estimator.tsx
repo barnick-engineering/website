@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, Calculator, ChevronDown, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
 import { getMessengerUrlWithText } from "@/lib/order";
+import { trackEvent } from "@/lib/analytics";
 import { Input } from "@/components/ui/input";
 import { DotPattern } from "@/components/ui/dot-pattern";
 import {
@@ -367,10 +368,12 @@ function buildEstimateMessengerMessage({
 function PricePanel({
   result,
   messengerUrl,
+  product,
   className,
 }: {
   result: EstimateResult | null;
   messengerUrl: string | null;
+  product: ProductId;
   className?: string;
 }) {
   const { t } = useLanguage();
@@ -415,6 +418,8 @@ function PricePanel({
             href={messengerUrl ?? facebookInsights.messengerUrl}
             target="_blank"
             rel="noopener noreferrer"
+            data-track-item={product}
+            data-track-value={result.minPrice}
             className="mt-4 flex w-full max-w-full min-w-0 items-center justify-center gap-2 rounded-full bg-background px-4 py-3 text-sm font-medium text-foreground hover:bg-background/90 transition-colors text-center leading-snug"
           >
             <MessageCircle className="h-4 w-4 shrink-0" />
@@ -443,7 +448,10 @@ export function PriceEstimator() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const parsed = parseEstimateQuery(window.location.search);
-    if (parsed.product) setProduct(parsed.product);
+    if (parsed.product) {
+      setProduct(parsed.product);
+      trackEvent("estimate_link_open", { product: parsed.product });
+    }
     if (parsed.visiting) {
       setVisiting((s) => ({
         ...s,
@@ -465,6 +473,7 @@ export function PriceEstimator() {
   }, []);
 
   const handleProductChange = (id: ProductId) => {
+    if (id !== product) trackEvent("estimate_product_select", { product: id });
     setProduct(id);
     setVisiting(DEFAULT_VISITING);
     setMemo(DEFAULT_MEMO);
@@ -519,8 +528,52 @@ export function PriceEstimator() {
     return getMessengerUrlWithText(message);
   }, [t, product, result, visitingQty, visiting, memoQty, memo, sticker]);
 
+  // Only report estimates the visitor built themselves (not defaults or a shared link).
+  const interactedRef = useRef(false);
+  const markInteracted = () => {
+    interactedRef.current = true;
+  };
+
+  const estimateQty =
+    product === "visiting-card" ? visitingQty : product === "cash-memo" ? memoQty : sticker.qty;
+  const estimateConfig =
+    product === "visiting-card"
+      ? [
+          visiting.bothSides ? "both_sides" : "one_side",
+          `${visiting.colors}_color`,
+          visiting.mattLamination && "matt_lamination",
+          visiting.spotUV && "spot_uv",
+          visiting.dyeCutting && "dye_cutting",
+        ]
+          .filter(Boolean)
+          .join(",")
+      : product === "cash-memo"
+        ? [memo.size, memo.binding, `${memo.colors}_color`].join(",")
+        : "2in_round";
+
+  // Debounced so tapping through options sends one event, not ten.
+  useEffect(() => {
+    if (!interactedRef.current || !result || !estimateQty) return;
+    const timer = window.setTimeout(() => {
+      trackEvent("estimate_update", {
+        product,
+        qty: estimateQty,
+        config: estimateConfig,
+        value: result.minPrice,
+        value_max: result.maxPrice,
+        currency: "BDT",
+      });
+    }, 1500);
+    return () => window.clearTimeout(timer);
+  }, [product, estimateQty, estimateConfig, result]);
+
   return (
-    <section id="estimate" className="relative scroll-mt-[7.5rem] px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20">
+    <section
+      id="estimate"
+      className="relative scroll-mt-[7.5rem] px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20"
+      onClickCapture={markInteracted}
+      onChangeCapture={markInteracted}
+    >
       <DotPattern />
       <div className="relative z-10 max-w-screen-xl mx-auto w-full">
         {/* Header — compact */}
@@ -565,6 +618,7 @@ export function PriceEstimator() {
                 </span>
                 <a
                   href={getMessengerUrlWithText(t("estimate.comingSoonMessenger"))}
+                  data-track-item={`notify_${p.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[11px] text-muted-foreground underline underline-offset-2 hover:text-foreground"
@@ -749,7 +803,7 @@ export function PriceEstimator() {
             ) : null}
           </div>
 
-          <PricePanel result={result} messengerUrl={messengerUrl} />
+          <PricePanel result={result} messengerUrl={messengerUrl} product={product} />
         </div>
       </div>
     </section>

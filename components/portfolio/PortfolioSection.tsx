@@ -10,6 +10,7 @@ import {
   type PortfolioItem,
 } from "@/lib/portfolioData";
 import { toBengaliDigits } from "@/lib/formatBn";
+import { trackEvent } from "@/lib/analytics";
 import CategoryFilter from "./CategoryFilter";
 import PortfolioCard from "./PortfolioCard";
 import PortfolioLightbox from "./PortfolioLightbox";
@@ -32,6 +33,7 @@ export default function PortfolioSection() {
   const hasMore = remaining > 0;
 
   const handleCategoryChange = (cat: PortfolioCategory) => {
+    if (cat !== activeCategory) trackEvent("portfolio_filter", { category: cat });
     setActiveCategory(cat);
     setVisibleCount(INITIAL_COUNT);
     setLightboxItem(null);
@@ -73,7 +75,14 @@ export default function PortfolioSection() {
             <PortfolioCard
               key={item.id}
               item={item}
-              onClick={() => setLightboxItem(item)}
+              onClick={() => {
+                trackEvent("portfolio_open", {
+                  item_id: item.id,
+                  item_name: item.productName,
+                  category: item.category,
+                });
+                setLightboxItem(item);
+              }}
             />
           ))}
         </AnimatePresence>
@@ -83,7 +92,13 @@ export default function PortfolioSection() {
         <div className="mt-8 text-center">
           <button
             type="button"
-            onClick={() => setVisibleCount((c) => c + LOAD_MORE_COUNT)}
+            onClick={() => {
+              trackEvent("portfolio_load_more", {
+                category: activeCategory,
+                shown: visibleCount + LOAD_MORE_COUNT,
+              });
+              setVisibleCount((c) => c + LOAD_MORE_COUNT);
+            }}
             className="px-6 py-2.5 border border-border text-sm text-foreground hover:bg-muted transition-colors"
           >
             আরও দেখুন ({toBengaliDigits(remaining)}টি বাকি)

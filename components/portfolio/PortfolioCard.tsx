@@ -42,6 +42,7 @@ export default function PortfolioCard({ item, onClick, priority }: Props) {
         <p className="text-white/70 text-xs mb-3">{item.specs}</p>
         <a
           href={messengerUrl}
+          data-track-item={item.productName}
           target="_blank"
           rel="noopener noreferrer"
           onClick={(e) => e.stopPropagation()}

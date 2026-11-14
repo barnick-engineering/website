@@ -4,6 +4,8 @@ import Script from "next/script";
 import { Fraunces, Geist, Noto_Sans_Bengali, Noto_Serif_Bengali } from "next/font/google";
 import { LanguageProvider } from "@/contexts/language-context";
 import { ContactTracker } from "@/components/contact-tracker";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
+import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -38,6 +40,11 @@ const notoSerifBengali = Noto_Serif_Bengali({
 });
 
 const siteUrl = "https://barnickpracharani.com";
+
+// GA only loads in production so local dev doesn't pollute reports.
+// Set NEXT_PUBLIC_GA_DEBUG=true to load it locally; events then show in GA DebugView.
+const gaDebug = process.env.NEXT_PUBLIC_GA_DEBUG === "true";
+const loadGA = process.env.NODE_ENV === "production" || gaDebug;
 const siteTitle = "বর্ণিক প্রচারাণী — প্রিন্টিং ও প্যাকেজিং";
 const siteDescription =
   "বিজনেস কার্ড থেকে কাস্টম প্যাকেজিং — সহজ, দ্রুত, নির্ভরযোগ্য। ১৯৮৯ সাল থেকে ঢাকায় মানসম্মত প্রিন্টিং সেবা।";
@@ -139,19 +146,25 @@ export default function RootLayout({
       className={`${geistSans.variable} ${notoSansBengali.variable} ${fraunces.variable} ${notoSerifBengali.variable}`}
     >
       <body className="font-sans antialiased">
-        {/* Google Analytics — lazyOnload so it never competes with first paint */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-M37QBL6ZZN"
-          strategy="lazyOnload"
-        />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-M37QBL6ZZN');
-          `}
-        </Script>
+        {/* Google Analytics — afterInteractive: loads right after hydration, so
+            visitors who leave within a few seconds are still counted (lazyOnload
+            waited for full page load + idle and missed them on slow connections). */}
+        {loadGA && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_MEASUREMENT_ID}'${gaDebug ? ", { debug_mode: true }" : ""});
+              `}
+            </Script>
+          </>
+        )}
         {/* JSON-LD Structured Data */}
         <Script
           id="localbusiness-schema"
@@ -198,6 +211,7 @@ export default function RootLayout({
         </Script>
         <LanguageProvider>
           <ContactTracker />
+          <AnalyticsTracker />
           <TooltipProvider>{children}</TooltipProvider>
         </LanguageProvider>
       </body>

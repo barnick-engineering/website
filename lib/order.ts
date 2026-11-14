@@ -56,18 +56,24 @@ const DEFAULT_GREETING = {
 
 /**
  * Adds the reference code + source to a Messenger link:
- * - appends "Ref: BR-XXXXX · source" to the prefilled text (staff can see it)
+ * - appends "Ref: BR-XXXXX · source · via instagram" to the prefilled text
+ *   (staff can see where the customer clicked and how they found the site)
  * - sets m.me `ref=` (delivered to the Page's messaging_referrals webhook)
  */
 export function withMessengerRef(
   href: string,
-  opts: { refCode: string; source: string; language: "bn" | "en" }
+  opts: { refCode: string; source: string; language: "bn" | "en"; trafficSource?: string }
 ): string {
   try {
     const url = new URL(href);
     const base = url.searchParams.get("text") || DEFAULT_GREETING[opts.language];
-    const text = `${base}\n\nRef: ${opts.refCode} · ${opts.source}`;
-    const ref = `${opts.source}_${opts.refCode}`.slice(0, 250);
+    const via = opts.trafficSource ? ` · via ${opts.trafficSource}` : "";
+    const text = `${base}\n\nRef: ${opts.refCode} · ${opts.source}${via}`;
+    const ref = [opts.source, opts.refCode, opts.trafficSource]
+      .filter(Boolean)
+      .join("_")
+      .replace(/[^A-Za-z0-9_=-]/g, "-") // m.me ref only allows these characters
+      .slice(0, 250);
     // Build the query by hand: URLSearchParams encodes spaces as "+", which
     // Messenger may show literally. encodeURIComponent uses %20.
     return `${url.origin}${url.pathname}?text=${encodeURIComponent(text)}&ref=${encodeURIComponent(ref)}`;

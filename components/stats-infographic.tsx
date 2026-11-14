@@ -23,7 +23,7 @@ export function StatsInfographic() {
   ];
 
   return (
-    <section className="w-full py-10 px-6 border-y bg-muted/30">
+    <section data-track-section="stats" className="w-full py-10 px-6 border-y bg-muted/30">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
         {stats.map((stat) => (
           <div

@@ -10,6 +10,27 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2592000,
   },
+  /**
+   * Short, pre-tagged links for bios, posts and print (see docs/ANALYTICS.md).
+   * Temporary (307) so a destination can change without browsers caching it.
+   */
+  async redirects() {
+    const go = (slug: string, source: string, medium: string, campaign: string) => ({
+      source: `/go/${slug}`,
+      destination: `/?utm_source=${source}&utm_medium=${medium}&utm_campaign=${campaign}`,
+      permanent: false,
+    });
+    return [
+      go("fb", "facebook", "social", "page_profile"),
+      go("ig", "instagram", "social", "profile_bio"),
+      go("li", "linkedin", "social", "company_page"),
+      go("wa", "whatsapp", "social", "whatsapp_share"),
+      go("yt", "youtube", "social", "channel"),
+      go("qr", "print", "qr", "business_card"),
+      go("qr-pack", "print", "qr", "packaging"),
+      go("gmb", "google", "organic", "business_profile"),
+    ];
+  },
   async headers() {
     const immutable = "public, max-age=31536000, immutable";
     return [
