@@ -116,6 +116,7 @@ export default function PortfolioLightbox({
               <div className="flex flex-col gap-2 mt-6">
                 <a
                   href={getMessengerUrlWithText(item.messengerText)}
+                  data-track-item={item.productName}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full text-center bg-foreground text-background text-sm font-medium py-3 hover:opacity-90 transition-opacity"

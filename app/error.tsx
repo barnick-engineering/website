@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Error({
   error,
@@ -12,6 +13,12 @@ export default function Error({
 }) {
   useEffect(() => {
     console.error(error);
+    trackEvent("exception", {
+      description: `${error.name}: ${error.message}`.slice(0, 150),
+      digest: error.digest,
+      page_path: window.location.pathname,
+      fatal: false,
+    });
   }, [error]);
 
   return (

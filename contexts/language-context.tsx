@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 type Language = "bn" | "en";
 
@@ -487,6 +488,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   }, [language]);
 
   const setLanguage = (lang: Language) => {
+    if (lang !== language) trackEvent("language_change", { from: language, to: lang });
     setLanguageState(lang);
     localStorage.setItem("language", lang);
   };

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export default function GlobalError({
   error,
@@ -11,6 +12,12 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     console.error(error);
+    trackEvent("exception", {
+      description: `${error.name}: ${error.message}`.slice(0, 150),
+      digest: error.digest,
+      page_path: window.location.pathname,
+      fatal: true,
+    });
   }, [error]);
 
   return (
