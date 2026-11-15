@@ -2,49 +2,68 @@
 
 import { MessageCircle, Phone } from "lucide-react";
 import { Button } from "./ui/button";
+import { Eyebrow } from "./ui/eyebrow";
+import { RegMark } from "./ui/reg-mark";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
 import { getPhoneUrl } from "@/lib/order";
-import { headingClass } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
+/** Orange band: everything is ink on orange (4.71:1); focus ring stays ink. */
 export default function CTABanner() {
   const { t, language } = useLanguage();
 
   return (
-    <section className="scroll-mt-[7.5rem] px-4 xs:px-6" id="contact">
-      <div className="mt-16 mb-4 max-w-screen-lg mx-auto border-t border-foreground/80 pt-10 md:pt-12 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-        <div className="max-w-xl">
-          <h2
-            className={cn(
-              "font-display text-3xl md:text-5xl font-semibold !leading-tight",
-              headingClass(language)
-            )}
-          >
-            {t("contact.title")}
-          </h2>
-          <p className="mt-3 text-base md:text-lg text-muted-foreground">
-            {t("contact.subtitle")}
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-          <Button size="lg" asChild>
-            <a
-              href={facebookInsights.messengerUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+    <section
+      id="contact"
+      aria-labelledby="contact-heading"
+      className="bg-primary text-foreground px-4 sm:px-6 lg:px-8 py-16 lg:py-24"
+    >
+      <div className="max-w-[75rem] mx-auto">
+        <div className="grid lg:grid-cols-12 gap-10 items-end">
+          <div className="lg:col-span-7">
+            <Eyebrow tone="onOrange" leading={<RegMark className="text-foreground" />}>
+              {t("contact.eyebrow")}
+            </Eyebrow>
+            <h2
+              id="contact-heading"
+              className={cn(
+                "mt-4 font-display text-display-xl lg:text-[3.25rem] font-semibold",
+                language === "bn" && "tracking-normal"
+              )}
             >
-              <MessageCircle className="!h-5 !w-5" />
-              {t("cta.messenger")}
-            </a>
-          </Button>
-          <Button size="lg" variant="outline" asChild>
-            <a href={getPhoneUrl()}>
-              <Phone className="!h-5 !w-5" />
-              {t("cta.call")}
-            </a>
-          </Button>
+              {t("contact.headline")}
+            </h2>
+            <p className="mt-4 text-lead max-w-[48ch]">{t("contact.subtitle")}</p>
+          </div>
+          <div className="lg:col-span-5 flex flex-col gap-3">
+            <Button variant="ink" size="lg" className="w-full" asChild>
+              <a
+                href={facebookInsights.messengerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track-item="contact_messenger"
+              >
+                <MessageCircle aria-hidden />
+                {t("cta.messenger")}
+              </a>
+            </Button>
+            <Button variant="outline" size="lg" className="w-full" asChild>
+              <a href={getPhoneUrl()} data-track-item="contact_call">
+                <Phone aria-hidden />
+                {t("cta.call")} · <span className="tabular-nums">{facebookInsights.phone}</span>
+              </a>
+            </Button>
+          </div>
         </div>
+
+        <div className="mt-12 pt-6 border-t border-foreground/40 grid gap-6 text-base">
+          <div>
+            <p className="font-semibold">{t("footer.address")}</p>
+            <address className="not-italic">{t("footer.addressValue")}</address>
+          </div>
+        </div>
+        {/* OWNER-GATED: WhatsApp, email, bKash/Nagad merchant number or QR, business hours, map. */}
       </div>
     </section>
   );

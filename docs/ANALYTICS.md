@@ -27,10 +27,11 @@ GA does not load in `npm run dev`. To test locally against GA DebugView, run wit
 | `contact_click` | Same click (same parameters, without value). Kept for history from before Nov 2026. | as above |
 | `estimate_product_select` | Estimator product tab changed | `product` |
 | `estimate_update` | Visitor builds or changes a quote (sent 1.5 s after their last change) | `product`, `qty`, `config`, `value`, `value_max`, `currency` |
+| `hero_sample_click` | Hero "Recent work" photo or "See all work" tapped (mobile) | `item_id`, `item_name` |
 | `estimate_link_open` | Someone opens a shared estimate link (`?product=…`) | `product` |
-| `portfolio_filter` | Portfolio category chosen | `category` |
+| `need_select` | A "Shop by need" card action is tapped (in-page link, not a contact click) | `need` (`seller`/`business`/`events`), `target` (`estimate`/`products`/`design`), `product` (estimator product it preselects, if any) |
 | `portfolio_open` | Portfolio item opened in the lightbox | `item_id`, `item_name`, `category` |
-| `portfolio_load_more` | "Show more" clicked | `category`, `shown` |
+| `portfolio_load_more` | "Show more" clicked (category is always `সব` since the Nov 2026 redesign removed the filter) | `category`, `shown` |
 | `section_view` | A section stays in the middle of the screen for 1 s | `section`, `page_path` |
 | `scroll_depth` | 25 / 50 / 75 / 100 % of a page | `percent`, `page_path` |
 | `social_click` | Facebook, Instagram, LinkedIn, etc. profile link clicked | `network`, `source`, `page_path` |
@@ -43,8 +44,16 @@ GA does not load in `npm run dev`. To test locally against GA DebugView, run wit
 **User properties:** `first_source`, `first_medium`, `first_campaign`, `preferred_language`.
 
 **`source` values** (where on the site the click happened): `data-track-source` on a parent element,
-otherwise the nearest section id (`hero`, `estimate`, `products`, `design`, `contact`, …), `footer`,
-or the page path.
+otherwise the nearest section id (`estimate`, `products`, `design`, `faq`, `contact`, …), `footer`,
+or the page path. Explicit sources: `hero`, `navbar` (top bar), `nav_menu` (mobile menu sheet),
+`sticky_bar` (mobile bottom bar), `shop_by_need`, `portfolio_ask` (the "don't see your item?" tile),
+`guide` / `policies` (content-page CTA), `not_found`.
+
+`portfolio_filter` was removed in the Nov 2026 redesign (the category filter is no longer shown).
+
+**`section_view` names** on the homepage: `hero`, `stats` (trust strip), `clients` (logo band inside
+the trust strip), `need` (Shop by need), `estimate`, `products`, `how` (How ordering works), `design`,
+`faq`, `contact`, `footer`.
 
 **Adding tracking to a new link:** contact and social links are picked up automatically. Add
 `data-track-item="…"` or `data-track-value="1200"` to a link (or a parent element) to attach an

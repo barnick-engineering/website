@@ -1,27 +1,36 @@
 import { Logo } from "./logo";
 import { NavMenu } from "./nav-menu";
 import { NavigationSheet } from "./navigation-sheet";
+import { NavCta } from "./nav-cta";
 import LanguageToggle from "../language-toggle";
 
 const Navbar = () => {
   return (
-    <nav className="fixed z-10 top-6 inset-x-4 h-14 xs:h-16 bg-background/80 backdrop-blur-sm border border-border max-w-screen-xl mx-auto rounded-none shadow-sm">
-      <div className="h-full flex items-center justify-between mx-auto px-4">
-        <Logo />
+    <>
+      <header
+        data-track-source="navbar"
+        className="fixed inset-x-0 top-0 z-40 h-16 lg:h-[72px] border-b border-border bg-background/90 backdrop-blur-sm"
+      >
+        <div className="h-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[75rem] mx-auto h-full flex items-center justify-between gap-2 sm:gap-4">
+            <Logo />
 
-        {/* Desktop Menu */}
-        <NavMenu className="hidden md:block" />
+            {/* Desktop menu */}
+            <NavMenu className="hidden lg:block" />
 
-        <div className="flex items-center gap-3">
-          <LanguageToggle />
+            <div className="flex items-center gap-2 sm:gap-3">
+              <LanguageToggle />
+              <NavCta className="hidden md:inline-flex" />
 
-          {/* Mobile Menu */}
-          <div className="md:hidden">
-            <NavigationSheet />
+              {/* Mobile + tablet menu */}
+              <div className="lg:hidden">
+                <NavigationSheet />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </header>
+    </>
   );
 };
 

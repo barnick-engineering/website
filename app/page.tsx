@@ -3,15 +3,17 @@ import Hero from "@/components/hero";
 import { Navbar } from "@/components/navbar";
 
 // Below-fold components: code-split to reduce initial JS bundle
-const StatsInfographic = dynamic(() =>
-  import("@/components/stats-infographic").then((m) => m.StatsInfographic)
+const TrustStrip = dynamic(() =>
+  import("@/components/trust-strip").then((m) => m.TrustStrip)
 );
+const ShopByNeed = dynamic(() => import("@/components/shop-by-need"));
 const PriceEstimator = dynamic(() =>
   import("@/components/price-estimator").then((m) => m.PriceEstimator)
 );
 const PortfolioSection = dynamic(() =>
   import("@/components/portfolio/PortfolioSection")
 );
+const HowItWorks = dynamic(() => import("@/components/how-it-works"));
 const DesignService = dynamic(() => import("@/components/design-service"));
 const FAQ = dynamic(() => import("@/components/faq"));
 const CTABanner = dynamic(() => import("@/components/cta-banner"));
@@ -24,16 +26,22 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="pt-16 xs:pt-20 sm:pt-24 pb-20 md:pb-0">
+      <main id="main" className="pt-16 lg:pt-[72px]">
         <Hero />
-        <StatsInfographic />
+        <TrustStrip />
+        <ShopByNeed />
         <PriceEstimator />
         <PortfolioSection />
+        <HowItWorks />
         <DesignService />
         <FAQ />
+        {/* OWNER-GATED: <Testimonials/> — render only with real, attributable reviews (GBP etc.). */}
+        {/* OWNER-GATED: <Kits/> — F-commerce starter kits; needs owner packaging prices (P1b). */}
+        {/* OWNER-GATED: <HeritageStory/> — shop/machines/founder photos + owner-confirmed history. */}
         <CTABanner />
-        <Footer />
       </main>
+      {/* Footer is a landmark sibling of <main>; trackers find it by tag name */}
+      <Footer />
       <StickyContactBar />
     </>
   );
