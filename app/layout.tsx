@@ -38,7 +38,7 @@ const notoSansBengaliLatin = localFont({
 
 // Display serif for headings: Fraunces (Latin) + Noto Serif Bengali (Bangla).
 // Both sit in one font stack (--font-display), so Bangla glyphs fall through
-// to the Bengali serif automatically.
+// to the Bengali serif automatically. Bangla headings run at 800 (globals.css).
 const fraunces = localFont({
   src: "./fonts/fraunces-latin.woff2",
   weight: "500 600",
@@ -49,7 +49,7 @@ const fraunces = localFont({
 
 const notoSerifBengali = localFont({
   src: "./fonts/noto-serif-bengali-bengali.woff2",
-  weight: "500 600",
+  weight: "500 800",
   variable: "--font-display-bengali",
   display: "swap",
   adjustFontFallback: "Times New Roman",

@@ -36,7 +36,7 @@ export function TrustStrip() {
             <div key={f.label} className="bg-muted p-3 sm:p-4 lg:p-8 min-h-[112px] flex flex-col justify-between">
               <dt className="order-2 mt-2 text-sm text-muted-foreground">{f.label}</dt>
               <dd
-                className="order-1 font-display text-2xl sm:text-display-l tabular-nums text-foreground"
+                className="order-1 font-display text-2xl sm:text-display-l font-semibold tabular-nums text-foreground"
                 suppressHydrationWarning={f.years}
               >
                 {f.value}

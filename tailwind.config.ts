@@ -78,7 +78,7 @@ export default {
         ],
         "display-m": [
           "clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem)",
-          { lineHeight: "1.2", fontWeight: "500" },
+          { lineHeight: "1.2", fontWeight: "600" },
         ],
         price: [
           "clamp(2.5rem, 2.1rem + 1.6vw, 3rem)",

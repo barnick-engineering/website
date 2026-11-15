@@ -60,7 +60,7 @@ export const NavigationSheet = () => {
                   <SheetClose asChild>
                     <Link
                       href={href}
-                      className="min-h-14 border-b border-border px-5 flex items-center font-display text-xl hover:bg-muted"
+                      className="min-h-14 border-b border-border px-5 flex items-center font-display text-xl font-semibold hover:bg-muted"
                     >
                       {t(key)}
                     </Link>

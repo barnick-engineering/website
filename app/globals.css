@@ -146,6 +146,20 @@
     line-height: 1.35;
   }
 
+  /* Bangla display text runs heavy (Noto Serif Bengali 800). Synthesis is off so
+     Latin glyphs in the same line (Fraunces, max 600) aren't faux-bolded. */
+  html[lang="bn"] h1,
+  html[lang="bn"] h2,
+  html[lang="bn"] .font-display {
+    font-weight: 800;
+    font-synthesis-weight: none;
+  }
+
+  /* Extra leading so stacked conjunct marks don't touch between lines */
+  html[lang="bn"] .text-display-xl {
+    line-height: 1.38;
+  }
+
   html[lang="bn"] .text-price {
     line-height: 1.15;
     letter-spacing: 0;
