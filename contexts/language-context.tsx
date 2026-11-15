@@ -255,11 +255,6 @@ const translations: Record<Language, Record<string, string>> = {
     "hero.orCall": "অথবা সরাসরি কল করুন:",
     "hero.recentWork": "সাম্প্রতিক কাজ",
     "hero.allWork": "সব কাজ দেখুন",
-    "hours.openNow": "এখন খোলা",
-    "hours.until": "সন্ধ্যা ৬টা পর্যন্ত",
-    "hours.opensToday": "আজ সকাল ৯টায় খুলবে",
-    "hours.opensTomorrow": "কাল সকাল ৯টায় খুলবে",
-    "hours.opensSaturday": "শনিবার সকাল ৯টায় খুলবে",
     // Redesign 2026 — trust strip
     "trust.heading": "কেন বর্ণিক প্রচারাণী",
     "trust.since": "১৯৮৯ থেকে",
@@ -583,11 +578,6 @@ const translations: Record<Language, Record<string, string>> = {
     "hero.orCall": "Or call us directly:",
     "hero.recentWork": "Recent work",
     "hero.allWork": "See all work",
-    "hours.openNow": "Open now",
-    "hours.until": "until 6 pm",
-    "hours.opensToday": "Opens today at 9 am",
-    "hours.opensTomorrow": "Opens tomorrow at 9 am",
-    "hours.opensSaturday": "Opens Saturday at 9 am",
     // Redesign 2026 — trust strip
     "trust.heading": "Why Barnick Pracharani",
     "trust.since": "Since 1989",

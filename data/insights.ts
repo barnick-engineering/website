@@ -10,12 +10,6 @@ export const facebookInsights = {
   monthlyReach: 45000,
   trustedClients: 100,
   turnaroundDays: "1–3",
-  /**
-   * Shop hours in Dhaka time (matches the JSON-LD openingHours "Sa-Th 09:00-18:00"
-   * in app/layout.tsx). Days use JS getDay(): 0 = Sunday … 6 = Saturday; Friday (5) closed.
-   * If these change, also update the hours.* strings in contexts/language-context.tsx.
-   */
-  openingHours: { days: [6, 0, 1, 2, 3, 4], open: 9, close: 18 },
   advancePercent: 50,
 
   /** Category popularity from FB post analysis (must sum to 100) */

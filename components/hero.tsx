@@ -6,7 +6,6 @@ import { ColorBar } from "@/components/ui/color-bar";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { HeroFlowDesktop } from "@/components/hero-flow-desktop";
 import { HeroWorkSamples } from "@/components/hero-work-samples";
-import { OpenStatus } from "@/components/open-status";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
 import { getPhoneUrl } from "@/lib/order";
@@ -72,7 +71,6 @@ const Hero = () => {
                 >
                   {facebookInsights.phone}
                 </a>
-                <OpenStatus />
               </div>
 
               {/* Mobile only: real work photos under the CTAs */}
