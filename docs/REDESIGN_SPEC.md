@@ -50,7 +50,7 @@ No new font families or weights. Fix `Geist` in app/layout.tsx so it has `displa
 
 | Stack | Tailwind | Families |
 |---|---|---|
-| Display | `font-display` | Fraunces 500/600 (Latin), then Noto Serif Bengali 500/600 (Bangla glyphs fall through), then Georgia |
+| Display | `font-display` | Fraunces 500/600 (Latin), then Noto Serif Bengali 800 (Bangla glyphs fall through), then Georgia |
 | Body (en) | `font-sans` | Geist |
 | Body (bn) | `font-bengali` (applied on `html[lang=bn] body`) | Noto Sans Bengali 400/600/700, then Geist |
 
