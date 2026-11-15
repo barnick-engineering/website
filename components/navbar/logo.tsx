@@ -8,15 +8,23 @@ export const Logo = () => {
   const { t } = useLanguage();
 
   return (
-    <Link href="/" className="flex items-center gap-2">
+    <Link
+      href="/"
+      aria-label={t("logo.name")}
+      className="flex min-h-11 items-center gap-2.5"
+    >
+      {/* Brand mark: same /barnick.png, rendered larger only — no filter, crop or background */}
       <Image
         src="/barnick.png"
-        alt="barnick Logo"
-        width={32}
-        height={32}
-        className="h-8 w-8"
+        alt={t("logo.name")}
+        width={40}
+        height={40}
+        className="h-9 w-9 lg:h-10 lg:w-10"
       />
-      <span className="text-lg font-semibold">{t("logo.name")}</span>
+      {/* Under 375px the name wraps to two lines so the menu button never gets pushed off-screen */}
+      <span className="font-display text-[15px] leading-tight max-w-[6.5rem] xs:max-w-none xs:text-lg xs:leading-none lg:text-xl font-semibold xs:whitespace-nowrap">
+        {t("logo.name")}
+      </span>
     </Link>
   );
 };

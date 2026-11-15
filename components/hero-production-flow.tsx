@@ -15,6 +15,7 @@ import {
   type ProcessStep,
   type ProcessSubStep,
 } from "@/hooks/use-process-step-animation";
+import { toBengaliDigits } from "@/lib/formatBn";
 import { sectionLabelClass } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
@@ -30,7 +31,8 @@ function StepLabel({
   isActive: boolean;
 }) {
   const { language } = useLanguage();
-  const stepNum = String(index).padStart(2, "0");
+  const padded = String(index).padStart(2, "0");
+  const stepNum = language === "bn" ? toBengaliDigits(padded) : padded;
 
   return (
     <p
@@ -101,8 +103,8 @@ function AnimatedColumn({
         y: showRevealed ? 0 : 16,
         backgroundColor:
           isLooping && isActive
-            ? "hsl(var(--foreground) / 0.05)"
-            : "hsl(var(--background) / 0)",
+            ? "rgba(17, 17, 17, 0.05)"
+            : "rgba(243, 238, 227, 0)",
         boxShadow:
           isLooping && isActive
             ? "0 4px 20px rgba(0, 0, 0, 0.06)"
@@ -139,9 +141,9 @@ function SideStep({
   isActive: boolean;
 }) {
   return (
-    <div className="flex flex-col justify-center p-5 lg:p-6 h-full min-w-0">
+    <div className="flex flex-col justify-center px-5 py-4 h-full min-w-0">
       <StepLabel index={index} title={title} pop={revealed} isActive={isActive} />
-      <p className="mt-4 text-sm text-muted-foreground leading-relaxed">{description}</p>
+      <p className="mt-1.5 text-sm text-muted-foreground leading-relaxed">{description}</p>
     </div>
   );
 }
@@ -171,16 +173,16 @@ function SubItem({
         x: revealed ? 0 : -10,
         backgroundColor:
           isLooping && highlighted
-            ? "hsl(var(--foreground) / 0.06)"
+            ? "rgba(17, 17, 17, 0.06)"
             : variant === "service"
-              ? "hsl(var(--background) / 0.8)"
-              : "transparent",
+              ? "rgba(243, 238, 227, 0.8)"
+              : "rgba(243, 238, 227, 0)", // #F3EEE3 at 0 alpha; motion can't animate "transparent" or CSS vars
       }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
       className={cn(
         variant === "pipeline"
-          ? "flex flex-col items-center justify-center px-1 sm:px-2 py-5 sm:py-7 text-center min-w-0"
-          : "flex flex-col xs:flex-row items-center justify-center gap-1.5 xs:gap-2 border border-border/60 bg-background/80 px-2.5 xs:px-3 py-2.5 sm:py-3 min-w-0 text-center xs:text-left",
+          ? "flex flex-col items-center justify-center px-2 py-4 text-center min-w-0"
+          : "flex flex-col xs:flex-row items-center justify-center gap-1.5 xs:gap-2 border border-border bg-card px-2.5 xs:px-3 py-2.5 sm:py-3 min-w-0 text-center xs:text-left",
         isLooping && highlighted && "ring-1 ring-foreground/25",
         isLooping && highlighted && variant === "pipeline" && "bg-foreground/5"
       )}
@@ -190,19 +192,19 @@ function SubItem({
         bounce={revealed && highlighted && !isLooping}
         className={cn(
           variant === "pipeline" ? "h-6 w-6 mb-3" : "h-4 w-4",
-          highlighted ? "text-foreground" : "text-muted-foreground"
+          highlighted ? "text-primary" : "text-muted-foreground"
         )}
         strokeWidth={variant === "pipeline" ? 1.75 : 1.5}
       />
       <span
         className={cn(
-          "font-semibold text-foreground min-w-0 text-center",
+          "font-semibold text-foreground min-w-0 max-w-full text-center break-words",
           variant === "pipeline" && "font-bold",
           isLooping && !highlighted && "text-foreground/75",
           language === "bn"
-            ? "text-xs sm:text-sm leading-snug tracking-normal"
+            ? "text-sm leading-snug tracking-normal"
             : variant === "pipeline"
-              ? "text-sm sm:text-base leading-tight tracking-tight"
+              ? "text-sm xl:text-base leading-tight tracking-tight"
               : "text-xs sm:text-sm leading-none"
         )}
       >
@@ -244,7 +246,7 @@ function ProductionStep({
   };
 
   return (
-    <div className="p-5 lg:p-6 h-full bg-muted/20 min-w-0">
+    <div className="px-5 py-4 h-full bg-card min-w-0">
       <StepLabel
         index={index}
         title={t("hero.flow.step2.title")}
@@ -252,7 +254,7 @@ function ProductionStep({
         isActive={isStepActive}
       />
 
-      <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 divide-x divide-border/80 border border-border bg-muted/35 shadow-sm">
+      <div className="mt-3 grid grid-cols-4 divide-x divide-border border border-border bg-card">
         {pipeline.map(({ icon, label }, i) => (
           <SubItem
             key={label}
@@ -309,7 +311,7 @@ function ProcessSteps({
         />
       </AnimatedColumn>
 
-      <AnimatedColumn {...columnProps(2)} className="bg-muted/20">
+      <AnimatedColumn {...columnProps(2)} className="bg-card">
         <ProductionStep
           index={2}
           revealed={revealedColumns[1]}
@@ -332,8 +334,9 @@ function ProcessSteps({
     </>
   );
 
+  // Stacked rows: the hero flow column is only ~450-560px wide, too narrow for three side-by-side columns
   return (
-    <div className="divide-y divide-border lg:grid lg:grid-cols-[1fr_2.5fr_1fr] lg:divide-y-0 lg:divide-x relative">
+    <div className="divide-y divide-border relative">
       {steps}
     </div>
   );
@@ -357,7 +360,7 @@ export function HeroProductionFlow() {
         {t("hero.flow.title")}
       </p>
 
-      <div className="border bg-background overflow-hidden">
+      <div className="border border-border bg-card overflow-hidden">
         <ProcessSteps
           revealedColumns={revealedColumns}
           revealedSubSteps={revealedSubSteps}

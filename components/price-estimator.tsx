@@ -1,23 +1,31 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { AlertTriangle, Calculator, ChevronDown, MessageCircle } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { facebookInsights } from "@/data/insights";
 import { getMessengerUrlWithText } from "@/lib/order";
 import { trackEvent } from "@/lib/analytics";
 import { Input } from "@/components/ui/input";
-import { DotPattern } from "@/components/ui/dot-pattern";
+import { SectionHeader } from "@/components/section-header";
 import {
   calculateOffsetMemo,
   calculateRoundSticker,
   calculateVisitingCard,
+  STICKER_2X2_FIXED_TIER_PRICES,
   STICKER_2X2_PRESET_QUANTITIES,
+  VISITING_FIXED_TIER_PRICES,
   VISITING_PRESET_QUANTITIES,
   type ColorCount,
   type EstimateResult,
 } from "@/lib/calculateEstimate";
 import { parseEstimateQuery } from "@/lib/estimateQuery";
+import {
+  consumePendingEstimateProduct,
+  ESTIMATE_PRODUCT_EVENT,
+  isEstimateProductId,
+} from "@/lib/estimateEvents";
+import { numberLocale, padNumber } from "@/lib/typography";
 import { cn } from "@/lib/utils";
 
 type ProductId = "visiting-card" | "cash-memo" | "round-sticker";
@@ -84,6 +92,47 @@ function formatPrice(n: number): string {
   return n.toLocaleString("en-BD");
 }
 
+/* ------------------------------------------------------------------ */
+/* Presentational helpers (restyle only — no pricing logic here)        */
+/* ------------------------------------------------------------------ */
+
+function tileClass(selected: boolean) {
+  return cn(
+    "min-h-14 px-2 py-2 flex flex-col items-center justify-center border text-base font-semibold tabular-nums transition-colors duration-150 motion-reduce:transition-none",
+    selected
+      ? "bg-foreground text-background border-foreground"
+      : "bg-background border-input text-foreground hover:border-foreground"
+  );
+}
+
+function segmentClass(selected: boolean) {
+  return cn(
+    "min-h-11 px-4 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none",
+    selected ? "bg-foreground text-background" : "text-foreground hover:bg-muted"
+  );
+}
+
+/** Per-piece hint under a fixed-tier quantity tile, in the visitor's digits */
+function PerPieceHint({ total, qty, selected }: { total: number; qty: number; selected: boolean }) {
+  const { t, language } = useLanguage();
+  const perPiece = (total / qty).toLocaleString(numberLocale(language), {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return (
+    <span
+      className={cn(
+        "mt-0.5 font-normal",
+        language === "bn" ? "text-sm" : "text-xs",
+        selected ? "text-background/80" : "text-muted-foreground"
+      )}
+    >
+      ৳{perPiece}
+      {t("estimate.perPiece")}
+    </span>
+  );
+}
+
 function CompactToggle<T extends string | boolean>({
   label,
   options,
@@ -96,20 +145,16 @@ function CompactToggle<T extends string | boolean>({
   onChange: (v: T) => void;
 }) {
   return (
-    <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-      <span className="text-sm font-medium text-foreground shrink-0">{label}</span>
-      <div className="inline-flex rounded-full border border-foreground/15 bg-muted/30 p-0.5 self-start sm:self-auto">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+      <span className="text-sm font-semibold text-foreground shrink-0">{label}</span>
+      <div role="group" aria-label={label} className="inline-flex flex-wrap border border-input bg-background self-start sm:self-auto">
         {options.map((opt) => (
           <button
             key={String(opt.value)}
             type="button"
+            aria-pressed={value === opt.value}
             onClick={() => onChange(opt.value)}
-            className={cn(
-              "min-h-9 rounded-full px-3 text-xs sm:text-sm font-medium transition-colors",
-              value === opt.value
-                ? "bg-foreground text-background"
-                : "text-foreground hover:bg-muted/80"
-            )}
+            className={segmentClass(value === opt.value)}
           >
             {opt.label}
           </button>
@@ -139,40 +184,38 @@ function VisitingQtySelector({
 
   return (
     <div>
-      <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.visiting.qty")}</p>
-      <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5 sm:gap-2">
-        {VISITING_PRESET_QUANTITIES.map((opt) => (
-          <button
-            key={opt}
-            type="button"
-            onClick={() => onPresetSelect(opt)}
-            className={cn(
-              "min-h-10 text-sm font-semibold transition-colors",
-              qtyMode === "preset" && presetQty === opt
-                ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                : "border border-foreground/20 bg-background hover:bg-muted"
-            )}
-          >
-            {opt.toLocaleString(locale)}
-          </button>
-        ))}
+      <p className="text-sm font-semibold text-ink-2 mb-3">{t("estimate.visiting.qty")}</p>
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        {VISITING_PRESET_QUANTITIES.map((opt) => {
+          const selected = qtyMode === "preset" && presetQty === opt;
+          // 5000 is formula-priced — no per-piece hint
+          const tier = opt !== 5000 ? VISITING_FIXED_TIER_PRICES[opt] : undefined;
+          return (
+            <button
+              key={opt}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => onPresetSelect(opt)}
+              className={tileClass(selected)}
+            >
+              {opt.toLocaleString(locale)}
+              {tier !== undefined && <PerPieceHint total={tier} qty={opt} selected={selected} />}
+            </button>
+          );
+        })}
         <button
           type="button"
+          aria-pressed={qtyMode === "custom"}
           onClick={onCustomSelect}
-          className={cn(
-            "min-h-10 text-sm font-semibold transition-colors",
-            qtyMode === "custom"
-              ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
-              : "border border-foreground/20 bg-background hover:bg-muted"
-          )}
+          className={tileClass(qtyMode === "custom")}
         >
           {t("estimate.visiting.custom")}
         </button>
       </div>
 
       {qtyMode === "custom" && (
-        <div className="mt-3">
-          <label className="text-sm font-medium text-foreground" htmlFor="visiting-custom-qty">
+        <div className="mt-4">
+          <label className="text-sm font-semibold text-foreground" htmlFor="visiting-custom-qty">
             {t("estimate.visiting.customLabel")}
           </label>
           <Input
@@ -183,7 +226,7 @@ function VisitingQtySelector({
             placeholder={t("estimate.visiting.customPlaceholder")}
             value={customQty}
             onChange={(e) => onCustomQtyChange(e.target.value)}
-            className="mt-1.5 min-h-11 text-base"
+            className="mt-2 min-h-12 text-base md:text-base border-input bg-background shadow-none"
           />
         </div>
       )}
@@ -211,40 +254,35 @@ function MemoQtySelector({
 
   return (
     <div>
-      <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.memo.qty")}</p>
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5 sm:gap-2">
-        {MEMO_QTY_OPTIONS.map((opt) => (
-          <button
-            key={opt}
-            type="button"
-            onClick={() => onPresetSelect(opt)}
-            className={cn(
-              "min-h-10 text-sm font-semibold transition-colors",
-              qtyMode === "preset" && presetQty === opt
-                ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                : "border border-foreground/20 bg-background hover:bg-muted"
-            )}
-          >
-            {opt.toLocaleString(locale)}
-          </button>
-        ))}
+      <p className="text-sm font-semibold text-ink-2 mb-3">{t("estimate.memo.qty")}</p>
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+        {MEMO_QTY_OPTIONS.map((opt) => {
+          const selected = qtyMode === "preset" && presetQty === opt;
+          return (
+            <button
+              key={opt}
+              type="button"
+              aria-pressed={selected}
+              onClick={() => onPresetSelect(opt)}
+              className={tileClass(selected)}
+            >
+              {opt.toLocaleString(locale)}
+            </button>
+          );
+        })}
         <button
           type="button"
+          aria-pressed={qtyMode === "custom"}
           onClick={onCustomSelect}
-          className={cn(
-            "min-h-10 text-sm font-semibold transition-colors",
-            qtyMode === "custom"
-              ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
-              : "border border-foreground/20 bg-background hover:bg-muted"
-          )}
+          className={tileClass(qtyMode === "custom")}
         >
           {t("estimate.memo.custom")}
         </button>
       </div>
 
       {qtyMode === "custom" && (
-        <div className="mt-3">
-          <label className="text-sm font-medium text-foreground" htmlFor="memo-custom-qty">
+        <div className="mt-4">
+          <label className="text-sm font-semibold text-foreground" htmlFor="memo-custom-qty">
             {t("estimate.memo.customLabel")}
           </label>
           <Input
@@ -255,7 +293,7 @@ function MemoQtySelector({
             placeholder={t("estimate.memo.customPlaceholder")}
             value={customQty}
             onChange={(e) => onCustomQtyChange(e.target.value)}
-            className="mt-1.5 min-h-11 text-base"
+            className="mt-2 min-h-12 text-base md:text-base border-input bg-background shadow-none"
           />
         </div>
       )}
@@ -263,7 +301,7 @@ function MemoQtySelector({
   );
 }
 
-function RoundStickerOptions({
+function RoundStickerQty({
   qty,
   onQtyChange,
 }: {
@@ -274,37 +312,64 @@ function RoundStickerOptions({
   const locale = language === "bn" ? "bn-BD" : "en-BD";
 
   return (
-    <>
-      <div>
-        <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.sticker.size")}</p>
-        <div className="inline-flex">
-          <span className="min-h-10 px-4 text-sm font-semibold bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background inline-flex items-center">
-            {t("estimate.sticker.size.2")}
-          </span>
-        </div>
-      </div>
-
-      <div className="pt-1 border-t border-border/60">
-        <p className="text-sm font-semibold text-foreground mb-2">{t("estimate.sticker.qty")}</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
-          {STICKER_2X2_PRESET_QUANTITIES.map((opt) => (
+    <div>
+      <p className="text-sm font-semibold text-ink-2 mb-3">{t("estimate.sticker.qty")}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        {STICKER_2X2_PRESET_QUANTITIES.map((opt) => {
+          const selected = qty === opt;
+          const tier = STICKER_2X2_FIXED_TIER_PRICES[opt];
+          return (
             <button
               key={opt}
               type="button"
+              aria-pressed={selected}
               onClick={() => onQtyChange(opt)}
-              className={cn(
-                "min-h-10 text-sm font-semibold transition-colors",
-                qty === opt
-                  ? "bg-foreground text-background ring-2 ring-foreground ring-offset-2 ring-offset-background"
-                  : "border border-foreground/20 bg-background hover:bg-muted"
-              )}
+              className={tileClass(selected)}
             >
               {opt.toLocaleString(locale)}
+              {tier !== undefined && <PerPieceHint total={tier} qty={opt} selected={selected} />}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
-    </>
+    </div>
+  );
+}
+
+function RoundStickerSize() {
+  const { t } = useLanguage();
+  return (
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+      <span className="text-sm font-semibold text-foreground">{t("estimate.sticker.size")}</span>
+      <span
+        aria-current="true"
+        className="min-h-11 px-4 text-sm font-semibold bg-foreground text-background inline-flex items-center self-start"
+      >
+        {t("estimate.sticker.size.2")}
+      </span>
+    </div>
+  );
+}
+
+/** Numbered field group: serif number + h3 label */
+function FieldGroup({
+  number,
+  label,
+  children,
+}: {
+  number: number;
+  label: string;
+  children: ReactNode;
+}) {
+  const { language } = useLanguage();
+  return (
+    <div className="p-5 lg:p-8 border-b border-border last:border-b-0">
+      <h3 className="flex items-baseline gap-3 text-lg lg:text-xl font-semibold text-foreground">
+        <span className="font-display text-primary-strong tabular-nums">{padNumber(language, number)}</span>
+        {label}
+      </h3>
+      <div className="mt-4">{children}</div>
+    </div>
   );
 }
 
@@ -379,71 +444,103 @@ function PricePanel({
   const { t } = useLanguage();
 
   return (
-    <aside
-      className={cn(
-        "w-full min-w-0 overflow-hidden rounded-2xl border-2 border-foreground/25 bg-foreground text-background p-4 sm:p-5 lg:sticky lg:top-24",
-        className
-      )}
-    >
-      <p className="text-xs font-medium text-background/70">
-        {t("estimate.result.total")}
-      </p>
+    <div className={cn("crop-marks p-3 lg:sticky lg:top-28", className)}>
+      <aside
+        id="estimate-result"
+        data-surface="ink"
+        aria-labelledby="estimate-result-label"
+        className="w-full min-w-0 bg-surface-ink text-on-ink p-6 lg:p-8 border-t-4 border-primary"
+      >
+        <p id="estimate-result-label" className="text-sm font-semibold text-on-ink-muted">
+          {t("estimate.result.total")}
+        </p>
 
-      {result ? (
-        <div className="mt-2 min-w-0">
-          {result.minPrice === result.maxPrice ? (
-            <p className="text-xl sm:text-2xl font-bold tabular-nums leading-none">
-              ৳ {formatPrice(result.minPrice)}
-            </p>
-          ) : (
-            <div className="flex flex-col gap-0.5">
-              <p className="text-xl sm:text-2xl font-bold tabular-nums leading-none">
-                ৳ {formatPrice(result.minPrice)}
-              </p>
-              <p className="text-xs text-background/60 py-0.5">{t("estimate.result.rangeTo")}</p>
-              <p className="text-xl sm:text-2xl font-bold tabular-nums leading-none">
-                ৳ {formatPrice(result.maxPrice)}
-              </p>
+        {result ? (
+          <div className="mt-3 min-w-0">
+            <div aria-live="polite">
+              {result.minPrice === result.maxPrice ? (
+                <p className="font-display text-price tabular-nums">
+                  ৳ {formatPrice(result.minPrice)}
+                </p>
+              ) : (
+                <div className="flex flex-col gap-1">
+                  <p className="font-display text-price tabular-nums">
+                    ৳ {formatPrice(result.minPrice)}
+                  </p>
+                  <p className="text-sm text-on-ink-muted">{t("estimate.result.rangeTo")}</p>
+                  <p className="font-display text-price tabular-nums">
+                    ৳ {formatPrice(result.maxPrice)}
+                  </p>
+                </div>
+              )}
             </div>
-          )}
-          <p className="mt-2 text-xs sm:text-sm text-background/80 break-words">
-            {t("estimate.result.perUnit")}: ৳ {formatPrice(result.minUnitPrice)} – ৳{" "}
-            {formatPrice(result.maxUnitPrice)}
-          </p>
-          <p className="mt-3 flex items-start gap-1.5 text-[11px] text-background/50 leading-snug">
-            <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5 opacity-70" aria-hidden />
-            <span className="min-w-0">{t("estimate.result.disclaimer")}</span>
-          </p>
-          <a
-            href={messengerUrl ?? facebookInsights.messengerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track-item={product}
-            data-track-value={result.minPrice}
-            className="mt-4 flex w-full max-w-full min-w-0 items-center justify-center gap-2 rounded-full bg-background px-4 py-3 text-sm font-medium text-foreground hover:bg-background/90 transition-colors text-center leading-snug"
-          >
-            <MessageCircle className="h-4 w-4 shrink-0" />
-            <span className="min-w-0">{t("estimate.ctaShort")}</span>
-          </a>
-        </div>
-      ) : (
-        <div className="mt-4 flex flex-col items-center text-center py-4 sm:py-6 min-w-0">
-          <Calculator className="h-8 w-8 text-background/40 mb-3" strokeWidth={1.5} />
-          <p className="text-sm text-background/70 leading-relaxed px-2">
-            {t("estimate.selectQty")}
-          </p>
-        </div>
+            <p className="mt-3 text-sm text-on-ink-muted break-words">
+              {t("estimate.result.perUnit")}: ৳ {formatPrice(result.minUnitPrice)} – ৳{" "}
+              {formatPrice(result.maxUnitPrice)}
+            </p>
+            <p className="mt-4 flex items-start gap-2 text-sm text-on-ink-muted">
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-primary" aria-hidden />
+              <span className="min-w-0">{t("estimate.result.disclaimer")}</span>
+            </p>
+            <a
+              href={messengerUrl ?? facebookInsights.messengerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track-item={product}
+              data-track-value={result.minPrice}
+              className="mt-6 flex w-full min-h-12 min-w-0 items-center justify-center gap-2 bg-primary px-4 py-3 text-base font-semibold text-primary-foreground hover:bg-primary-hover transition-colors duration-150 text-center"
+            >
+              <MessageCircle className="h-[18px] w-[18px] shrink-0" aria-hidden />
+              <span className="min-w-0">{t("estimate.ctaShort")}</span>
+            </a>
+            <p className="mt-4 text-sm text-on-ink-muted">{t("estimate.trustNote")}</p>
+          </div>
+        ) : (
+          <div className="mt-4 flex flex-col items-center text-center py-4 sm:py-6 min-w-0">
+            <Calculator className="h-8 w-8 text-on-ink/40 mb-3" strokeWidth={1.5} aria-hidden />
+            <p className="text-base text-on-ink-muted px-2">{t("estimate.selectQty")}</p>
+          </div>
+        )}
+      </aside>
+    </div>
+  );
+}
+
+/** Read-only mobile mirror of the panel total, shown right under the quantity tiles */
+function MobileLiveTotal({ result }: { result: EstimateResult | null }) {
+  const { t } = useLanguage();
+  return (
+    <div className="lg:hidden mt-5 border-t border-border pt-3">
+      <p aria-live="polite" className="flex items-baseline justify-between gap-3">
+        <span className="text-sm font-semibold text-ink-2">{t("estimate.result.total")}</span>
+        {result ? (
+          <span className="font-display text-2xl font-semibold tabular-nums text-foreground text-right">
+            ৳ {formatPrice(result.minPrice)}
+            {result.maxPrice !== result.minPrice && <> –৳{formatPrice(result.maxPrice)}</>}
+          </span>
+        ) : (
+          <span className="text-sm text-muted-foreground text-right">{t("estimate.selectQty")}</span>
+        )}
+      </p>
+      {result && (
+        <a
+          href="#estimate-result"
+          className="mt-1 inline-flex min-h-11 items-center text-sm font-semibold text-primary-strong underline underline-offset-4"
+        >
+          {t("estimate.seeOrder")}
+        </a>
       )}
-    </aside>
+    </div>
   );
 }
 
 export function PriceEstimator() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [product, setProduct] = useState<ProductId>("visiting-card");
   const [visiting, setVisiting] = useState(DEFAULT_VISITING);
   const [memo, setMemo] = useState(DEFAULT_MEMO);
   const [sticker, setSticker] = useState(DEFAULT_STICKER);
+  const productChangeRef = useRef<(id: ProductId) => void>(() => {});
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -470,6 +567,9 @@ export function PriceEstimator() {
         ...parsed.sticker,
       }));
     }
+    // A "Shop by need" tap that happened before this (dynamic) section mounted
+    const pending = consumePendingEstimateProduct();
+    if (pending) productChangeRef.current(pending);
   }, []);
 
   const handleProductChange = (id: ProductId) => {
@@ -479,6 +579,19 @@ export function PriceEstimator() {
     setMemo(DEFAULT_MEMO);
     setSticker(DEFAULT_STICKER);
   };
+
+  // Shop-by-need preselect: keep the latest handler in a ref (so `product` is never
+  // stale) and register the window listener once.
+  productChangeRef.current = handleProductChange;
+  useEffect(() => {
+    const onSelect = (event: Event) => {
+      const detail = (event as CustomEvent<unknown>).detail;
+      consumePendingEstimateProduct();
+      if (isEstimateProductId(detail)) productChangeRef.current(detail);
+    };
+    window.addEventListener(ESTIMATE_PRODUCT_EVENT, onSelect);
+    return () => window.removeEventListener(ESTIMATE_PRODUCT_EVENT, onSelect);
+  }, []);
 
   const visitingQty = useMemo(() => resolveVisitingQty(visiting), [visiting]);
   const memoQty = useMemo(() => resolveMemoQty(memo), [memo]);
@@ -505,13 +618,6 @@ export function PriceEstimator() {
     return calculateRoundSticker("2", sticker.qty);
   }, [product, visiting, visitingQty, memo, memoQty, sticker]);
 
-  const hasQty =
-    product === "visiting-card"
-      ? visitingQty !== null
-      : product === "cash-memo"
-        ? memoQty !== null
-        : sticker.qty !== null;
-  const stepNums = language === "bn" ? ["১", "২", "৩"] : ["1", "2", "3"];
 
   const messengerUrl = useMemo(() => {
     if (!result) return null;
@@ -570,85 +676,71 @@ export function PriceEstimator() {
   return (
     <section
       id="estimate"
-      className="relative scroll-mt-[7.5rem] px-4 xs:px-6 py-8 sm:py-10 border-y bg-muted/20"
+      aria-labelledby="estimate-heading"
+      className="px-4 sm:px-6 lg:px-8 py-16 lg:py-24"
       onClickCapture={markInteracted}
       onChangeCapture={markInteracted}
     >
-      <DotPattern />
-      <div className="relative z-10 max-w-screen-xl mx-auto w-full">
-        {/* Header — compact */}
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold">{t("estimate.title")}</h2>
-          <p className="mt-2 text-sm text-muted-foreground">{t("estimate.subtitle")}</p>
-        </div>
-
-        <div
-          className="mt-4 mx-auto max-w-2xl flex items-start justify-center gap-2 text-left text-[11px] sm:text-xs border border-primary/25 bg-primary/10 px-3 py-2.5 text-foreground/90"
-          role="note"
+      <div className="max-w-[75rem] mx-auto w-full">
+        <SectionHeader
+          id="estimate-heading"
+          number={2}
+          eyebrow={t("estimate.eyebrow")}
+          title={t("estimate.title")}
+          lead={t("estimate.subtitle")}
         >
-          <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5 text-primary" aria-hidden />
-          <span>{t("estimate.disclaimer")}</span>
-        </div>
+          <p
+            role="note"
+            className="mt-4 flex gap-2 text-sm text-ink-2 border-l-2 border-primary pl-3 max-w-[60ch]"
+          >
+            <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-primary-strong" aria-hidden />
+            <span>{t("estimate.disclaimer")}</span>
+          </p>
+        </SectionHeader>
 
-        {/* Simple 3-step hint */}
-        <div className="mt-5 flex items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">
-            {stepNums[0]}. {t("estimate.step1")}
-          </span>
-          <span aria-hidden>→</span>
-          <span className={cn(hasQty && "font-medium text-foreground")}>
-            {stepNums[1]}. {t("estimate.step2")}
-          </span>
-          <span aria-hidden>→</span>
-          <span className={cn(result && "font-medium text-foreground")}>
-            {stepNums[2]}. {t("estimate.step3")}
-          </span>
-        </div>
-
-        {/* Product pills — scrollable, scales to many items */}
-        <div className="mt-5 flex gap-2 overflow-x-auto pb-1 scrollbar-none [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {PRODUCT_PILLS.map((p) =>
-            p.disabled ? (
-              <span
-                key={p.id}
-                className="shrink-0 inline-flex flex-col items-center gap-1"
-              >
-                <span className="min-h-10 rounded-full px-4 sm:px-5 text-sm font-semibold border border-dashed border-foreground/15 text-muted-foreground inline-flex items-center cursor-default">
-                  {t(p.labelKey)}
-                </span>
-                <a
-                  href={getMessengerUrlWithText(t("estimate.comingSoonMessenger"))}
-                  data-track-item={`notify_${p.id}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] text-muted-foreground underline underline-offset-2 hover:text-foreground"
-                >
-                  {t("estimate.comingSoonNotify")}
-                </a>
-              </span>
-            ) : (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => handleProductChange(p.id)}
-                className={cn(
-                  "shrink-0 min-h-10 rounded-full px-4 sm:px-5 text-sm font-semibold transition-colors",
-                  product === p.id
-                    ? "bg-foreground text-background"
-                    : "border border-foreground/20 bg-background hover:bg-muted"
+        <div className="mt-10 grid lg:grid-cols-12 gap-6 lg:gap-8 items-start min-w-0">
+          <div className="lg:col-span-8 min-w-0 bg-card border border-border shadow-paper">
+            {/* 01 — product */}
+            <FieldGroup number={1} label={t("estimate.step1")}>
+              <div role="group" aria-label={t("estimate.step1")} className="grid grid-cols-3 gap-2">
+                {PRODUCT_PILLS.map((p) =>
+                  p.disabled ? null : (
+                    <button
+                      key={p.id}
+                      type="button"
+                      aria-pressed={product === p.id}
+                      onClick={() => handleProductChange(p.id)}
+                      className={cn(
+                        "min-h-12 px-2 text-sm sm:text-base font-semibold border leading-snug transition-colors duration-150 motion-reduce:transition-none",
+                        product === p.id
+                          ? "bg-foreground text-background border-foreground"
+                          : "bg-background border-input text-foreground hover:border-foreground"
+                      )}
+                    >
+                      {t(p.labelKey)}
+                    </button>
+                  )
                 )}
-              >
-                {t(p.labelKey)}
-              </button>
-            )
-          )}
-        </div>
+              </div>
+              {PRODUCT_PILLS.filter((p) => p.disabled).map((p) => (
+                <p key={p.id} className="mt-3 text-sm text-muted-foreground">
+                  {t("estimate.comingSoon")} ·{" "}
+                  <a
+                    href={getMessengerUrlWithText(t("estimate.comingSoonMessenger"))}
+                    data-track-item={`notify_${p.id}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary-strong font-semibold underline underline-offset-4 min-h-11 inline-flex items-center"
+                  >
+                    {t("estimate.comingSoonNotify")}
+                  </a>
+                </p>
+              ))}
+            </FieldGroup>
 
-        {/* Options first on mobile; price panel after all inputs */}
-        <div className="mt-5 grid lg:grid-cols-[1fr_minmax(240px,320px)] gap-4 lg:gap-5 items-start min-w-0">
-          <div className="rounded-xl border bg-background p-4 sm:p-5 space-y-4">
-            {product === "visiting-card" ? (
-              <>
+            {/* 02 — quantity (+ mobile live total) */}
+            <FieldGroup number={2} label={t("estimate.step2")}>
+              {product === "visiting-card" ? (
                 <VisitingQtySelector
                   qtyMode={visiting.qtyMode}
                   presetQty={visiting.presetQty}
@@ -663,81 +755,7 @@ export function PriceEstimator() {
                     setVisiting((s) => ({ ...s, qtyMode: "custom", customQty }))
                   }
                 />
-
-                <div className="grid sm:grid-cols-2 gap-3 pt-1 border-t border-border/60">
-                  <CompactToggle
-                    label={t("estimate.visiting.sides")}
-                    value={visiting.bothSides}
-                    onChange={(bothSides) => setVisiting((s) => ({ ...s, bothSides }))}
-                    options={[
-                      { value: false, label: t("estimate.visiting.sides.one") },
-                      { value: true, label: t("estimate.visiting.sides.both") },
-                    ]}
-                  />
-                  <div className="sm:col-span-2">
-                    <p className="text-sm font-medium text-foreground mb-1.5">
-                      {t("estimate.visiting.colors")}
-                    </p>
-                    <div className="inline-flex rounded-full border border-foreground/15 bg-muted/30 p-0.5">
-                      {COLOR_OPTIONS.map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          onClick={() => setVisiting((s) => ({ ...s, colors: c }))}
-                          className={cn(
-                            "min-h-9 rounded-full px-3 text-xs sm:text-sm font-medium",
-                            visiting.colors === c
-                              ? "bg-foreground text-background"
-                              : "text-foreground"
-                          )}
-                        >
-                          {t(`estimate.visiting.colors.${c}`)}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <details className="group border-t border-border/60 pt-3">
-                  <summary className="flex cursor-pointer items-center gap-2 text-sm font-medium text-muted-foreground list-none [&::-webkit-details-marker]:hidden">
-                    <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-                    {t("estimate.moreOptions")}
-                  </summary>
-                  <div className="mt-3 grid sm:grid-cols-2 gap-3">
-                    <CompactToggle
-                      label={t("estimate.visiting.matt")}
-                      value={visiting.mattLamination}
-                      onChange={(v) => setVisiting((s) => ({ ...s, mattLamination: v }))}
-                      options={[
-                        { value: false, label: t("estimate.visiting.matt.off") },
-                        { value: true, label: t("estimate.visiting.matt.on") },
-                      ]}
-                    />
-                    <CompactToggle
-                      label={t("estimate.visiting.spot")}
-                      value={visiting.spotUV}
-                      onChange={(v) => setVisiting((s) => ({ ...s, spotUV: v }))}
-                      options={[
-                        { value: false, label: t("estimate.visiting.spot.off") },
-                        { value: true, label: t("estimate.visiting.spot.on") },
-                      ]}
-                    />
-                    <CompactToggle
-                      label={t("estimate.visiting.cutting")}
-                      value={visiting.dyeCutting}
-                      onChange={(v) => setVisiting((s) => ({ ...s, dyeCutting: v }))}
-                      options={[
-                        { value: false, label: t("estimate.visiting.cutting.regular") },
-                        { value: true, label: t("estimate.visiting.cutting.dye") },
-                      ]}
-                    />
-                  </div>
-                </details>
-
-                <p className="text-[11px] text-muted-foreground pt-1">{t("estimate.paperNote")}</p>
-              </>
-            ) : product === "cash-memo" ? (
-              <>
+              ) : product === "cash-memo" ? (
                 <MemoQtySelector
                   qtyMode={memo.qtyMode}
                   presetQty={memo.presetQty}
@@ -752,7 +770,80 @@ export function PriceEstimator() {
                     setMemo((s) => ({ ...s, qtyMode: "custom", customQty }))
                   }
                 />
-                <div className="grid sm:grid-cols-2 gap-3 pt-1 border-t border-border/60">
+              ) : (
+                <RoundStickerQty qty={sticker.qty} onQtyChange={(qty) => setSticker({ qty })} />
+              )}
+              <MobileLiveTotal result={result} />
+            </FieldGroup>
+
+            {/* 03 — options */}
+            <FieldGroup number={3} label={t("estimate.options")}>
+              {product === "visiting-card" ? (
+                <div className="space-y-5">
+                  <CompactToggle
+                    label={t("estimate.visiting.sides")}
+                    value={visiting.bothSides}
+                    onChange={(bothSides) => setVisiting((s) => ({ ...s, bothSides }))}
+                    options={[
+                      { value: false, label: t("estimate.visiting.sides.one") },
+                      { value: true, label: t("estimate.visiting.sides.both") },
+                    ]}
+                  />
+                  <CompactToggle
+                    label={t("estimate.visiting.colors")}
+                    value={String(visiting.colors)}
+                    onChange={(c) =>
+                      setVisiting((s) => ({ ...s, colors: Number(c) as ColorCount }))
+                    }
+                    options={COLOR_OPTIONS.map((c) => ({
+                      value: String(c),
+                      label: t(`estimate.visiting.colors.${c}`),
+                    }))}
+                  />
+
+                  <details className="group border-t border-border pt-2">
+                    <summary className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold text-foreground list-none [&::-webkit-details-marker]:hidden">
+                      <ChevronDown
+                        className="h-4 w-4 transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+                        aria-hidden
+                      />
+                      {t("estimate.moreOptions")}
+                    </summary>
+                    <div className="mt-3 space-y-5">
+                      <CompactToggle
+                        label={t("estimate.visiting.matt")}
+                        value={visiting.mattLamination}
+                        onChange={(v) => setVisiting((s) => ({ ...s, mattLamination: v }))}
+                        options={[
+                          { value: false, label: t("estimate.visiting.matt.off") },
+                          { value: true, label: t("estimate.visiting.matt.on") },
+                        ]}
+                      />
+                      <CompactToggle
+                        label={t("estimate.visiting.spot")}
+                        value={visiting.spotUV}
+                        onChange={(v) => setVisiting((s) => ({ ...s, spotUV: v }))}
+                        options={[
+                          { value: false, label: t("estimate.visiting.spot.off") },
+                          { value: true, label: t("estimate.visiting.spot.on") },
+                        ]}
+                      />
+                      <CompactToggle
+                        label={t("estimate.visiting.cutting")}
+                        value={visiting.dyeCutting}
+                        onChange={(v) => setVisiting((s) => ({ ...s, dyeCutting: v }))}
+                        options={[
+                          { value: false, label: t("estimate.visiting.cutting.regular") },
+                          { value: true, label: t("estimate.visiting.cutting.dye") },
+                        ]}
+                      />
+                    </div>
+                  </details>
+
+                  <p className="text-sm text-muted-foreground">{t("estimate.paperNote")}</p>
+                </div>
+              ) : product === "cash-memo" ? (
+                <div className="space-y-5">
                   <CompactToggle
                     label={t("estimate.memo.size")}
                     value={memo.size}
@@ -771,39 +862,28 @@ export function PriceEstimator() {
                       { value: "memo", label: t("estimate.memo.binding.memo") },
                     ]}
                   />
-                  <div className="sm:col-span-2">
-                    <p className="text-sm font-medium text-foreground mb-1.5">
-                      {t("estimate.memo.colors")}
-                    </p>
-                    <div className="inline-flex rounded-full border border-foreground/15 bg-muted/30 p-0.5">
-                      {COLOR_OPTIONS.map((c) => (
-                        <button
-                          key={c}
-                          type="button"
-                          onClick={() => setMemo((s) => ({ ...s, colors: c }))}
-                          className={cn(
-                            "min-h-9 rounded-full px-3 text-xs sm:text-sm font-medium",
-                            memo.colors === c
-                              ? "bg-foreground text-background"
-                              : "text-foreground"
-                          )}
-                        >
-                          {t(`estimate.memo.colors.${c}`)}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <CompactToggle
+                    label={t("estimate.memo.colors")}
+                    value={String(memo.colors)}
+                    onChange={(c) => setMemo((s) => ({ ...s, colors: Number(c) as ColorCount }))}
+                    options={COLOR_OPTIONS.map((c) => ({
+                      value: String(c),
+                      label: t(`estimate.memo.colors.${c}`),
+                    }))}
+                  />
                 </div>
-              </>
-            ) : product === "round-sticker" ? (
-              <RoundStickerOptions
-                qty={sticker.qty}
-                onQtyChange={(qty) => setSticker({ qty })}
-              />
-            ) : null}
+              ) : (
+                <RoundStickerSize />
+              )}
+            </FieldGroup>
           </div>
 
-          <PricePanel result={result} messengerUrl={messengerUrl} product={product} />
+          <PricePanel
+            result={result}
+            messengerUrl={messengerUrl}
+            product={product}
+            className="lg:col-span-4"
+          />
         </div>
       </div>
     </section>

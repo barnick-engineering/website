@@ -4,34 +4,37 @@ import { Languages } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { Button } from "./ui/button";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
-const LanguageToggle = () => {
+/** Shows the language you can switch TO ("English" in bn mode, "বাংলা" in en mode). */
+const LanguageToggle = ({ className }: { className?: string }) => {
   const [mounted, setMounted] = useState(false);
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  const base = cn("h-11 min-w-[84px] px-3 border border-input text-foreground", className);
+
   if (!mounted) {
-    return <Button variant="outline" size="icon" />;
+    // Same box as the real button, so nothing shifts after hydration (CLS)
+    return <span aria-hidden className={cn("inline-block", base)} />;
   }
 
   return (
     <Button
-      variant="outline"
-      size="sm"
+      variant="ghost"
       onClick={() => setLanguage(language === "bn" ? "en" : "bn")}
-      title={language === "bn" ? "Switch to English" : "বাংলায় পরিবর্তন করুন"}
-      className="gap-2 border-foreground/25 text-foreground"
+      title={t("lang.switchTitle")}
+      aria-label={t("lang.switchTitle")}
+      lang={language === "bn" ? "en" : "bn"}
+      className={base}
     >
-      <Languages className="h-4 w-4" />
-      <span className="text-xs font-medium">
-        {language === "bn" ? "BN" : "EN"}
-      </span>
+      <Languages className="hidden sm:inline" aria-hidden />
+      <span className="text-sm font-semibold">{t("lang.switchTo")}</span>
     </Button>
   );
 };
 
 export default LanguageToggle;
-

@@ -1,42 +1,58 @@
 import { TooltipProvider } from "@/components/ui/tooltip";
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Fraunces, Geist, Noto_Sans_Bengali, Noto_Serif_Bengali } from "next/font/google";
+import localFont from "next/font/local";
 import { LanguageProvider } from "@/contexts/language-context";
 import { ContactTracker } from "@/components/contact-tracker";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import "./globals.css";
 
-const geistSans = Geist({
-  subsets: ["latin"],
+// Fonts are self-hosted from app/fonts (the same files Google Fonts serves) so the
+// build never depends on fetching fonts.googleapis.com — that fetch was failing
+// intermittently and breaking `next build`. All are variable fonts, licensed OFL.
+const geistSans = localFont({
+  src: "./fonts/geist-latin.woff2",
+  weight: "100 900",
   variable: "--font-sans",
+  display: "swap",
   preload: false,
 });
 
-const notoSansBengali = Noto_Sans_Bengali({
-  subsets: ["bengali"],
+// Bangla body text. The Bengali file has no Latin glyphs, so numbers and English
+// words fall through to the Latin file of the same family (next in the stack).
+const notoSansBengali = localFont({
+  src: "./fonts/noto-sans-bengali-bengali.woff2",
+  weight: "400 700",
   variable: "--font-bengali",
-  weight: ["400", "600", "700"],
   display: "swap",
-  adjustFontFallback: true,
+});
+
+const notoSansBengaliLatin = localFont({
+  src: "./fonts/noto-sans-bengali-latin.woff2",
+  weight: "400 700",
+  variable: "--font-bengali-latin",
+  display: "swap",
+  preload: false,
 });
 
 // Display serif for headings: Fraunces (Latin) + Noto Serif Bengali (Bangla).
 // Both sit in one font stack (--font-display), so Bangla glyphs fall through
 // to the Bengali serif automatically.
-const fraunces = Fraunces({
-  subsets: ["latin"],
+const fraunces = localFont({
+  src: "./fonts/fraunces-latin.woff2",
+  weight: "500 600",
   variable: "--font-display-latin",
-  weight: ["500", "600"],
   display: "swap",
+  adjustFontFallback: "Times New Roman",
 });
 
-const notoSerifBengali = Noto_Serif_Bengali({
-  subsets: ["bengali"],
+const notoSerifBengali = localFont({
+  src: "./fonts/noto-serif-bengali-bengali.woff2",
+  weight: "500 600",
   variable: "--font-display-bengali",
-  weight: ["500", "600"],
   display: "swap",
+  adjustFontFallback: "Times New Roman",
 });
 
 const siteUrl = "https://barnickpracharani.com";
@@ -143,7 +159,7 @@ export default function RootLayout({
     <html
       lang="bn"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${notoSansBengali.variable} ${fraunces.variable} ${notoSerifBengali.variable}`}
+      className={`${geistSans.variable} ${notoSansBengali.variable} ${notoSansBengaliLatin.variable} ${fraunces.variable} ${notoSerifBengali.variable}`}
     >
       <body className="font-sans antialiased">
         {/* Google Analytics — afterInteractive: loads right after hydration, so

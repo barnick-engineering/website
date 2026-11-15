@@ -26,6 +26,7 @@ export interface PortfolioItem {
   /** Must match one of PORTFOLIO_CATEGORIES except "সব" — controls filter tab grouping */
   category: Exclude<PortfolioCategory, "সব">;
   productName: string;
+  /** Real spec line only; leave "" when there is nothing beyond the product name */
   specs: string;
   featured?: boolean; // reserved; grid uses uniform card size
   messengerText: string;
@@ -38,7 +39,7 @@ export const portfolioItems: PortfolioItem[] = [
     alt: "প্রিমিয়াম শপিং ব্যাগের নমুনা",
     category: "প্যাকেজিং",
     productName: "প্রিমিয়াম শপিং ব্যাগ",
-    specs: "প্রিমিয়াম শপিং ব্যাগ",
+    specs: "", // was a repeat of productName
     featured: true,
     messengerText: "আমি প্রিমিয়াম শপিং ব্যাগ অর্ডার করতে চাই",
   },
@@ -48,7 +49,7 @@ export const portfolioItems: PortfolioItem[] = [
     alt: "ইনভাইটেশন কার্ডের নমুনা",
     category: "কার্ড",
     productName: "ইনভাইটেশন কার্ড",
-    specs: "ইনভাইটেশন কার্ড",
+    specs: "", // was a repeat of productName
     messengerText: "আমি ইনভাইটেশন কার্ড অর্ডার করতে চাই",
   },
   {
@@ -57,7 +58,7 @@ export const portfolioItems: PortfolioItem[] = [
     alt: "ব্রোশিওর ও পোর্টফোলিওর নমুনা",
     category: "ব্রোশিওর / ক্যাটালগ",
     productName: "ব্রশিউর / পোর্টফলিও",
-    specs: "ব্রশিউর / পোর্টফলিও",
+    specs: "", // was a repeat of productName
     messengerText: "আমি ব্রশিউর / পোর্টফলিও অর্ডার করতে চাই",
   },
   {
@@ -66,7 +67,7 @@ export const portfolioItems: PortfolioItem[] = [
     alt: "নোটপ্যাডের নমুনা",
     category: "নোটপ্যাড",
     productName: "নোটপ্যাড",
-    specs: "নোটপ্যাড",
+    specs: "", // was a repeat of productName
     messengerText: "আমি নোটপ্যাড অর্ডার করতে চাই",
   },
   {
@@ -84,7 +85,7 @@ export const portfolioItems: PortfolioItem[] = [
     alt: "ভিজিটিং কার্ডের নমুনা",
     category: "ভিজিটিং কার্ড",
     productName: "ভিজিটিং কার্ড",
-    specs: "ভিজিটিং কার্ড",
+    specs: "", // was a repeat of productName
     messengerText: "আমি ভিজিটিং কার্ড অর্ডার করতে চাই",
   },
   {
@@ -93,7 +94,7 @@ export const portfolioItems: PortfolioItem[] = [
     alt: "স্টিকার ও লেবেলের নমুনা",
     category: "স্টিকার / লেবেল",
     productName: "স্টিকার / লেবেল",
-    specs: "স্টিকার / লেবেল",
+    specs: "", // was a repeat of productName
     messengerText: "আমি স্টিকার / লেবেল অর্ডার করতে চাই",
   },
 ];

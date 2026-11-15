@@ -1,57 +1,37 @@
 "use client";
 
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import { NavigationMenuProps } from "@radix-ui/react-navigation-menu";
 import Link from "next/link";
 import { useLanguage } from "@/contexts/language-context";
+import { cn } from "@/lib/utils";
 
-export const NavMenu = (props: NavigationMenuProps) => {
+const LINKS = [
+  { key: "nav.portfolio", href: "/#products" },
+  { key: "nav.estimate", href: "/#estimate" },
+  { key: "nav.design", href: "/#design" },
+  { key: "nav.guide", href: "/guide" },
+  { key: "nav.faq", href: "/#faq" },
+] as const;
+
+export const NavMenu = ({ className }: { className?: string }) => {
   const { t } = useLanguage();
 
   return (
-    <NavigationMenu {...props}>
-      <NavigationMenuList className="gap-6 space-x-0 data-[orientation=vertical]:flex-col data-[orientation=vertical]:items-start">
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/#products" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
-              {t("nav.portfolio")}
+    <nav aria-label={t("nav.primaryLabel")} className={className}>
+      <ul className="flex items-center gap-5 lg:gap-7">
+        {LINKS.map(({ key, href }) => (
+          <li key={key}>
+            <Link
+              href={href}
+              className={cn(
+                "inline-flex py-3 text-sm font-medium text-foreground whitespace-nowrap",
+                "underline-offset-[6px] decoration-primary decoration-1 hover:underline"
+              )}
+            >
+              {t(key)}
             </Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/#estimate" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
-              {t("nav.estimate")}
-            </Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/guide" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
-              {t("nav.guide")}
-            </Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/#faq" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
-              {t("nav.faq")}
-            </Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/#contact" className="text-sm font-medium text-foreground hover:text-foreground/80 transition-colors">
-              {t("nav.contact")}
-            </Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 };

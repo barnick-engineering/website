@@ -23,6 +23,14 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          hover: "hsl(var(--primary-hover))",
+          strong: "hsl(var(--primary-strong))",
+        },
+        "ink-2": "hsl(var(--ink-2))",
+        "surface-ink": "hsl(var(--surface-ink))",
+        "on-ink": {
+          DEFAULT: "hsl(var(--on-ink) / <alpha-value>)",
+          muted: "hsl(var(--on-ink-muted))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -59,6 +67,31 @@ export default {
       screens: {
         xs: "375px",
       },
+      fontSize: {
+        "display-xl": [
+          "clamp(2.125rem, 1.35rem + 3.3vw, 3.75rem)",
+          { lineHeight: "1.06", letterSpacing: "-0.02em", fontWeight: "600" },
+        ],
+        "display-l": [
+          "clamp(1.75rem, 1.3rem + 1.9vw, 2.5rem)",
+          { lineHeight: "1.1", letterSpacing: "-0.015em", fontWeight: "600" },
+        ],
+        "display-m": [
+          "clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem)",
+          { lineHeight: "1.2", fontWeight: "500" },
+        ],
+        price: [
+          "clamp(2.5rem, 2.1rem + 1.6vw, 3rem)",
+          { lineHeight: "1", letterSpacing: "-0.01em", fontWeight: "600" },
+        ],
+        lead: ["1.125rem", { lineHeight: "1.6" }],
+      },
+      boxShadow: {
+        paper: "0 1px 0 #D6CEBD, 0 18px 32px -24px rgba(17,17,17,.22)",
+      },
+      transitionTimingFunction: {
+        press: "cubic-bezier(0.2, 0, 0, 1)",
+      },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         display: [
@@ -69,6 +102,7 @@ export default {
         ],
         bengali: [
           "var(--font-bengali)",
+          "var(--font-bengali-latin)",
           "var(--font-sans)",
           "system-ui",
           "sans-serif",
